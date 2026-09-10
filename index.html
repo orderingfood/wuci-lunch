@@ -1,0 +1,907 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>員工團膳報餐系統</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #E0F2FE 0%, #FFFBEB 100%);
+            text-align: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .card {
+            background: white;
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .input-field {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .input-field:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+
+        .btn-lunch {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-lunch:hover {
+            background-color: #218838;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+
+        .meal-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .meal-option {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .meal-option input {
+            display: none;
+        }
+
+        .meal-option span {
+            display: block;
+            padding: 14px 10px;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 17px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .meal-option input:checked + span {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        /* 分頁標籤樣式 */
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .input-field {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .input-field:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* 多選日期排版 */
+        .date-checkbox-list {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            background: #fafafa;
+        }
+
+        .date-item {
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .date-item input {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+
+        /* 淺色模式的樣式 */
+        body.white-mode {
+            background: linear-gradient(135deg, #E0F2FE 0%, #FFFBEB 100%);
+        }
+
+        /* 深色模式的樣式 */
+        body.dark-mode {
+            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>員工團膳報餐系統</h2>
+
+        <!-- 員工工號 -->
+        <div class="input-group">
+            <label for="empIdInput">🆔  員工工號(運務士為xxxxx，沒有D)：</label>
+
+            <input
+                type="text"
+                id="empIdInput"
+                class="input-field"
+                autocomplete="off"
+                autocapitalize="characters"
+                placeholder="請輸入員工代號"
+            >
+
+            <div class="hint">
+                ※ 系統會自動記住您的員工代號，下次開啟會自動帶入。
+            </div>
+        </div>
+        
+        <!-- 員工姓名 -->
+         <div class="input-group">
+            <label for="nameInput">👤  姓名：</label>
+
+            <input
+                type="text"
+                id="nameInput"
+                class="input-field"
+                autocomplete="name"
+                placeholder="請輸入姓名"
+            >
+
+            <div class="hint">
+                ※ 系統會自動記住上次輸入的姓名。
+            </div>
+        </div>
+
+        <!-- 公司名稱 -->
+        <div class="input-group">
+            <label for="companySelect">🏢  公司名稱(運務士選擇全翔)：</label>
+
+            <select id="companySelect" class="input-field">
+                <option value="">請選擇公司</option>
+                <option value="弘達">弘達</option>
+                <option value="全翔">全翔</option>
+                <option value="君獅">君獅</option>
+                <option value="蘭亭">蘭亭</option>
+                <option value="專佳人支">專佳人支</option>
+                <option value="浩翔">浩翔</option>
+                <option value="華輿">華輿</option>
+                <option value="聯興">聯興</option>
+                <option value="全怡(保全)">全怡(保全)</option>
+             </select>
+
+                <div class="hint">
+                    ※ 系統會自動記住上次輸入的公司。
+                </div>
+        </div>
+
+        <!-- 單位組別 -->
+        <div class="input-group">
+            <label for="unit">👨‍👩‍👧‍👦  單位組別(運務士選擇運輸)：</label>
+
+            <select id="unit" class="input-field">
+                <option value="">請選擇單位</option>
+                <option value="主辦">主辦</option>
+                <option value="保全">保全</option>
+                <option value="運輸">運輸</option>
+                <option value="出貨組">出貨組</option>
+                <option value="收貨組">收貨組</option>
+                <option value="退貨組">退貨組</option>
+                <option value="保管組">保管組</option>
+                <option value="揀貨組">揀貨組</option>
+             </select>
+
+                <div class="hint">
+                    ※ 系統會自動記住上次輸入的組別。
+                </div>
+        </div>
+
+        <div class="input-group">
+            <label>用餐時段：</label>
+
+            <div class="meal-options">
+                <label class="meal-option">
+                    <input type="radio" name="mealTime"  value="午餐" checked id="white">
+                    <span>☀️ 午餐</span>
+                </label>
+
+                <label class="meal-option">
+                    <input type="radio" name="mealTime" value="晚餐" id="black">
+                    <span>🌙 晚餐</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>訂餐類別：</label>
+
+            <div class="meal-options">
+                <label class="meal-option">
+                    <input type="radio" name="category" value="葷食" checked>
+                    <span>🥩 葷食</span>
+                </label>
+
+                <label class="meal-option">
+                    <input type="radio" name="category" value="素食">
+                    <span>🥬 素食</span>
+                </label>
+            </div>
+        </div>
+
+         <!-- 分頁標籤 -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('single')">📅 單日報餐</button>
+            <button class="tab-btn" onclick="switchTab('multi')">🗂️ 多日報餐</button>
+        </div>
+
+        <!-- 分頁一：單日報餐 -->
+        <div id="tab-single" class="tab-content active">
+            <div class="input-group">
+                <label for="single-date">選擇報餐日期 (單選)</label>
+                <input type="date" id="single-date" class="input-field">
+            </div>
+        </div>
+
+        <!-- 分頁二：多日報餐 -->
+        <div id="tab-multi" class="tab-content">
+            <div class="input-group">
+                <label>選擇報餐日期 (可多選)</label>
+                <div id="multi-date-list" class="date-checkbox-list">
+                    <!-- 由 JavaScript 動態生成日期清單 -->
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-lunch" onclick="submitOrder()" >
+            🙋‍♂️ 我要報餐
+        </button>
+
+        <div class="status" id="statusMsg"></div>
+
+    </div>
+
+
+    <!-- 依選項改變背景顏色  -->
+    <script>
+        const whiteInput = document.getElementById('white');
+        
+        // 監聽 input 的變更事件
+        whiteInput.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('white-mode'); // 勾選午餐時，恢復白色背景
+                document.body.classList.remove('dark-mode');  // 移除黑色背景類別
+            } 
+        });
+
+        const blackInput = document.getElementById('black');
+        
+        // 監聽 input 的變更事件
+        blackInput.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode'); // 勾選晚餐時，加上黑色背景
+                document.body.classList.remove('white-mode'); // 移除白色背景類別
+            } 
+        });
+    </script>
+
+
+    <!-- Firebase -->
+     
+    <script>
+    function switchTab(mode) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+
+        if (mode === 'single') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        } else {
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        }
+
+        document.getElementById('tab-' + mode).classList.add('active');
+    }
+    </script>
+
+    <script type="module">
+
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+        import {
+            getFirestore,
+            collection,
+            addDoc
+        }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+        // =====================================================
+        // Firebase 設定
+        // 請把以下內容換成你自己的 Firebase 專案設定
+        // =====================================================
+
+        const firebaseConfig = {
+
+            apiKey: "你的API_KEY",
+
+            authDomain: "你的PROJECT_ID.firebaseapp.com",
+
+            projectId: "你的PROJECT_ID",
+
+            storageBucket: "你的PROJECT_ID.appspot.com",
+
+            messagingSenderId: "你的SENDER_ID",
+
+            appId: "你的APP_ID"
+
+        };
+
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+
+        const db = getFirestore(app);
+
+
+        // =====================================================
+        // 員工代號自動記憶功能
+        // =====================================================
+
+        const inputField =
+            document.getElementById("empIdInput");
+
+        const STORAGE_KEY =
+            "company_lunch_employee_id";
+
+
+        // -----------------------------------------------------
+        // 1. 網頁開啟時，自動讀取之前儲存的員工代號
+        // -----------------------------------------------------
+
+        try {
+
+            const savedId =
+                localStorage.getItem(STORAGE_KEY);
+
+            if (
+                savedId &&
+                savedId.trim() !== ""
+            ) {
+
+                inputField.value = savedId;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "讀取員工代號失敗：",
+                error
+            );
+
+        }
+
+
+        // -----------------------------------------------------
+        // 2. 員工輸入時，自動儲存
+        // -----------------------------------------------------
+
+        inputField.addEventListener(
+            "input",
+            function () {
+
+                try {
+
+                    localStorage.setItem(
+                        STORAGE_KEY,
+                        inputField.value
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "儲存員工代號失敗：",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+
+        // -----------------------------------------------------
+        // 3. 離開輸入框時，再儲存一次
+        // -----------------------------------------------------
+
+        inputField.addEventListener(
+            "blur",
+            function () {
+
+                try {
+
+                    const empId =
+                        inputField.value
+                            .trim()
+                            .toUpperCase();
+
+                    inputField.value = empId;
+
+                    if (empId !== "") {
+
+                        localStorage.setItem(
+                            STORAGE_KEY,
+                            empId
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "儲存員工代號失敗：",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+
+        // =====================================================
+        // 公司名稱自動記憶功能
+        // =====================================================
+
+        // 開啟網頁時，自動帶入上次選擇的公司
+
+        const companySelect = document.getElementById("companySelect");
+        const COMPANY_STORAGE_KEY = "last_company";
+        const savedCompany = localStorage.getItem(COMPANY_STORAGE_KEY);
+
+        if (savedCompany) {
+            companySelect.value = savedCompany;
+        }
+
+        // 選擇公司後立即儲存
+        companySelect.addEventListener("change", function () {
+            localStorage.setItem(
+                COMPANY_STORAGE_KEY,
+                companySelect.value
+            );
+        });
+
+
+        // =====================================================
+        // 單位組別自動記憶功能
+        // =====================================================
+
+        // 開啟網頁時，自動帶入上次選擇的單位組別
+        const unitSelect = document.getElementById("unit");
+        const UNIT_STORAGE_KEY = "last_unit";
+        const savedunit = localStorage.getItem(UNIT_STORAGE_KEY);
+
+        if (savedunit) {
+            unitSelect.value = savedunit;
+        }
+
+        // 選擇單位組別後立即儲存
+        unitSelect.addEventListener("change", function () {
+            localStorage.setItem(
+                UNIT_STORAGE_KEY,
+                unitSelect.value
+            );
+        });
+
+
+        // =====================================================
+        // 員工姓名自動記憶功能
+        // =====================================================
+
+        const nameInput = document.getElementById("nameInput");
+        const NAME_STORAGE_KEY = "last_employee_name";
+
+        // 開啟網頁時，自動帶入上次姓名
+        const savedName = localStorage.getItem(NAME_STORAGE_KEY);
+
+        if (savedName) {
+            nameInput.value = savedName;
+        }
+
+        // 輸入時自動儲存
+        nameInput.addEventListener("input", function () {
+            localStorage.setItem(
+                NAME_STORAGE_KEY,
+                nameInput.value
+            );
+        });
+
+        // 離開輸入框時整理姓名
+        nameInput.addEventListener("blur", function () {
+            const name = nameInput.value.trim();
+
+            nameInput.value = name;
+
+            if (name !== "") {
+                localStorage.setItem(
+                    NAME_STORAGE_KEY,
+                    name
+                );
+            }
+        });
+
+        // =====================================================
+        // 日期選擇級分頁功能
+        // =====================================================
+
+        let currentMode = 'single'; // 記錄當前分頁：single 或 multi
+
+        // 自訂格式化函式，確保抓取的是瀏覽器當地的年、月、日（解決時區短少一天問題）
+        const formatLocalDate = (d) => {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const date = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${date}`;
+        };
+
+        // 初始化日期限制
+        window.onload = function() {
+            const today = new Date();
+            
+            // 修正：改為 +0 即可包含「今天」
+            const startDate = new Date();
+            startDate.setDate(today.getDate() + 0); 
+            
+            // 設定結束日期（本月底）
+            const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
+
+            const minStr = formatLocalDate(startDate);
+            const maxStr = formatLocalDate(endDate);
+
+            // 1. 設定單日分頁的限制
+            const singleDateInput = document.getElementById('single-date');
+            singleDateInput.min = minStr;
+            singleDateInput.max = maxStr;
+            singleDateInput.value = minStr; // 預設選取今天
+
+            // 2. 動態生成多日分頁的複選框
+            const multiContainer = document.getElementById('multi-date-list');
+            multiContainer.innerHTML = ''; // 清空
+
+            let tempDate = new Date(startDate);
+            while (tempDate <= endDate) {
+                const dateStr = formatLocalDate(tempDate);
+                const weekDay = ['日', '一', '二', '三', '四', '五', '六'][tempDate.getDay()];
+                
+                // 建立複選框元素
+                const label = document.createElement('label');
+                label.className = 'date-item';
+                label.innerHTML = `<input type="checkbox" name="multi-dates" value="${dateStr}"> ${dateStr} (${weekDay})`;
+                
+                multiContainer.appendChild(label);
+                tempDate.setDate(tempDate.getDate() + 1);
+            }
+        };
+
+         // 切換分頁功能
+        function switchTab(mode) {
+            currentMode = mode;
+
+        // 取得所有分頁按鈕
+        const tabButtons = document.querySelectorAll('.tab-btn');
+
+        // 移除所有按鈕的 active
+        tabButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // 根據 mode 找到對應按鈕並加入 active
+        tabButtons.forEach(btn => {
+            if (
+                (mode === 'single' && btn.innerText.includes('單日報餐')) ||
+                (mode === 'multi' && btn.innerText.includes('多日報餐'))
+                ) {
+                    btn.classList.add('active');
+                }
+            });
+
+        // 隱藏所有分頁內容
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        // 顯示指定分頁
+        const targetTab = document.getElementById(`tab-${mode}`);
+        if (targetTab) {
+            targetTab.classList.add('active');
+        }
+
+        // 清除報餐狀態訊息
+        const status = document.getElementById('statusMsg');
+        if (status) {
+            status.innerText = ''; 
+            status.style.color = '';
+        }
+        }
+
+        // =====================================================
+        // 報餐功能
+        // =====================================================
+
+        window.submitOrder = async function () {
+
+            const status =
+                document.getElementById("statusMsg");
+
+
+            // 取得員工代號
+            const empId =
+                inputField.value
+                    .trim()
+                    .toUpperCase();
+
+
+            // -------------------------------------------------
+            // 沒有輸入員工代號
+            // -------------------------------------------------
+
+            if (!empId) {
+
+                status.style.color = "#dc3545";
+
+                status.innerText =
+                    "❌ 請先輸入您的員工代號！";
+
+                inputField.focus();
+
+                return;
+
+            }
+
+            
+            // -------------------------------------------------
+            // 儲存員工代號
+            // -------------------------------------------------
+
+            try {
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    empId
+                );
+
+                inputField.value = empId;
+
+            } catch (error) {
+
+                console.error(
+                    "儲存員工代號失敗：",
+                    error
+                );
+
+            }
+
+
+            // 顯示傳送中
+            status.style.color = "#666";
+
+            status.innerText =
+                "⏳ 正在傳送報餐資料...";
+
+
+            try {
+
+                // -------------------------------------------------
+                // 取得台灣今天日期
+                // -------------------------------------------------
+
+                const today =
+                    new Date()
+                        .toLocaleDateString(
+                            "zh-TW",
+                            {
+                                timeZone: "Asia/Taipei"
+                            }
+                        )
+                        .replace(/\//g, "-");
+
+
+                // -------------------------------------------------
+                // 寫入 Firebase
+                // -------------------------------------------------
+
+                await addDoc(
+                    collection(
+                        db,
+                        "lunch_orders"
+                    ),
+                    {
+
+                        employeeId: empId,
+
+                        date: today,
+
+                        meal: "排骨飯",
+
+                        timestamp: new Date()
+
+                    }
+                );
+
+
+                // -------------------------------------------------
+                // 報餐成功
+                // -------------------------------------------------
+
+                status.style.color =
+                    "#28a745";
+
+                status.innerText =
+                    `🎉 代號 ${empId} 報餐成功！`;
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                status.style.color =
+                    "#dc3545";
+
+                status.innerText =
+                    "❌ 報餐失敗，請檢查網路或聯絡管理員。";
+
+            }
+
+        };
+
+
+        // =====================================================
+        // PWA Service Worker
+        // =====================================================
+
+        if ("serviceWorker" in navigator) {
+
+            navigator.serviceWorker
+                .register("/sw.js")
+                .catch(
+                    err =>
+                        console.log(
+                            "Service Worker 註冊失敗：",
+                            err
+                        )
+                );
+
+        }
+
+    </script>
+
+</body>
+</html>
