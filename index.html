@@ -1161,6 +1161,10 @@
             }
         );
 
+// =================================================
+// 工號查詢員工資料
+// =================================================
+
 inputField.addEventListener(
     "blur",
     async function () {
@@ -1170,17 +1174,32 @@ inputField.addEventListener(
                 .trim()
                 .toUpperCase();
 
-        inputField.value =
-            empId;
+        inputField.value = empId;
 
 
+        // 沒有輸入工號
         if (!empId) {
+
+            nameInput.value = "";
+
+            companySelect.innerHTML = `
+                <option value="">
+                    請先輸入員工工號
+                </option>
+            `;
+
+            unitSelect.innerHTML = `
+                <option value="">
+                    請先輸入員工工號
+                </option>
+            `;
+
             return;
         }
 
 
-        status.style.color =
-            "#666";
+        // 顯示查詢中
+        status.style.color = "#666";
 
         status.innerHTML =
             "⏳ 正在查詢員工資料...";
@@ -1199,13 +1218,16 @@ inputField.addEventListener(
                                 "text/plain;charset=utf-8"
                         },
 
-                        body:
-                            JSON.stringify({
-                                action:
-                                    "getEmployee",
-                                employeeId:
-                                    empId
-                            })
+                        body: JSON.stringify({
+
+                            action:
+                                "getEmployee",
+
+                            employeeId:
+                                empId
+
+                        })
+
                     }
                 );
 
@@ -1214,16 +1236,31 @@ inputField.addEventListener(
                 await response.json();
 
 
+            console.log(
+                "員工查詢結果：",
+                result
+            );
+
+
+            // =================================================
+            // 查詢失敗
+            // =================================================
+
             if (!result.success) {
 
-                nameInput.value =
-                    "";
+                nameInput.value = "";
 
-                companySelect.value =
-                    "";
+                companySelect.innerHTML = `
+                    <option value="">
+                        請先輸入員工工號
+                    </option>
+                `;
 
-                unitSelect.value =
-                    "";
+                unitSelect.innerHTML = `
+                    <option value="">
+                        請先輸入員工工號
+                    </option>
+                `;
 
 
                 status.style.color =
@@ -1231,33 +1268,58 @@ inputField.addEventListener(
 
                 status.innerHTML =
                     "❌ " +
-                    result.message;
+                    (
+                        result.message ||
+                        "查無此員工工號"
+                    );
 
                 return;
-
             }
 
 
-            // -----------------------------
-            // 自動帶入員工資料
-            // -----------------------------
+            // =================================================
+            // 姓名
+            // =================================================
 
             nameInput.value =
-                result.name;
-
-            companySelect.value =
-                result.company;
-
-            unitSelect.value =
-                result.unit;
+                result.name || "";
 
 
+            // =================================================
+            // 公司
+            // =================================================
+
+            companySelect.innerHTML = `
+                <option value="${result.company || ""}">
+                    ${result.company || ""}
+                </option>
+            `;
+
+
+            // =================================================
+            // 單位
+            // =================================================
+
+            unitSelect.innerHTML = `
+                <option value="${result.unit || ""}">
+                    ${result.unit || ""}
+                </option>
+            `;
+
+
+            // =================================================
             // 記住工號
+            // =================================================
+
             localStorage.setItem(
                 STORAGE_KEY,
                 empId
             );
 
+
+            // =================================================
+            // 顯示成功
+            // =================================================
 
             status.style.color =
                 "#28a745";
@@ -1266,12 +1328,48 @@ inputField.addEventListener(
                 "✅ 員工資料查詢成功";
 
 
-        } catch (error) {
+            console.log(
+                "姓名：",
+                result.name
+            );
+
+            console.log(
+                "公司：",
+                result.company
+            );
+
+            console.log(
+                "單位：",
+                result.unit
+            );
+
+
+        }
+
+        catch (error) {
 
             console.error(
                 "查詢員工資料失敗：",
                 error
             );
+
+
+            nameInput.value = "";
+
+
+            companySelect.innerHTML = `
+                <option value="">
+                    查詢失敗
+                </option>
+            `;
+
+
+            unitSelect.innerHTML = `
+                <option value="">
+                    查詢失敗
+                </option>
+            `;
+
 
             status.style.color =
                 "#dc3545";
@@ -1283,6 +1381,7 @@ inputField.addEventListener(
 
     }
 );
+
 
 
 
