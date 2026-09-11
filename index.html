@@ -984,69 +984,6 @@
          JavaScript
     ====================================================== -->
 
-    // =================================================
-    // 代報人工號檢查
-    // =================================================
-    
-    proxyEmpIdInput.addEventListener(
-        "input",
-        function () {
-    
-            this.value =
-                this.value
-                    .toUpperCase();
-    
-        }
-    );
-    
-    
-    proxyEmpIdInput.addEventListener(
-        "blur",
-        function () {
-    
-            const empId =
-                inputField.value
-                    .trim()
-                    .toUpperCase();
-    
-            const proxyEmpId =
-                proxyEmpIdInput.value
-                    .trim()
-                    .toUpperCase();
-    
-            inputField.value =
-                empId;
-    
-            proxyEmpIdInput.value =
-                proxyEmpId;
-    
-    
-            // ---------------------------------------------
-            // 代報人工號等於報餐人工號
-            // ---------------------------------------------
-    
-            if (
-                proxyEmpId !== "" &&
-                empId !== "" &&
-                proxyEmpId === empId
-            ) {
-    
-                status.style.color =
-                    "#dc3545";
-    
-                status.innerHTML = `
-                    <div class="status-title">
-                        ❌ 為自己報餐時，不需填寫此欄！
-                    </div>
-                `;
-    
-                proxyEmpIdInput.focus();
-    
-            }
-    
-        }
-    );
-
     <script>
 
 
@@ -1113,6 +1050,69 @@
             document.getElementById(
                 "submitBtn"
             );
+
+        // =================================================
+        // 代報人工號檢查
+        // =================================================
+        
+        proxyEmpIdInput.addEventListener(
+            "input",
+            function () {
+        
+                this.value =
+                    this.value.toUpperCase();
+        
+            }
+        );
+        
+        
+        proxyEmpIdInput.addEventListener(
+            "blur",
+            function () {
+        
+                const empId =
+                    inputField.value
+                        .trim()
+                        .toUpperCase();
+        
+                const proxyEmpId =
+                    proxyEmpIdInput.value
+                        .trim()
+                        .toUpperCase();
+        
+                inputField.value =
+                    empId;
+        
+                proxyEmpIdInput.value =
+                    proxyEmpId;
+        
+        
+                // ---------------------------------------------
+                // 代報人工號等於報餐人工號
+                // ---------------------------------------------
+        
+                if (
+                    proxyEmpId !== "" &&
+                    empId !== "" &&
+                    proxyEmpId === empId
+                ) {
+        
+                    status.style.color =
+                        "#dc3545";
+        
+                    status.innerHTML = `
+                        <div class="status-title">
+                            ❌ 為自己報餐時，不需填寫此欄！
+                        </div>
+                    `;
+        
+                    proxyEmpIdInput.focus();
+        
+                }
+        
+            }
+        );
+
 
 
 
@@ -1785,6 +1785,11 @@
                 const name =
                     nameInput.value
                         .trim();
+
+                const proxyEmpId =
+                    proxyEmpIdInput.value
+                        .trim()
+                        .toUpperCase();
 
 
                 const company =
