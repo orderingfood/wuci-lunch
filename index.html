@@ -530,6 +530,106 @@
 
         }
 
+    /* =================================================
+       員工資料查詢視窗
+    ================================================= */
+    
+    .loading-overlay {
+    
+        display: none;
+    
+        position: fixed;
+    
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    
+        background: rgba(0, 0, 0, 0.55);
+    
+        z-index: 99999;
+    
+        justify-content: center;
+    
+        align-items: center;
+    
+    }
+    
+    
+    .loading-box {
+    
+        width: 280px;
+    
+        padding: 30px 20px;
+    
+        background: white;
+    
+        border-radius: 15px;
+    
+        text-align: center;
+    
+        box-shadow:
+            0 5px 25px
+            rgba(0, 0, 0, 0.3);
+    
+    }
+    
+    
+    .loading-spinner {
+    
+        width: 45px;
+    
+        height: 45px;
+    
+        margin: 0 auto 20px;
+    
+        border:
+            5px solid #e5e7eb;
+    
+        border-top-color:
+            #007bff;
+    
+        border-radius: 50%;
+    
+        animation:
+            loading-spin 0.8s linear infinite;
+    
+    }
+    
+    
+    .loading-text {
+    
+        font-size: 18px;
+    
+        font-weight: bold;
+    
+        color: #333;
+    
+    }
+    
+    
+    .loading-hint {
+    
+        margin-top: 10px;
+    
+        font-size: 14px;
+    
+        color: #888;
+    
+    }
+    
+    
+    @keyframes loading-spin {
+    
+        from {
+            transform: rotate(0deg);
+        }
+    
+        to {
+            transform: rotate(360deg);
+        }
+    
+    }
 
 
     </style>
@@ -1084,267 +1184,264 @@
             "company_lunch_employee_id";
 
 
+// =================================================
+// 工號查詢員工資料
+// =================================================
+
+inputField.addEventListener(
+    "blur",
+    async function () {
+
+        const empId =
+            inputField.value
+                .trim()
+                .toUpperCase();
+
+
+        inputField.value =
+            empId;
+
+
         // =================================================
-        // 工號查詢員工資料
+        // 沒有工號，不查詢
         // =================================================
-        
-        inputField.addEventListener(
-            "blur",
-            async function () {
-        
-                const empId =
-                    inputField.value
-                        .trim()
-                        .toUpperCase();
-        
-        
-                inputField.value =
-                    empId;
-        
-        
-                // =================================================
-                // 沒有工號，不查詢
-                // =================================================
-        
-                if (!empId) {
-        
-                    return;
-        
-                }
-        
-        
-                // =================================================
-                // 顯示「正在查詢」視窗
-                // =================================================
-        
-                const loadingOverlay =
-                    document.getElementById(
-                        "loadingOverlay"
-                    );
-        
-                const loadingText =
-                    document.getElementById(
-                        "loadingText"
-                    );
-        
-        
-                loadingText.innerText =
-                    "正在查詢員工資料...";
-        
-        
+
+        if (!empId) {
+
+            return;
+
+        }
+
+
+        // =================================================
+        // 顯示「正在查詢」視窗
+        // =================================================
+
+        const loadingOverlay =
+            document.getElementById(
+                "loadingOverlay"
+            );
+
+        const loadingText =
+            document.getElementById(
+                "loadingText"
+            );
+
+
+        loadingText.innerText =
+            "正在查詢員工資料，請稍候...";
+
+
+        loadingOverlay.style.display =
+            "flex";
+
+
+        // =================================================
+        // 顯示狀態
+        // =================================================
+
+        status.style.color =
+            "#666";
+
+        status.innerHTML =
+            "⏳ 正在查詢員工資料...";
+
+
+        try {
+
+            // =================================================
+            // ⭐ 保留原本成功的 GET 查詢方式
+            // =================================================
+
+            const response =
+                await fetch(
+                    GOOGLE_SCRIPT_URL +
+                    "?employeeId=" +
+                    encodeURIComponent(
+                        empId
+                    )
+                );
+
+
+            const result =
+                await response.json();
+
+
+            console.log(
+                "員工查詢結果：",
+                result
+            );
+
+
+            // =================================================
+            // 查詢完成
+            // =================================================
+
+            if (!result.success) {
+
+                // ---------------------------------------------
+                // 查詢失敗
+                // ---------------------------------------------
+
+                nameInput.value =
+                    "";
+
+                companySelect.value =
+                    "";
+
+                unitSelect.value =
+                    "";
+
+
+                // 清除代報人工號
+                proxyEmpIdInput.value =
+                    "";
+
+
+                // 關閉查詢視窗
                 loadingOverlay.style.display =
-                    "flex";
-        
-        
-                // =================================================
-                // 顯示狀態
-                // =================================================
-        
+                    "none";
+
+
                 status.style.color =
-                    "#666";
-        
+                    "#dc3545";
+
                 status.innerHTML =
-                    "⏳ 正在查詢員工資料...";
-        
-        
-                try {
-        
-                    // =================================================
-                    // 傳送查詢
-                    // =================================================
-        
-                    const response =
-                        await fetch(
-                            GOOGLE_SCRIPT_URL,
-                            {
-        
-                                method: "POST",
-        
-                                headers: {
-        
-                                    "Content-Type":
-                                        "text/plain;charset=utf-8"
-        
-                                },
-        
-                                body:
-                                    JSON.stringify({
-        
-                                        action:
-                                            "getEmployee",
-        
-                                        employeeId:
-                                            empId
-        
-                                    })
-        
-                            }
-                        );
-        
-        
-                    const result =
-                        await response.json();
-        
-        
-                    console.log(
-                        "員工查詢結果：",
-                        result
+                    "❌ " +
+                    (
+                        result.message ||
+                        "查無此員工工號"
                     );
-        
-        
-                    // =================================================
-                    // 查詢完成
-                    // =================================================
-        
-                    if (!result.success) {
-        
-                        // ---------------------------------------------
-                        // 查詢失敗
-                        // ---------------------------------------------
-        
-                        nameInput.value =
-                            "";
-        
-                        companySelect.value =
-                            "";
-        
-                        unitSelect.value =
-                            "";
-        
-        
-                        // 清除代報人工號
-                        proxyEmpIdInput.value =
-                            "";
-        
-        
-                        // 關閉查詢視窗
-                        loadingOverlay.style.display =
-                            "none";
-        
-        
-                        status.style.color =
-                            "#dc3545";
-        
-                        status.innerHTML =
-                            "❌ " +
-                            (
-                                result.message ||
-                                "查無此員工工號"
-                            );
-        
-        
-                        return;
-        
-                    }
-        
-        
-                    // =================================================
-                    // 查詢成功
-                    // =================================================
-        
-                    nameInput.value =
-                        result.name || "";
-        
-        
-                    companySelect.value =
-                        result.company || "";
-        
-        
-                    unitSelect.value =
-                        result.unit || "";
-        
-        
-                    // =================================================
-                    // ⭐ 查詢完成後清除代報人工號
-                    // =================================================
-        
-                    proxyEmpIdInput.value =
-                        "";
-        
-        
-                    // =================================================
-                    // ⭐ 工號不記錄
-                    // =================================================
-        
-                    localStorage.removeItem(
-                        "company_lunch_employee_id"
-                    );
-        
-        
-                    // =================================================
-                    // 姓名 / 公司 / 單位可以記錄
-                    // =================================================
-        
-                    localStorage.setItem(
-                        NAME_STORAGE_KEY,
-                        nameInput.value
-                    );
-        
-        
-                    localStorage.setItem(
-                        COMPANY_STORAGE_KEY,
-                        companySelect.value
-                    );
-        
-        
-                    localStorage.setItem(
-                        UNIT_STORAGE_KEY,
-                        unitSelect.value
-                    );
-        
-        
-                    // =================================================
-                    // 關閉查詢視窗
-                    // =================================================
-        
-                    loadingOverlay.style.display =
-                        "none";
-        
-        
-                    // =================================================
-                    // 顯示成功
-                    // =================================================
-        
-                    status.style.color =
-                        "#28a745";
-        
-                    status.innerHTML =
-                        "✅ 員工資料查詢成功";
-        
-        
-                }
-        
-                catch (error) {
-        
-                    console.error(
-                        "查詢員工資料失敗：",
-                        error
-                    );
-        
-        
-                    // =================================================
-                    // 發生錯誤
-                    // =================================================
-        
-                    proxyEmpIdInput.value =
-                        "";
-        
-        
-                    // 關閉查詢視窗
-                    loadingOverlay.style.display =
-                        "none";
-        
-        
-                    status.style.color =
-                        "#dc3545";
-        
-                    status.innerHTML =
-                        "❌ 無法取得員工資料，請稍後再試。";
-        
-                }
-        
+
+
+                return;
+
             }
-        );
+
+
+            // =================================================
+            // 查詢成功
+            // =================================================
+
+            /*
+             * 注意：
+             * 你的 GAS 回傳格式是：
+             *
+             * result.employee.name
+             * result.employee.company
+             * result.employee.unit
+             *
+             * 不是：
+             *
+             * result.name
+             */
+
+            nameInput.value =
+                result.employee?.name ||
+                "";
+
+            companySelect.value =
+                result.employee?.company ||
+                "";
+
+            unitSelect.value =
+                result.employee?.unit ||
+                "";
+
+
+            // =================================================
+            // ⭐ 查詢完成後清除代報人工號
+            // =================================================
+
+            proxyEmpIdInput.value =
+                "";
+
+
+            // =================================================
+            // ⭐ 工號不記錄
+            // =================================================
+
+            localStorage.removeItem(
+                "company_lunch_employee_id"
+            );
+
+
+            // =================================================
+            // 姓名 / 公司 / 單位仍然可以記錄
+            // =================================================
+
+            localStorage.setItem(
+                NAME_STORAGE_KEY,
+                nameInput.value
+            );
+
+
+            localStorage.setItem(
+                COMPANY_STORAGE_KEY,
+                companySelect.value
+            );
+
+
+            localStorage.setItem(
+                UNIT_STORAGE_KEY,
+                unitSelect.value
+            );
+
+
+            // =================================================
+            // 關閉查詢視窗
+            // =================================================
+
+            loadingOverlay.style.display =
+                "none";
+
+
+            // =================================================
+            // 顯示成功
+            // =================================================
+
+            status.style.color =
+                "#28a745";
+
+            status.innerHTML =
+                "✅ 員工資料查詢成功";
+
+
+        }
+
+
+        catch (error) {
+
+            console.error(
+                "查詢員工資料失敗：",
+                error
+            );
+
+
+            // =================================================
+            // 發生錯誤
+            // =================================================
+
+            proxyEmpIdInput.value =
+                "";
+
+
+            // 關閉查詢視窗
+            loadingOverlay.style.display =
+                "none";
+
+
+            status.style.color =
+                "#dc3545";
+
+            status.innerHTML =
+                "❌ 無法取得員工資料，請稍後再試。";
+
+        }
+
+    }
+);
+
 
 
 
