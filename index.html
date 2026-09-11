@@ -546,236 +546,143 @@
         </h2>
 
 
-        <!-- =================================================
-             員工工號
-        ================================================== -->
+<!-- =================================================
+     員工工號
+================================================== -->
 
-        <div class="input-group">
+<div class="input-group">
 
-            <label for="empIdInput">
+    <label for="empIdInput">
 
-                🆔 員工工號
-                (運務士為xxxxx，沒有D)：
+        🆔 員工工號
+        (運務士為xxxxx，沒有D)：
 
-            </label>
+    </label>
 
+    <input
+        type="text"
+        id="empIdInput"
+        class="input-field"
+        autocomplete="off"
+        autocapitalize="characters"
+        placeholder="請輸入員工代號"
+    >
 
-            <input
-                type="text"
-                id="empIdInput"
-                class="input-field"
-                autocomplete="off"
-                autocapitalize="characters"
-                placeholder="請輸入員工代號"
-            >
+    <div class="hint">
 
+        ※ 輸入工號後，姓名、公司、單位會自動帶入。
 
-            <div class="hint">
-
-                ※ 系統會自動記住您的員工代號，
-                下次開啟會自動帶入。
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             員工姓名
-        ================================================== -->
-
-        <div class="input-group">
-
-            <label for="nameInput">
-
-                👤 姓名：
-
-            </label>
-
-
-            <input
-                type="text"
-                id="nameInput"
-                class="input-field"
-                readonly
-                placeholder="輸入工號後自動帶入"
-            >
-
-
-            <div class="hint">
-
-                ※ 系統會自動記住上次輸入的姓名。
-
-            </div>
-
-        </div>
-
-        <div class="input-group">
-
-            <label for="proxyEmpIdInput">
-
-            ✍️ 代報人工號：
-
-            </label>
-
-            <input
-                type="text"
-                id="proxyEmpIdInput"
-                class="proxy-input-field"
-                autocomplete="off"
-                autocapitalize="characters"
-                placeholder="若為本人報餐請留白"
-                >
-
-            <div class="hint">
-
-        ※ 若由其他人代為報餐，請輸入代報人工號。
-        本人報餐不需填寫。
-
-        </div>
+    </div>
 
 </div>
 
 
-        <!-- =================================================
-             公司
-        ================================================== -->
+<!-- =================================================
+     員工姓名
+================================================== -->
 
-        <div class="input-group">
+<div class="input-group">
 
-            <label for="companySelect">
+    <label for="nameInput">
 
-                🏢 公司名稱
+        👤 姓名：
 
-            </label>
+    </label>
 
+    <input
+        type="text"
+        id="nameInput"
+        class="input-field"
+        readonly
+        placeholder="輸入工號後自動帶入"
+    >
 
-            <select
-                id="companySelect"
-                class="input-field"
-                disabled
-            >
-
-                <option value="">
-                    請選擇公司
-                </option>
-
-                <option value="弘達">
-                    弘達
-                </option>
-
-                <option value="全翔">
-                    全翔
-                </option>
-
-                <option value="君獅">
-                    君獅
-                </option>
-
-                <option value="蘭亭">
-                    蘭亭
-                </option>
-
-                <option value="專佳人支">
-                    專佳人支
-                </option>
-
-                <option value="浩翔">
-                    浩翔
-                </option>
-
-                <option value="華輿">
-                    華輿
-                </option>
-
-                <option value="聯興">
-                    聯興
-                </option>
-
-                <option value="全怡(保全)">
-                    全怡(保全)
-                </option>
-
-            </select>
+</div>
 
 
-            <div class="hint">
+<!-- =================================================
+     代報人工號
+================================================== -->
 
-                ※ 系統會自動記住上次輸入的公司。
+<div class="input-group">
 
-            </div>
+    <label for="proxyEmpIdInput">
 
-        </div>
+        ✍️ 代報人工號：
 
+    </label>
 
-        <!-- =================================================
-             單位
-        ================================================== -->
+    <input
+        type="text"
+        id="proxyEmpIdInput"
+        class="input-field"
+        autocomplete="off"
+        autocapitalize="characters"
+        placeholder="若為本人報餐請留白"
+    >
 
-        <div class="input-group">
+    <div class="hint">
 
-            <label for="unit">
+        ※ 若由其他人代為報餐，請輸入代報人工號。
+        本人報餐不需填寫。
 
-                👨‍👩‍👧‍👦 單位組別
-                (運務士選擇運輸)：
+    </div>
 
-            </label>
-
-
-            <select
-                id="unit"
-                class="input-field"
-                disabled
-            >
-
-                <option value="">
-                    請選擇單位
-                </option>
-
-                <option value="主辦">
-                    主辦
-                </option>
-
-                <option value="保全">
-                    保全
-                </option>
-
-                <option value="運輸">
-                    運輸
-                </option>
-
-                <option value="出貨組">
-                    出貨組
-                </option>
-
-                <option value="收貨組">
-                    收貨組
-                </option>
-
-                <option value="退貨組">
-                    退貨組
-                </option>
-
-                <option value="保管組">
-                    保管組
-                </option>
-
-                <option value="揀貨組">
-                    揀貨組
-                </option>
-
-            </select>
+</div>
 
 
-            <div class="hint">
+<!-- =================================================
+     公司
+================================================== -->
 
-                ※ 系統會自動記住上次輸入的組別。
+<div class="input-group">
 
-            </div>
+    <label for="companySelect">
 
-        </div>
+        🏢 公司名稱：
+
+    </label>
+
+    <select
+        id="companySelect"
+        class="input-field"
+        disabled
+    >
+
+        <option value="">
+            請先輸入員工工號
+        </option>
+
+    </select>
+
+</div>
 
 
+<!-- =================================================
+     單位
+================================================== -->
+
+<div class="input-group">
+
+    <label for="unit">
+
+        👨‍👩‍👧‍👦 單位組別：
+
+    </label>
+
+    <select
+        id="unit"
+        class="input-field"
+        disabled
+    >
+
+        <option value="">
+            請先輸入員工工號
+        </option>
+
+    </select>
+
+</div>
         <!-- =================================================
              用餐時段
         ================================================== -->
