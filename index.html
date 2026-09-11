@@ -729,56 +729,46 @@
 </div>
 
 
-<!-- =================================================
-     公司
-================================================== -->
-
-<div class="input-group">
-
-    <label for="companySelect">
-
-        🏢 公司名稱：
-
-    </label>
-
-    <select
-        id="companySelect"
-        class="input-field"
-        disabled
-    >
-
-        <option value="">
-            請先輸入員工工號
-        </option>
-
-    </select>
-
-</div>
+    <!-- =================================================
+         公司
+    ================================================== -->
+    
+    <div class="input-group">
+    
+        <label for="companySelect">
+            🏢 公司名稱：
+        </label>
+    
+        <input
+            type="text"
+            id="companySelect"
+            class="input-field"
+            readonly
+            placeholder="輸入工號後自動帶入"
+        >
+    
+    </div>
 
 
-<!-- =================================================
-     單位
-================================================== -->
-
-<div class="input-group">
-
-    <label for="unit">
-
-        👨‍👩‍👧‍👦 單位組別：
-
-    </label>
-
-    <select
-        id="unit"
-        class="input-field"
-        disabled
-    >
-
-    </select>
-
-        <option value="">
-            請先輸入員工工號
-        </option>
+        <!-- =================================================
+             單位
+        ================================================== -->
+        
+        <div class="input-group">
+        
+            <label for="unit">
+                👨‍👩‍👧‍👦 單位組別：
+            </label>
+        
+            <input
+                type="text"
+                id="unit"
+                class="input-field"
+                readonly
+                placeholder="輸入工號後自動帶入"
+            >
+        
+        </div>
 
     <!-- =================================================
          代報人工號
