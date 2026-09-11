@@ -1882,12 +1882,10 @@
                 try {
 
 
-                    let successCount =
-                        0;
+                let successCount = 0;
+                let failCount = 0;
 
-
-                    let failMessages =
-                        [];
+                let resultMessages = [];
 
 
                     // =============================================
@@ -2013,72 +2011,155 @@
                     // 全部成功
                     // =================================================
 
-                    if (
-                        successCount ===
-                        selectedDates.length
-                    ) {
+// =============================================
+// 一個日期一個日期傳送
+// =============================================
+
+for (const orderDate of selectedDates) {
+
+    const data = {
+
+        orderDate: orderDate,
+
+        mealTime: mealTime,
+
+        category: category,
+
+        employeeId: empId,
+
+        name: name,
+
+        company: company,
+
+        unit: unit
+
+    };
 
 
-                        status.style.color =
-                            "#28a745";
+    console.log(
+        "傳送資料：",
+        data
+    );
 
 
-                        status.innerText =
-                            `🎉 報餐成功！共 ${successCount} 天`;
+    try {
 
+        const response =
+            await fetch(
+                GOOGLE_SCRIPT_URL,
+                {
 
-                    }
+                    method: "POST",
 
+                    headers: {
 
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
 
-                    // =================================================
-                    // 部分成功
-                    // =================================================
+                    },
 
-                    else if (
-                        successCount > 0
-                    ) {
-
-
-                        status.style.color =
-                            "#ff9800";
-
-
-                        status.innerText =
-                            `⚠️ 成功 ${successCount} 天，部分日期未成功`;
-
-
-                        console.log(
-                            "未成功日期：",
-                            failMessages
-                        );
-
-
-                    }
-
-
-
-                    // =================================================
-                    // 全部失敗
-                    // =================================================
-
-                    else {
-
-
-                        status.style.color =
-                            "#dc3545";
-
-
-                        status.innerText =
-                            "❌ 報餐失敗：" +
-                            failMessages.join(
-                                "、"
-                            );
-
-                    }
-
+                    body:
+                        JSON.stringify(data)
 
                 }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "Google 回應：",
+            result
+        );
+
+
+        // =============================================
+        // 成功
+        // =============================================
+
+        if (result.success) {
+
+            successCount++;
+
+            resultMessages.push(
+                `✅ ${orderDate} 報餐成功`
+            );
+
+        }
+
+
+        // =============================================
+        // 失敗
+        // =============================================
+
+        else {
+
+            failCount++;
+
+            resultMessages.push(
+                `❌ ${orderDate} 報餐失敗：${
+                    result.message ||
+                    "未知錯誤"
+                }`
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            `${orderDate} 傳送失敗：`,
+            error
+        );
+
+
+        failCount++;
+
+
+        resultMessages.push(
+            `❌ ${orderDate} 報餐失敗：無法連線到 Google`
+        );
+
+    }
+
+}
+
+
+// =============================================
+// 顯示所有日期的結果
+// =============================================
+
+if (failCount === 0) {
+
+    status.style.color =
+        "#28a745";
+
+} else if (successCount > 0) {
+
+    status.style.color =
+        "#ff9800";
+
+} else {
+
+    status.style.color =
+        "#dc3545";
+
+}
+
+
+// =============================================
+// 每個日期各顯示一行
+// =============================================
+
+status.innerHTML =
+    `🎉 報餐處理完成<br>
+     成功 ${successCount} 天，
+     失敗 ${failCount} 天
+     <br><br>
+     ${resultMessages.join("<br>")}`;
 
 
                 // =================================================
