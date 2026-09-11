@@ -1055,92 +1055,38 @@
             "company_lunch_employee_id";
 
 
-        const NAME_STORAGE_KEY =
-            "last_employee_name";
-
-
-        const COMPANY_STORAGE_KEY =
-            "last_company";
-
-
-        const UNIT_STORAGE_KEY =
-            "last_unit";
-
-
-
         // =================================================
         // 讀取之前資料
         // =================================================
 
         try {
-
-
+        
             const savedId =
                 localStorage.getItem(
                     STORAGE_KEY
                 );
-
-
+        
+        
             if (
                 savedId &&
                 savedId.trim() !== ""
             ) {
-
+        
                 inputField.value =
-                    savedId;
-
+                    savedId
+                        .trim()
+                        .toUpperCase();
+        
             }
-
-
-            const savedName =
-                localStorage.getItem(
-                    NAME_STORAGE_KEY
-                );
-
-
-            if (savedName) {
-
-                nameInput.value =
-                    savedName;
-
-            }
-
-
-            const savedCompany =
-                localStorage.getItem(
-                    COMPANY_STORAGE_KEY
-                );
-
-
-            if (savedCompany) {
-
-                companySelect.value =
-                    savedCompany;
-
-            }
-
-
-            const savedUnit =
-                localStorage.getItem(
-                    UNIT_STORAGE_KEY
-                );
-
-
-            if (savedUnit) {
-
-                unitSelect.value =
-                    savedUnit;
-
-            }
-
-
-        } catch (error) {
-
+        
+        }
+        catch (error) {
+        
             console.error(
-                "讀取記憶資料失敗：",
+                "讀取記憶工號失敗：",
                 error
             );
-
+        
         }
 
 
@@ -1177,7 +1123,10 @@ inputField.addEventListener(
         inputField.value = empId;
 
 
+        // -------------------------------------------------
         // 沒有輸入工號
+        // -------------------------------------------------
+
         if (!empId) {
 
             nameInput.value = "";
@@ -1194,11 +1143,17 @@ inputField.addEventListener(
                 </option>
             `;
 
+            status.innerHTML = "";
+
             return;
+
         }
 
 
-        // 顯示查詢中
+        // -------------------------------------------------
+        // 查詢中
+        // -------------------------------------------------
+
         status.style.color = "#666";
 
         status.innerHTML =
@@ -1207,29 +1162,19 @@ inputField.addEventListener(
 
         try {
 
+            // =================================================
+            // 使用 GET 查詢員工
+            // 對應 Apps Script doGet(e)
+            // =================================================
+
+            const url =
+                GOOGLE_SCRIPT_URL +
+                "?employeeId=" +
+                encodeURIComponent(empId);
+
+
             const response =
-                await fetch(
-                    GOOGLE_SCRIPT_URL,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "text/plain;charset=utf-8"
-                        },
-
-                        body: JSON.stringify({
-
-                            action:
-                                "getEmployee",
-
-                            employeeId:
-                                empId
-
-                        })
-
-                    }
-                );
+                await fetch(url);
 
 
             const result =
@@ -1246,25 +1191,30 @@ inputField.addEventListener(
             // 查詢失敗
             // =================================================
 
-            if (!result.success) {
+            if (
+                !result.success
+            ) {
 
                 nameInput.value = "";
 
+
                 companySelect.innerHTML = `
                     <option value="">
-                        請先輸入員工工號
+                        查無員工資料
                     </option>
                 `;
 
+
                 unitSelect.innerHTML = `
                     <option value="">
-                        請先輸入員工工號
+                        查無員工資料
                     </option>
                 `;
 
 
                 status.style.color =
                     "#dc3545";
+
 
                 status.innerHTML =
                     "❌ " +
@@ -1273,7 +1223,31 @@ inputField.addEventListener(
                         "查無此員工工號"
                     );
 
+
                 return;
+
+            }
+
+
+            // =================================================
+            // Apps Script 回傳格式：
+            //
+            // result.employee.employeeId
+            // result.employee.name
+            // result.employee.company
+            // result.employee.unit
+            // =================================================
+
+            const employee =
+                result.employee;
+
+
+            if (!employee) {
+
+                throw new Error(
+                    "Google 回傳資料缺少 employee"
+                );
+
             }
 
 
@@ -1282,7 +1256,7 @@ inputField.addEventListener(
             // =================================================
 
             nameInput.value =
-                result.name || "";
+                employee.name || "";
 
 
             // =================================================
@@ -1290,9 +1264,18 @@ inputField.addEventListener(
             // =================================================
 
             companySelect.innerHTML = `
-                <option value="${result.company || ""}">
-                    ${result.company || ""}
+
+                <option value="${
+                    employee.company || ""
+                }">
+
+                    ${
+                        employee.company ||
+                        ""
+                    }
+
                 </option>
+
             `;
 
 
@@ -1301,9 +1284,18 @@ inputField.addEventListener(
             // =================================================
 
             unitSelect.innerHTML = `
-                <option value="${result.unit || ""}">
-                    ${result.unit || ""}
+
+                <option value="${
+                    employee.unit || ""
+                }">
+
+                    ${
+                        employee.unit ||
+                        ""
+                    }
+
                 </option>
+
             `;
 
 
@@ -1324,27 +1316,33 @@ inputField.addEventListener(
             status.style.color =
                 "#28a745";
 
+
             status.innerHTML =
                 "✅ 員工資料查詢成功";
 
 
             console.log(
+                "工號：",
+                employee.employeeId
+            );
+
+            console.log(
                 "姓名：",
-                result.name
+                employee.name
             );
 
             console.log(
                 "公司：",
-                result.company
+                employee.company
             );
 
             console.log(
                 "單位：",
-                result.unit
+                employee.unit
             );
 
-
         }
+
 
         catch (error) {
 
@@ -1358,21 +1356,26 @@ inputField.addEventListener(
 
 
             companySelect.innerHTML = `
+
                 <option value="">
                     查詢失敗
                 </option>
+
             `;
 
 
             unitSelect.innerHTML = `
+
                 <option value="">
                     查詢失敗
                 </option>
+
             `;
 
 
             status.style.color =
                 "#dc3545";
+
 
             status.innerHTML =
                 "❌ 無法取得員工資料，請稍後再試。";
@@ -1381,89 +1384,6 @@ inputField.addEventListener(
 
     }
 );
-
-
-
-
-
-
-        // =================================================
-        // 姓名
-        // =================================================
-
-        nameInput.addEventListener(
-            "input",
-            function () {
-
-                localStorage.setItem(
-                    NAME_STORAGE_KEY,
-                    nameInput.value
-                );
-
-            }
-        );
-
-
-        nameInput.addEventListener(
-            "blur",
-            function () {
-
-                const name =
-                    nameInput.value.trim();
-
-
-                nameInput.value =
-                    name;
-
-
-                if (name !== "") {
-
-                    localStorage.setItem(
-                        NAME_STORAGE_KEY,
-                        name
-                    );
-
-                }
-
-            }
-        );
-
-
-
-        // =================================================
-        // 公司
-        // =================================================
-
-        companySelect.addEventListener(
-            "change",
-            function () {
-
-                localStorage.setItem(
-                    COMPANY_STORAGE_KEY,
-                    companySelect.value
-                );
-
-            }
-        );
-
-
-
-        // =================================================
-        // 單位
-        // =================================================
-
-        unitSelect.addEventListener(
-            "change",
-            function () {
-
-                localStorage.setItem(
-                    UNIT_STORAGE_KEY,
-                    unitSelect.value
-                );
-
-            }
-        );
-
 
 
         // =================================================
