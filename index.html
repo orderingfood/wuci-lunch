@@ -597,8 +597,8 @@
                 type="text"
                 id="nameInput"
                 class="input-field"
-                autocomplete="name"
-                placeholder="請輸入姓名"
+                readonly
+                placeholder="輸入工號後自動帶入"
             >
 
 
@@ -646,7 +646,6 @@
             <label for="companySelect">
 
                 🏢 公司名稱
-                (運務士選擇全翔)：
 
             </label>
 
@@ -654,6 +653,7 @@
             <select
                 id="companySelect"
                 class="input-field"
+                disabled
             >
 
                 <option value="">
@@ -725,6 +725,7 @@
             <select
                 id="unit"
                 class="input-field"
+                disabled
             >
 
                 <option value="">
@@ -1253,32 +1254,130 @@
             }
         );
 
+inputField.addEventListener(
+    "blur",
+    async function () {
 
-        inputField.addEventListener(
-            "blur",
-            function () {
+        const empId =
+            inputField.value
+                .trim()
+                .toUpperCase();
 
-                const empId =
-                    inputField.value
-                        .trim()
-                        .toUpperCase();
-
-
-                inputField.value =
-                    empId;
+        inputField.value =
+            empId;
 
 
-                if (empId !== "") {
+        if (!empId) {
+            return;
+        }
 
-                    localStorage.setItem(
-                        STORAGE_KEY,
-                        empId
-                    );
 
-                }
+        status.style.color =
+            "#666";
+
+        status.innerHTML =
+            "⏳ 正在查詢員工資料...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    GOOGLE_SCRIPT_URL,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                action:
+                                    "getEmployee",
+                                employeeId:
+                                    empId
+                            })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!result.success) {
+
+                nameInput.value =
+                    "";
+
+                companySelect.value =
+                    "";
+
+                unitSelect.value =
+                    "";
+
+
+                status.style.color =
+                    "#dc3545";
+
+                status.innerHTML =
+                    "❌ " +
+                    result.message;
+
+                return;
 
             }
-        );
+
+
+            // -----------------------------
+            // 自動帶入員工資料
+            // -----------------------------
+
+            nameInput.value =
+                result.name;
+
+            companySelect.value =
+                result.company;
+
+            unitSelect.value =
+                result.unit;
+
+
+            // 記住工號
+            localStorage.setItem(
+                STORAGE_KEY,
+                empId
+            );
+
+
+            status.style.color =
+                "#28a745";
+
+            status.innerHTML =
+                "✅ 員工資料查詢成功";
+
+
+        } catch (error) {
+
+            console.error(
+                "查詢員工資料失敗：",
+                error
+            );
+
+            status.style.color =
+                "#dc3545";
+
+            status.innerHTML =
+                "❌ 無法取得員工資料，請稍後再試。";
+
+        }
+
+    }
+);
+
+
 
 
 
