@@ -46,9 +46,7 @@
 
         body {
 
-            font-family:
-                Arial,
-                sans-serif;
+            font-family: Arial, sans-serif;
 
             background:
                 linear-gradient(
@@ -226,7 +224,38 @@
 
             font-size: 16px;
 
+            line-height: 1.8;
+
             min-height: 24px;
+
+            text-align: left;
+
+            word-break: break-word;
+
+        }
+
+
+        .status-title {
+
+            text-align: center;
+
+            font-size: 18px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .result-success {
+
+            color: #28a745;
+
+        }
+
+
+        .result-fail {
+
+            color: #dc3545;
 
         }
 
@@ -318,8 +347,7 @@
 
             display: flex;
 
-            justify-content:
-                space-around;
+            justify-content: space-around;
 
             margin-bottom: 20px;
 
@@ -390,7 +418,7 @@
 
             gap: 10px;
 
-            max-height: 200px;
+            max-height: 250px;
 
             overflow-y: auto;
 
@@ -412,16 +440,23 @@
 
             align-items: center;
 
-            padding: 6px;
+            padding: 8px;
 
             background: white;
 
             border:
                 1px solid #ddd;
 
-            border-radius: 4px;
+            border-radius: 6px;
 
             cursor: pointer;
+
+        }
+
+
+        .date-item:hover {
+
+            background: #f0f8ff;
 
         }
 
@@ -524,7 +559,7 @@
 
 
         <!-- =================================================
-             姓名
+             員工姓名
         ================================================== -->
 
         <div class="input-group">
@@ -827,7 +862,7 @@
 
 
         <!-- =================================================
-             單日
+             單日報餐
         ================================================== -->
 
         <div
@@ -858,7 +893,7 @@
 
 
         <!-- =================================================
-             多日
+             多日報餐
         ================================================== -->
 
         <div
@@ -880,8 +915,6 @@
                     id="multi-date-list"
                     class="date-checkbox-list"
                 >
-
-                    <!-- JavaScript 自動產生 -->
 
                 </div>
 
@@ -931,18 +964,21 @@
         // =================================================
         // Google Apps Script 網址
         //
-        // ⚠️ 請把下面網址換成你的 Apps Script /exec 網址
+        // ⚠️ 一定要改成你的 /exec 網址
         // =================================================
 
         const GOOGLE_SCRIPT_URL =
             "https://script.google.com/macros/s/AKfycbz5A0b2thyY6D2ExzqC_IEizobQmFf6mxSHrw2rl7nWaBjsnjqOijuNf13rElb4aQPKUg/exec";
 
 
+
         // =================================================
         // 目前分頁
         // =================================================
 
-        let currentMode = "single";
+        let currentMode =
+            "single";
+
 
 
         // =================================================
@@ -1008,7 +1044,7 @@
 
 
         // =================================================
-        // 載入之前儲存的資料
+        // 讀取之前資料
         // =================================================
 
         try {
@@ -1085,25 +1121,17 @@
 
 
         // =================================================
-        // 工號輸入
+        // 工號
         // =================================================
 
         inputField.addEventListener(
             "input",
             function () {
 
-                try {
-
-                    localStorage.setItem(
-                        STORAGE_KEY,
-                        inputField.value
-                    );
-
-                } catch (error) {
-
-                    console.error(error);
-
-                }
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    inputField.value
+                );
 
             }
         );
@@ -1274,7 +1302,7 @@
 
 
         // =================================================
-        // 日期格式化
+        // 日期格式
         // =================================================
 
         function formatLocalDate(date) {
@@ -1324,13 +1352,13 @@
                 new Date();
 
 
-            // 今天開始
             const startDate =
                 new Date(
                     today
                 );
 
 
+            // 今天可以報
             startDate.setDate(
                 today.getDate()
             );
@@ -1465,7 +1493,7 @@
 
 
         // =================================================
-        // 切換分頁
+        // 分頁
         // =================================================
 
         function switchTab(mode) {
@@ -1475,7 +1503,6 @@
                 mode;
 
 
-            // 移除按鈕 active
             document
                 .querySelectorAll(
                     ".tab-btn"
@@ -1491,7 +1518,6 @@
                 );
 
 
-            // 對應按鈕
             document
                 .querySelectorAll(
                     ".tab-btn"
@@ -1525,7 +1551,6 @@
                 );
 
 
-            // 隱藏所有內容
             document
                 .querySelectorAll(
                     ".tab-content"
@@ -1541,7 +1566,6 @@
                 );
 
 
-            // 顯示目前內容
             const targetTab =
                 document.getElementById(
                     "tab-" + mode
@@ -1557,12 +1581,7 @@
             }
 
 
-            // 清除訊息
-            status.innerText =
-                "";
-
-
-            status.style.color =
+            status.innerHTML =
                 "";
 
         }
@@ -1578,10 +1597,6 @@
 
             const dates = [];
 
-
-            // -------------------------------------------------
-            // 單日
-            // -------------------------------------------------
 
             if (
                 currentMode === "single"
@@ -1605,11 +1620,6 @@
                 }
 
             }
-
-
-            // -------------------------------------------------
-            // 多日
-            // -------------------------------------------------
 
             else {
 
@@ -1646,7 +1656,7 @@
 
 
                 // -------------------------------------------------
-                // 檢查 Google 網址
+                // 檢查網址
                 // -------------------------------------------------
 
                 if (
@@ -1659,7 +1669,7 @@
                     status.style.color =
                         "#dc3545";
 
-                    status.innerText =
+                    status.innerHTML =
                         "❌ 尚未設定 Google Apps Script 網址。";
 
                     return;
@@ -1713,7 +1723,7 @@
 
 
                 // -------------------------------------------------
-                // 工號
+                // 驗證
                 // -------------------------------------------------
 
                 if (!empId) {
@@ -1721,7 +1731,7 @@
                     status.style.color =
                         "#dc3545";
 
-                    status.innerText =
+                    status.innerHTML =
                         "❌ 請先輸入您的員工代號！";
 
                     inputField.focus();
@@ -1731,17 +1741,12 @@
                 }
 
 
-
-                // -------------------------------------------------
-                // 姓名
-                // -------------------------------------------------
-
                 if (!name) {
 
                     status.style.color =
                         "#dc3545";
 
-                    status.innerText =
+                    status.innerHTML =
                         "❌ 請輸入您的姓名！";
 
                     nameInput.focus();
@@ -1751,17 +1756,12 @@
                 }
 
 
-
-                // -------------------------------------------------
-                // 公司
-                // -------------------------------------------------
-
                 if (!company) {
 
                     status.style.color =
                         "#dc3545";
 
-                    status.innerText =
+                    status.innerHTML =
                         "❌ 請選擇公司！";
 
                     companySelect.focus();
@@ -1771,17 +1771,12 @@
                 }
 
 
-
-                // -------------------------------------------------
-                // 單位
-                // -------------------------------------------------
-
                 if (!unit) {
 
                     status.style.color =
                         "#dc3545";
 
-                    status.innerText =
+                    status.innerHTML =
                         "❌ 請選擇單位！";
 
                     unitSelect.focus();
@@ -1791,11 +1786,6 @@
                 }
 
 
-
-                // -------------------------------------------------
-                // 日期
-                // -------------------------------------------------
-
                 if (
                     selectedDates.length === 0
                 ) {
@@ -1803,7 +1793,7 @@
                     status.style.color =
                         "#dc3545";
 
-                    status.innerText =
+                    status.innerHTML =
                         "❌ 請至少選擇一個報餐日期！";
 
                     return;
@@ -1813,7 +1803,7 @@
 
 
                 // -------------------------------------------------
-                // 防止連續按兩次
+                // 禁止重複按鈕
                 // -------------------------------------------------
 
                 submitBtn.disabled =
@@ -1828,17 +1818,16 @@
                     "#666";
 
 
-                status.innerText =
+                status.innerHTML =
                     "⏳ 正在傳送報餐資料...";
 
 
 
                 // -------------------------------------------------
-                // 儲存使用者資料
+                // 儲存資料
                 // -------------------------------------------------
 
                 try {
-
 
                     localStorage.setItem(
                         STORAGE_KEY,
@@ -1863,8 +1852,9 @@
                         unit
                     );
 
+                }
 
-                } catch (error) {
+                catch (error) {
 
                     console.error(
                         "儲存資料失敗：",
@@ -1875,22 +1865,25 @@
 
 
 
-                // -------------------------------------------------
-                // 開始傳送
-                // -------------------------------------------------
+                // =================================================
+                // 開始逐日傳送
+                // =================================================
+
+                let successCount =
+                    0;
+
+
+                let failCount =
+                    0;
+
+
+                let resultMessages =
+                    [];
+
+
 
                 try {
 
-
-                let successCount = 0;
-                let failCount = 0;
-
-                let resultMessages = [];
-
-
-                    // =============================================
-                    // 一個日期一個日期傳送
-                    // =============================================
 
                     for (
                         const orderDate
@@ -1930,76 +1923,131 @@
                         );
 
 
-                        const response =
-                            await fetch(
-                                GOOGLE_SCRIPT_URL,
-                                {
 
-                                    method:
-                                        "POST",
+                        try {
 
-                                    headers: {
 
-                                        "Content-Type":
-                                            "text/plain;charset=utf-8"
+                            const response =
+                                await fetch(
+                                    GOOGLE_SCRIPT_URL,
+                                    {
 
-                                    },
+                                        method:
+                                            "POST",
 
-                                    body:
-                                        JSON.stringify(
-                                            data
-                                        )
+                                        headers: {
 
-                                }
+                                            "Content-Type":
+                                                "text/plain;charset=utf-8"
+
+                                        },
+
+                                        body:
+                                            JSON.stringify(
+                                                data
+                                            )
+
+                                    }
+                                );
+
+
+
+                            // -------------------------------------------------
+                            // Google 回應
+                            // -------------------------------------------------
+
+                            const result =
+                                await response.json();
+
+
+                            console.log(
+                                "Google 回應：",
+                                result
                             );
 
 
 
-                        // -------------------------------------------------
-                        // 讀取 Google 回應
-                        // -------------------------------------------------
+                            // -------------------------------------------------
+                            // 成功
+                            // -------------------------------------------------
 
-                        const result =
-                            await response.json();
-
-
-                        console.log(
-                            "Google 回應：",
-                            result
-                        );
+                            if (
+                                result.success
+                            ) {
 
 
+                                successCount++;
 
-                        // -------------------------------------------------
-                        // 成功
-                        // -------------------------------------------------
 
-                        if (
-                            result.success
-                        ) {
+                                resultMessages.push(`
 
-                            successCount++;
+                                    <div class="result-success">
+
+                                        ✅ ${orderDate}
+                                        報餐成功
+
+                                    </div>
+
+                                `);
+
+                            }
+
+
+
+                            // -------------------------------------------------
+                            // 失敗
+                            // -------------------------------------------------
+
+                            else {
+
+
+                                failCount++;
+
+
+                                resultMessages.push(`
+
+                                    <div class="result-fail">
+
+                                        ❌ ${orderDate}
+                                        報餐失敗：
+                                        ${
+                                            result.message ||
+                                            "未知錯誤"
+                                        }
+
+                                    </div>
+
+                                `);
+
+                            }
+
 
                         }
 
 
+                        catch (error) {
 
-                        // -------------------------------------------------
-                        // 失敗
-                        // -------------------------------------------------
 
-                        else {
-
-                            failMessages.push(
-
-                                orderDate +
-                                "：" +
-                                (
-                                    result.message ||
-                                    "未知錯誤"
-                                )
-
+                            console.error(
+                                `${orderDate} 傳送失敗：`,
+                                error
                             );
+
+
+                            failCount++;
+
+
+                            resultMessages.push(`
+
+                                <div class="result-fail">
+
+                                    ❌ ${orderDate}
+                                    報餐失敗：
+                                    無法連線到 Google
+
+                                </div>
+
+                            `);
 
                         }
 
@@ -2008,169 +2056,73 @@
 
 
                     // =================================================
-                    // 全部成功
+                    // 顯示最後結果
                     // =================================================
 
-// =============================================
-// 一個日期一個日期傳送
-// =============================================
+                    if (
+                        failCount === 0
+                    ) {
 
-for (const orderDate of selectedDates) {
+                        status.style.color =
+                            "#28a745";
 
-    const data = {
+                    }
 
-        orderDate: orderDate,
+                    else if (
+                        successCount > 0
+                    ) {
 
-        mealTime: mealTime,
+                        status.style.color =
+                            "#ff9800";
 
-        category: category,
+                    }
 
-        employeeId: empId,
+                    else {
 
-        name: name,
+                        status.style.color =
+                            "#dc3545";
 
-        company: company,
-
-        unit: unit
-
-    };
-
-
-    console.log(
-        "傳送資料：",
-        data
-    );
+                    }
 
 
-    try {
 
-        const response =
-            await fetch(
-                GOOGLE_SCRIPT_URL,
-                {
+                    status.innerHTML = `
 
-                    method: "POST",
+                        <div class="status-title">
 
-                    headers: {
+                            🎉 報餐處理完成
 
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
+                        </div>
 
-                    },
 
-                    body:
-                        JSON.stringify(data)
+                        <div style="
+                            text-align:center;
+                            margin-bottom:12px;
+                        ">
+
+                            成功
+                            ${successCount}
+                            天　
+                            失敗
+                            ${failCount}
+                            天
+
+                        </div>
+
+
+                        ${resultMessages.join("")}
+
+                    `;
+
 
                 }
-            );
 
-
-        const result =
-            await response.json();
-
-
-        console.log(
-            "Google 回應：",
-            result
-        );
-
-
-        // =============================================
-        // 成功
-        // =============================================
-
-        if (result.success) {
-
-            successCount++;
-
-            resultMessages.push(
-                `✅ ${orderDate} 報餐成功`
-            );
-
-        }
-
-
-        // =============================================
-        // 失敗
-        // =============================================
-
-        else {
-
-            failCount++;
-
-            resultMessages.push(
-                `❌ ${orderDate} 報餐失敗：${
-                    result.message ||
-                    "未知錯誤"
-                }`
-            );
-
-        }
-
-
-    } catch (error) {
-
-        console.error(
-            `${orderDate} 傳送失敗：`,
-            error
-        );
-
-
-        failCount++;
-
-
-        resultMessages.push(
-            `❌ ${orderDate} 報餐失敗：無法連線到 Google`
-        );
-
-    }
-
-}
-
-
-// =============================================
-// 顯示所有日期的結果
-// =============================================
-
-if (failCount === 0) {
-
-    status.style.color =
-        "#28a745";
-
-} else if (successCount > 0) {
-
-    status.style.color =
-        "#ff9800";
-
-} else {
-
-    status.style.color =
-        "#dc3545";
-
-}
-
-
-// =============================================
-// 每個日期各顯示一行
-// =============================================
-
-status.innerHTML =
-    `🎉 報餐處理完成<br>
-     成功 ${successCount} 天，
-     失敗 ${failCount} 天
-     <br><br>
-     ${resultMessages.join("<br>")}`;
-
-
-                // =================================================
-                // 網路錯誤
-                // =================================================
 
                 catch (error) {
 
 
                     console.error(
-                        "Google API 錯誤：",
+                        "報餐系統錯誤：",
                         error
                     );
 
@@ -2179,18 +2131,18 @@ status.innerHTML =
                         "#dc3545";
 
 
-                    status.innerText =
-                        "❌ 無法連線到 Google，請稍後再試。";
+                    status.innerHTML =
+                        "❌ 報餐處理失敗，請稍後再試。";
 
                 }
 
 
-                // =================================================
+
+                // -------------------------------------------------
                 // 恢復按鈕
-                // =================================================
+                // -------------------------------------------------
 
                 finally {
-
 
                     submitBtn.disabled =
                         false;
@@ -2206,7 +2158,7 @@ status.innerHTML =
 
 
         // =================================================
-        // PWA Service Worker
+        // Service Worker
         // =================================================
 
         if (
@@ -2234,7 +2186,7 @@ status.innerHTML =
 
 
         // =================================================
-        // 網頁載入完成
+        // 網頁載入
         // =================================================
 
         document.addEventListener(
