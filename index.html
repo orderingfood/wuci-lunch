@@ -588,6 +588,32 @@
 
         </div>
 
+        <div class="input-group">
+
+            <label for="proxyEmpIdInput">
+
+            🧑‍💼 代報人工號：
+
+            </label>
+
+            <input
+                type="text"
+                id="proxyEmpIdInput"
+                class="input-field"
+                autocomplete="off"
+                autocapitalize="characters"
+                placeholder="若為本人報餐請留白"
+                >
+
+            <div class="hint">
+
+        ※ 若由其他人代為報餐，請輸入代報人工號。
+        本人報餐不需填寫。
+
+        </div>
+
+</div>
+
 
         <!-- =================================================
              公司
@@ -994,6 +1020,11 @@
         const nameInput =
             document.getElementById(
                 "nameInput"
+            );
+
+        const proxyEmpIdInput =
+            document.getElementById(
+                "proxyEmpIdInput"
             );
 
 
