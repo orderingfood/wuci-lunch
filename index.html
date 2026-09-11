@@ -111,6 +111,15 @@
 
         }
 
+        proxy-input-group{
+
+            margin: 20px 0;
+
+            text-align: left;
+
+            background-color:#fff8e1
+
+        }
 
         .input-group label {
 
@@ -588,7 +597,7 @@
 
         </div>
 
-        <div class="input-group">
+        <div class="proxy-input-group">
 
             <label for="proxyEmpIdInput">
 
@@ -1100,15 +1109,16 @@
                     status.style.color =
                         "#dc3545";
         
-                    status.innerHTML = `
-                        <div class="status-title">
-                            ❌ 為自己報餐時，不需填寫此欄！
-                        </div>
-                    `;
+
+                    alert(
+                        " ❌ 為自己報餐時，不需填寫此欄！"
+                    );
+        
+                    proxyEmpIdInput.value = "";
         
                     proxyEmpIdInput.focus();
-        
-                }
+                
+                        }
         
             }
         );
