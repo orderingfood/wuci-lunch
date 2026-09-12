@@ -664,6 +664,74 @@
     
     }
 
+        /* -------------------------------------------------
+           單日報餐時間資訊
+        ------------------------------------------------- */
+
+        .single-time-info {
+        
+            margin-top: 12px;
+        
+            padding: 14px;
+        
+            background-color: #f8fafc;
+        
+            border:
+                1px solid #dbeafe;
+        
+            border-radius: 8px;
+        
+            text-align: center;
+        
+        }
+        
+        
+        /* 目前時間 */
+        
+        .current-time {
+        
+            font-size: 18px;
+        
+            font-weight: bold;
+        
+            color: #2563eb;
+        
+            margin-bottom: 10px;
+        
+        }
+        
+        
+        /* 報餐規則 */
+        
+        .meal-rule {
+        
+            font-size: 14px;
+        
+            color: #555;
+        
+            line-height: 1.8;
+        
+        }
+        
+        
+        /* 禁止報餐 */
+        
+        .time-warning {
+        
+            margin-top: 10px;
+        
+            padding: 10px;
+        
+            background-color: #fee2e2;
+        
+            color: #dc2626;
+        
+            border-radius: 6px;
+        
+            font-weight: bold;
+        
+        }
+
 
     </style>
 
@@ -932,6 +1000,38 @@
 
             </div>
 
+        </div>
+
+        <div
+            id="single-time-info"
+            class="single-time-info"
+        >
+        
+            <div
+                id="current-time"
+                class="current-time"
+            >
+                🕐 目前時間：讀取中...
+            </div>
+        
+        
+            <div class="meal-rule">
+        
+                🍱 午餐：
+                當天報餐截止時間為
+                <strong>09:00</strong>
+        
+            </div>
+        
+        
+            <div class="meal-rule">
+        
+                🌙 晚餐：
+                當天報餐截止時間為
+                <strong>14:00</strong>
+        
+            </div>
+        
         </div>
 
 
@@ -1456,19 +1556,21 @@ inputField.addEventListener(
         whiteInput.addEventListener(
             "change",
             function () {
-
+        
                 if (this.checked) {
-
+        
                     document.body.classList.add(
                         "white-mode"
                     );
-
+        
                     document.body.classList.remove(
                         "dark-mode"
                     );
-
+        
+                    updateTimeWarning();
+        
                 }
-
+        
             }
         );
 
@@ -1476,22 +1578,23 @@ inputField.addEventListener(
         blackInput.addEventListener(
             "change",
             function () {
-
+        
                 if (this.checked) {
-
+        
                     document.body.classList.add(
                         "dark-mode"
                     );
-
+        
                     document.body.classList.remove(
                         "white-mode"
                     );
-
+        
+                    updateTimeWarning();
+        
                 }
-
+        
             }
         );
-
 
 
         // =================================================
@@ -1530,6 +1633,341 @@ inputField.addEventListener(
                 day
             );
 
+        }
+
+        // =================================================
+        // 報餐時間設定
+        // =================================================
+        
+        const LUNCH_DEADLINE_HOUR = 9;
+        
+        const DINNER_DEADLINE_HOUR = 14;
+        
+        
+        // =================================================
+        // 取得目前台灣時間
+        // =================================================
+        
+        function getTaiwanNow() {
+        
+            const now =
+                new Date();
+        
+            const taiwanString =
+                now.toLocaleString(
+                    "en-US",
+                    {
+                        timeZone:
+                            "Asia/Taipei"
+                    }
+                );
+        
+            return new Date(
+                taiwanString
+            );
+        
+        }
+
+
+        // =================================================
+        // 顯示目前時間
+        // =================================================
+        
+        function updateCurrentTime() {
+        
+            const timeElement =
+                document.getElementById(
+                    "current-time"
+                );
+        
+        
+            if (!timeElement) {
+        
+                return;
+        
+            }
+        
+        
+            const now =
+                getTaiwanNow();
+        
+        
+            const year =
+                now.getFullYear();
+        
+        
+            const month =
+                String(
+                    now.getMonth() + 1
+                ).padStart(
+                    2,
+                    "0"
+                );
+        
+        
+            const day =
+                String(
+                    now.getDate()
+                ).padStart(
+                    2,
+                    "0"
+                );
+        
+        
+            const hours =
+                String(
+                    now.getHours()
+                ).padStart(
+                    2,
+                    "0"
+                );
+        
+        
+            const minutes =
+                String(
+                    now.getMinutes()
+                ).padStart(
+                    2,
+                    "0"
+                );
+        
+        
+            const seconds =
+                String(
+                    now.getSeconds()
+                ).padStart(
+                    2,
+                    "0"
+                );
+        
+        
+            timeElement.innerText =
+                `🕐 目前時間：${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        
+        }
+
+
+        // =================================================
+        // 檢查單日報餐時間
+        // =================================================
+        
+        function checkSingleMealTime() {
+        
+            const dateInput =
+                document.getElementById(
+                    "single-date"
+                );
+        
+        
+            const warningElement =
+                document.getElementById(
+                    "single-time-warning"
+                );
+        
+        
+            if (!dateInput) {
+        
+                return true;
+        
+            }
+        
+        
+            const selectedDate =
+                dateInput.value;
+        
+        
+            // -------------------------------------------------
+            // 沒選日期
+            // -------------------------------------------------
+        
+            if (!selectedDate) {
+        
+                return true;
+        
+            }
+        
+        
+            const now =
+                getTaiwanNow();
+        
+        
+            const today =
+                formatLocalDate(
+                    now
+                );
+        
+        
+            // -------------------------------------------------
+            // 未來日期
+            //
+            // 不受當天截止時間限制
+            // -------------------------------------------------
+        
+            if (
+                selectedDate !== today
+            ) {
+        
+                if (warningElement) {
+        
+                    warningElement.innerHTML =
+                        "";
+        
+                }
+        
+                return true;
+        
+            }
+        
+        
+            // -------------------------------------------------
+            // 取得目前餐別
+            // -------------------------------------------------
+        
+            const mealTime =
+                document.querySelector(
+                    'input[name="mealTime"]:checked'
+                )?.value || "";
+        
+        
+            const currentHour =
+                now.getHours();
+        
+        
+            const currentMinute =
+                now.getMinutes();
+        
+        
+            const currentTime =
+                currentHour * 60 +
+                currentMinute;
+        
+        
+            // -------------------------------------------------
+            // 午餐
+            // 截止 09:00
+            // -------------------------------------------------
+        
+            if (
+                mealTime === "午餐"
+            ) {
+        
+                const deadline =
+                    LUNCH_DEADLINE_HOUR * 60;
+        
+        
+                if (
+                    currentTime >= deadline
+                ) {
+        
+                    if (warningElement) {
+        
+                        warningElement.innerHTML =
+                            "❌ 今日午餐已超過 09:00 截止時間，無法報餐。";
+        
+                    }
+        
+                    return false;
+        
+                }
+        
+            }
+        
+        
+            // -------------------------------------------------
+            // 晚餐
+            // 截止 14:00
+            // -------------------------------------------------
+        
+            if (
+                mealTime === "晚餐"
+            ) {
+        
+                const deadline =
+                    DINNER_DEADLINE_HOUR * 60;
+        
+        
+                if (
+                    currentTime >= deadline
+                ) {
+        
+                    if (warningElement) {
+        
+                        warningElement.innerHTML =
+                            "❌ 今日晚餐已超過 14:00 截止時間，無法報餐。";
+        
+                    }
+        
+                    return false;
+        
+                }
+        
+            }
+        
+        
+            // -------------------------------------------------
+            // 可以報餐
+            // -------------------------------------------------
+        
+            if (warningElement) {
+        
+                warningElement.innerHTML =
+                    "";
+        
+            }
+        
+        
+            return true;
+        
+        }
+        
+        
+        // =================================================
+        // 建立 / 更新時間警告
+        // =================================================
+        
+        function updateTimeWarning() {
+        
+            const info =
+                document.getElementById(
+                    "single-time-info"
+                );
+        
+        
+            if (!info) {
+        
+                return;
+        
+            }
+        
+        
+            let warning =
+                document.getElementById(
+                    "single-time-warning"
+                );
+        
+        
+            if (!warning) {
+        
+                warning =
+                    document.createElement(
+                        "div"
+                    );
+        
+                warning.id =
+                    "single-time-warning";
+        
+                warning.className =
+                    "time-warning";
+        
+                info.appendChild(
+                    warning
+                );
+        
+            }
+        
+        
+            checkSingleMealTime();
+        
         }
 
 
@@ -1585,11 +2023,14 @@ function initializeDates() {
     // 單日報餐
     // =================================================
 
-    const singleDateInput =
-        document.getElementById(
-            "single-date"
-        );
-
+    singleDateInput.addEventListener(
+        "change",
+        function () {
+    
+            updateTimeWarning();
+    
+        }
+    );
 
     singleDateInput.min =
         minStr;
@@ -1925,6 +2366,88 @@ function initializeDates() {
 
                 const selectedDates =
                     getSelectedDates();
+
+        // -------------------------------------------------
+        // 檢查當天報餐截止時間
+        // -------------------------------------------------
+        
+        const now =
+            getTaiwanNow();
+        
+        const today =
+            formatLocalDate(now);
+        
+        const currentTime =
+            now.getHours() * 60 +
+            now.getMinutes();
+        
+        
+        // =================================================
+        // 判斷是否有違反當天報餐時間
+        // =================================================
+        
+        for (
+            const orderDate of selectedDates
+        ) {
+        
+            // ---------------------------------------------
+            // 只有「今天」需要檢查截止時間
+            // ---------------------------------------------
+        
+            if (
+                orderDate !== today
+            ) {
+        
+                continue;
+        
+            }
+        
+        
+            // ---------------------------------------------
+            // 午餐
+            // ---------------------------------------------
+        
+            if (
+                mealTime === "午餐" &&
+                currentTime >= 9 * 60
+            ) {
+        
+                status.style.color =
+                    "#dc3545";
+        
+                status.innerHTML =
+                    "❌ 今日午餐已超過 09:00 截止時間，無法報餐。";
+        
+                updateTimeWarning();
+        
+                return;
+        
+            }
+        
+        
+            // ---------------------------------------------
+            // 晚餐
+            // ---------------------------------------------
+        
+            if (
+                mealTime === "晚餐" &&
+                currentTime >= 14 * 60
+            ) {
+        
+                status.style.color =
+                    "#dc3545";
+        
+                status.innerHTML =
+                    "❌ 今日晚餐已超過 14:00 截止時間，無法報餐。";
+        
+                updateTimeWarning();
+        
+                return;
+        
+            }
+        
+        }
+
 
 
 
@@ -2312,6 +2835,21 @@ function initializeDates() {
                 initializeDates();
 
             }
+        );
+
+        // =================================================
+        // 目前時間即時更新
+        // =================================================
+        
+        setInterval(
+            function () {
+        
+                updateCurrentTime();
+        
+                updateTimeWarning();
+        
+            },
+            1000
         );
 
 
