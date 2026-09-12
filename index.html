@@ -855,6 +855,115 @@
         
         }
 
+        /* =================================================
+           查詢結果表格
+        ================================================= */
+        
+        .query-table-wrapper {
+        
+            width: 100%;
+        
+            overflow-x: auto;
+        
+            margin-top: 20px;
+        
+            border:
+                1px solid #ddd;
+        
+            border-radius: 10px;
+        
+            background: white;
+        
+        }
+        
+        
+        .query-table {
+        
+            width: 100%;
+        
+            min-width: 1050px;
+        
+            border-collapse: collapse;
+        
+            font-size: 14px;
+        
+        }
+        
+        
+        .query-table th {
+        
+            background: #007bff;
+        
+            color: white;
+        
+            padding: 12px 10px;
+        
+            border:
+                1px solid #ddd;
+        
+            white-space: nowrap;
+        
+            text-align: center;
+        
+        }
+        
+        
+        .query-table td {
+        
+            padding: 11px 10px;
+        
+            border:
+                1px solid #ddd;
+        
+            white-space: nowrap;
+        
+            text-align: center;
+        
+        }
+        
+        
+        .query-table tbody tr:nth-child(even) {
+        
+            background:
+                #f8fafc;
+        
+        }
+        
+        
+        .query-table tbody tr:hover {
+        
+            background:
+                #eff6ff;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           可取消
+        ------------------------------------------------- */
+        
+        .query-table .status-cancel {
+        
+            color: #16a34a;
+        
+            font-weight: bold;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           不可取消
+        ------------------------------------------------- */
+        
+        .query-table .status-disabled {
+        
+            color: #dc2626;
+        
+            font-weight: bold;
+        
+        }
+
+
     </style>
 
 </head>
@@ -3751,84 +3860,147 @@ function initializeDates() {
                 // =================================================
                 // 顯示查詢結果
                 // =================================================
-        
-                let html = "";
-        
-        
+                
+                let html = `
+                
+                    <div class="query-table-wrapper">
+                
+                        <table class="query-table">
+                
+                            <thead>
+                
+                                <tr>
+                
+                                    <th>報餐日期</th>
+                                    <th>工號</th>
+                                    <th>姓名</th>
+                                    <th>公司</th>
+                                    <th>單位</th>
+                                    <th>餐別</th>
+                                    <th>葷素別</th>
+                                    <th>代報人</th>
+                                    <th>報餐時間</th>
+                                    <th>狀態</th>
+                
+                                </tr>
+                
+                            </thead>
+                
+                            <tbody>
+                `;
+                
+                
                 result.results.forEach(
                     function(item) {
-        
+                
+                        let statusText = "";
+                
+                        let statusClass = "";
+                
+                
+                        // -------------------------------------------------
+                        // J欄 O = 可取消
+                        // J欄 X = 不可取消
+                        // -------------------------------------------------
+                
+                        if (
+                            item.status === "O"
+                        ) {
+                
+                            statusText =
+                                "可取消";
+                
+                            statusClass =
+                                "status-cancel";
+                
+                        }
+                
+                        else if (
+                            item.status === "X"
+                        ) {
+                
+                            statusText =
+                                "不可取消";
+                
+                            statusClass =
+                                "status-disabled";
+                
+                        }
+                
+                        else {
+                
+                            statusText =
+                                item.status || "";
+                
+                        }
+                
+                
                         html += `
-                        
-                            <div
-                                style="
-                                    border:1px solid #ddd;
-                                    border-radius:10px;
-                                    padding:15px;
-                                    margin-top:12px;
-                                    text-align:left;
-                                    background:#fff;
-                                "
-                            >
-        
-                                <div>
-                                    <strong>📅 報餐日期：</strong>
+                
+                            <tr>
+                
+                                <td>
                                     ${item.orderDate || ""}
-                                </div>
-        
-                                <div>
-                                    <strong>🆔 工號：</strong>
+                                </td>
+                
+                                <td>
                                     ${item.employeeId || ""}
-                                </div>
-        
-                                <div>
-                                    <strong>👤 姓名：</strong>
+                                </td>
+                
+                                <td>
                                     ${item.name || ""}
-                                </div>
-        
-                                <div>
-                                    <strong>🏢 公司：</strong>
+                                </td>
+                
+                                <td>
                                     ${item.company || ""}
-                                </div>
-        
-                                <div>
-                                    <strong>👨‍👩‍👧‍👦 單位：</strong>
+                                </td>
+                
+                                <td>
                                     ${item.unit || ""}
-                                </div>
-        
-                                <div>
-                                    <strong>🍱 餐別：</strong>
+                                </td>
+                
+                                <td>
                                     ${item.mealTime || ""}
-                                </div>
-        
-                                <div>
-                                    <strong>🥬 葷素別：</strong>
+                                </td>
+                
+                                <td>
                                     ${item.category || ""}
-                                </div>
-        
-                                <div>
-                                    <strong>✍️ 代報人：</strong>
-                                    ${item.proxyEmployeeId || "本人"}
-                                </div>
-        
-                                <div>
-                                    <strong>🕐 報餐時間：</strong>
+                                </td>
+                
+                                <td>
+                                    ${
+                                        item.proxyEmployeeId ||
+                                        "本人"
+                                    }
+                                </td>
+                
+                                <td>
                                     ${item.orderTime || ""}
-                                </div>
-        
-                                <div>
-                                    <strong>📌 狀態：</strong>
-                                    ${item.status || ""}
-                                </div>
-        
-                            </div>
-        
+                                </td>
+                
+                                <td class="${statusClass}">
+                                    ${statusText}
+                                </td>
+                
+                            </tr>
+                
                         `;
-        
+                
                     }
                 );
-        
-        
+                
+                
+                html += `
+                
+                            </tbody>
+                
+                        </table>
+                
+                    </div>
+                
+                `;
+                
+                
                 resultBox.innerHTML =
                     html;
         
