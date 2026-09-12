@@ -2383,7 +2383,67 @@ function initializeDates() {
 
     singleDateInput.addEventListener(
         "change",
-        function () {   
+        function () {
+    
+            const selectedDate =
+                this.value;
+    
+            const today =
+                formatLocalDate(
+                    new Date()
+                );
+    
+            const maxDate =
+                new Date();
+    
+            maxDate.setDate(
+                maxDate.getDate() + 30
+            );
+    
+            const maxDateStr =
+                formatLocalDate(
+                    maxDate
+                );
+    
+    
+            // -----------------------------------------
+            // 選到今天以前
+            // -----------------------------------------
+    
+            if (
+                selectedDate < today
+            ) {
+    
+                alert(
+                    "❌ 報餐日期不能選擇今天以前的日期！"
+                );
+    
+                this.value =
+                    today;
+    
+                return;
+    
+            }
+    
+    
+            // -----------------------------------------
+            // 超過未來 30 天
+            // -----------------------------------------
+    
+            if (
+                selectedDate > maxDateStr
+            ) {
+    
+                alert(
+                    "❌ 報餐日期最多只能選擇今天起 30 天內！"
+                );
+    
+                this.value =
+                    maxDateStr;
+    
+                return;
+    
+            }
     
         }
     );
