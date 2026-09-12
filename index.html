@@ -712,26 +712,6 @@
             line-height: 1.8;
         
         }
-        
-        
-        /* 禁止報餐 */
-        
-        .time-warning {
-        
-            margin-top: 10px;
-        
-            padding: 10px;
-        
-            background-color: #fee2e2;
-        
-            color: #dc2626;
-        
-            border-radius: 6px;
-        
-            font-weight: bold;
-        
-        }
-
 
     </style>
 
@@ -1572,8 +1552,6 @@ inputField.addEventListener(
                         "dark-mode"
                     );
         
-                    updateTimeWarning();
-        
                 }
         
             }
@@ -1593,8 +1571,6 @@ inputField.addEventListener(
                     document.body.classList.remove(
                         "white-mode"
                     );
-        
-                    updateTimeWarning();
         
                 }
         
@@ -1764,12 +1740,6 @@ inputField.addEventListener(
                 );
         
         
-            const warningElement =
-                document.getElementById(
-                    "single-time-warning"
-                );
-        
-        
             if (!dateInput) {
         
                 return true;
@@ -1811,14 +1781,7 @@ inputField.addEventListener(
             if (
                 selectedDate !== today
             ) {
-        
-                if (warningElement) {
-        
-                    warningElement.innerHTML =
-                        "";
-        
-                }
-        
+                
                 return true;
         
             }
@@ -1925,57 +1888,6 @@ inputField.addEventListener(
         
         }
         
-        
-        // =================================================
-        // 建立 / 更新時間警告
-        // =================================================
-        
-        function updateTimeWarning() {
-        
-            const info =
-                document.getElementById(
-                    "single-time-info"
-                );
-        
-        
-            if (!info) {
-        
-                return;
-        
-            }
-        
-        
-            let warning =
-                document.getElementById(
-                    "single-time-warning"
-                );
-        
-        
-            if (!warning) {
-        
-                warning =
-                    document.createElement(
-                        "div"
-                    );
-        
-                warning.id =
-                    "single-time-warning";
-        
-                warning.className =
-                    "time-warning";
-        
-                info.appendChild(
-                    warning
-                );
-        
-            }
-        
-        
-            checkSingleMealTime();
-        
-        }
-
-
 
 // =================================================
 // 初始化日期
@@ -2030,9 +1942,7 @@ function initializeDates() {
 
     singleDateInput.addEventListener(
         "change",
-        function () {
-    
-            updateTimeWarning();
+        function () {   
     
         }
     );
@@ -2423,8 +2333,6 @@ function initializeDates() {
                 status.innerHTML =
                     "❌ 今日午餐已超過 09:00 截止時間，無法報餐。";
         
-                updateTimeWarning();
-        
                 return;
         
             }
@@ -2444,8 +2352,6 @@ function initializeDates() {
         
                 status.innerHTML =
                     "❌ 今日晚餐已超過 14:00 截止時間，無法報餐。";
-        
-                updateTimeWarning();
         
                 return;
         
@@ -2850,8 +2756,6 @@ function initializeDates() {
             function () {
         
                 updateCurrentTime();
-        
-                updateTimeWarning();
         
             },
             1000
