@@ -3645,6 +3645,215 @@ function initializeDates() {
             1000
         );
 
+        // =================================================
+        // 查詢報餐
+        // =================================================
+        
+        async function queryOrders() {
+        
+            const employeeId =
+                document
+                    .getElementById("queryEmployeeId")
+                    .value
+                    .trim()
+                    .toUpperCase();
+        
+            const company =
+                document
+                    .getElementById("queryCompany")
+                    .value
+                    .trim();
+        
+            const startDate =
+                document
+                    .getElementById("queryStartDate")
+                    .value;
+        
+            const endDate =
+                document
+                    .getElementById("queryEndDate")
+                    .value;
+        
+        
+            const resultBox =
+                document.getElementById(
+                    "queryResult"
+                );
+        
+        
+            resultBox.innerHTML =
+                "⏳ 查詢中，請稍候...";
+        
+        
+            try {
+        
+                const url =
+                    GOOGLE_SCRIPT_URL +
+                    "?action=queryOrders" +
+                    "&employeeId=" +
+                    encodeURIComponent(employeeId) +
+                    "&company=" +
+                    encodeURIComponent(company) +
+                    "&startDate=" +
+                    encodeURIComponent(startDate) +
+                    "&endDate=" +
+                    encodeURIComponent(endDate);
+        
+        
+                const response =
+                    await fetch(url);
+        
+        
+                const result =
+                    await response.json();
+        
+        
+                console.log(
+                    "報餐查詢結果：",
+                    result
+                );
+        
+        
+                if (!result.success) {
+        
+                    resultBox.innerHTML =
+                        `
+                        <div class="result-fail">
+                            ❌ ${
+                                result.message ||
+                                "查詢失敗"
+                            }
+                        </div>
+                        `;
+        
+                    return;
+        
+                }
+        
+        
+                if (
+                    !Array.isArray(result.results) ||
+                    result.results.length === 0
+                ) {
+        
+                    resultBox.innerHTML =
+                        `
+                        <div class="hint">
+                            查無符合條件的報餐資料
+                        </div>
+                        `;
+        
+                    return;
+        
+                }
+        
+        
+                // =================================================
+                // 顯示查詢結果
+                // =================================================
+        
+                let html = "";
+        
+        
+                result.results.forEach(
+                    function(item) {
+        
+                        html += `
+                        
+                            <div
+                                style="
+                                    border:1px solid #ddd;
+                                    border-radius:10px;
+                                    padding:15px;
+                                    margin-top:12px;
+                                    text-align:left;
+                                    background:#fff;
+                                "
+                            >
+        
+                                <div>
+                                    <strong>📅 報餐日期：</strong>
+                                    ${item.orderDate || ""}
+                                </div>
+        
+                                <div>
+                                    <strong>🆔 工號：</strong>
+                                    ${item.employeeId || ""}
+                                </div>
+        
+                                <div>
+                                    <strong>👤 姓名：</strong>
+                                    ${item.name || ""}
+                                </div>
+        
+                                <div>
+                                    <strong>🏢 公司：</strong>
+                                    ${item.company || ""}
+                                </div>
+        
+                                <div>
+                                    <strong>👨‍👩‍👧‍👦 單位：</strong>
+                                    ${item.unit || ""}
+                                </div>
+        
+                                <div>
+                                    <strong>🍱 餐別：</strong>
+                                    ${item.mealTime || ""}
+                                </div>
+        
+                                <div>
+                                    <strong>🥬 葷素別：</strong>
+                                    ${item.category || ""}
+                                </div>
+        
+                                <div>
+                                    <strong>✍️ 代報人：</strong>
+                                    ${item.proxyEmployeeId || "本人"}
+                                </div>
+        
+                                <div>
+                                    <strong>🕐 報餐時間：</strong>
+                                    ${item.orderTime || ""}
+                                </div>
+        
+                                <div>
+                                    <strong>📌 狀態：</strong>
+                                    ${item.status || ""}
+                                </div>
+        
+                            </div>
+        
+                        `;
+        
+                    }
+                );
+        
+        
+                resultBox.innerHTML =
+                    html;
+        
+        
+            }
+        
+            catch (error) {
+        
+                console.error(
+                    "查詢報餐失敗：",
+                    error
+                );
+        
+        
+                resultBox.innerHTML =
+                    `
+                    <div class="result-fail">
+                        ❌ 無法取得報餐資料，請稍後再試。
+                    </div>
+                    `;
+        
+            }
+        
+        }
+
 
     </script>
 
