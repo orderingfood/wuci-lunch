@@ -859,6 +859,12 @@
            查詢結果表格
         ================================================= */
         
+        .query-result {
+            width: 100%;
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+        
         .query-table-wrapper {
         
             width: 100%;
@@ -936,6 +942,63 @@
                 #eff6ff;
         
         }
+        
+        
+        /* =================================================
+           電腦版
+        ================================================= */
+        
+        @media (min-width: 769px) {
+        
+            .query-result {
+        
+                width: 100%;
+        
+                max-width: 1400px;
+        
+                padding:
+                    0 20px;
+        
+                box-sizing: border-box;
+        
+            }
+        
+        }
+        
+        
+        /* =================================================
+           手機版
+        ================================================= */
+        
+        @media (max-width: 768px) {
+        
+            .query-result {
+        
+                width: 100%;
+        
+                padding:
+                    0 10px;
+        
+                box-sizing: border-box;
+        
+            }
+        
+            .query-table-wrapper {
+        
+                border-radius: 8px;
+        
+            }
+        
+            .query-table {
+        
+                min-width: 1050px;
+        
+                font-size: 13px;
+        
+            }
+        
+        }
+
         
         
         /* =========================================
