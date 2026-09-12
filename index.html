@@ -3337,6 +3337,256 @@ function initializeDates() {
 
             };
 
+        // =================================================
+        // 查詢日期區間限制
+        // 今天～未來30天
+        // =================================================
+        
+        function initializeQueryDates() {
+        
+            const startInput =
+                document.getElementById(
+                    "queryStartDate"
+                );
+        
+            const endInput =
+                document.getElementById(
+                    "queryEndDate"
+                );
+        
+        
+            if (
+                !startInput ||
+                !endInput
+            ) {
+        
+                return;
+        
+            }
+        
+        
+            // -------------------------------------------------
+            // 今天
+            // -------------------------------------------------
+        
+            const today =
+                new Date();
+        
+        
+            const todayStr =
+                formatLocalDate(
+                    today
+                );
+        
+        
+            // -------------------------------------------------
+            // 今天 + 30 天
+            // -------------------------------------------------
+        
+            const maxDate =
+                new Date(
+                    today
+                );
+        
+        
+            maxDate.setDate(
+                maxDate.getDate() + 30
+            );
+        
+        
+            const maxDateStr =
+                formatLocalDate(
+                    maxDate
+                );
+        
+        
+            // -------------------------------------------------
+            // 設定 HTML 原生限制
+            // -------------------------------------------------
+        
+            startInput.min =
+                todayStr;
+        
+            startInput.max =
+                maxDateStr;
+        
+        
+            endInput.min =
+                todayStr;
+        
+            endInput.max =
+                maxDateStr;
+        
+        
+            // -------------------------------------------------
+            // 預設日期
+            // -------------------------------------------------
+        
+            startInput.value =
+                todayStr;
+        
+            endInput.value =
+                maxDateStr;
+        
+        
+            // =================================================
+            // 起始日期變更
+            // =================================================
+        
+            startInput.addEventListener(
+                "change",
+                function () {
+        
+                    const selectedDate =
+                        this.value;
+        
+        
+                    // ---------------------------------------------
+                    // 超過 30 天
+                    // ---------------------------------------------
+        
+                    if (
+                        selectedDate > maxDateStr
+                    ) {
+        
+                        alert(
+                            "❌ 查詢日期最多只能選擇今天起 30 天內！"
+                        );
+        
+        
+                        this.value =
+                            todayStr;
+        
+        
+                        return;
+        
+                    }
+        
+        
+                    // ---------------------------------------------
+                    // 今天以前
+                    // ---------------------------------------------
+        
+                    if (
+                        selectedDate < todayStr
+                    ) {
+        
+                        alert(
+                            "❌ 查詢日期不能選擇今天以前的日期！"
+                        );
+        
+        
+                        this.value =
+                            todayStr;
+        
+        
+                        return;
+        
+                    }
+        
+        
+                    // ---------------------------------------------
+                    // 起始日期不能晚於結束日期
+                    // ---------------------------------------------
+        
+                    if (
+                        endInput.value &&
+                        selectedDate > endInput.value
+                    ) {
+        
+                        alert(
+                            "❌ 起始日期不能晚於結束日期！"
+                        );
+        
+        
+                        this.value =
+                            endInput.value;
+        
+                    }
+        
+                }
+            );
+        
+        
+            // =================================================
+            // 結束日期變更
+            // =================================================
+        
+            endInput.addEventListener(
+                "change",
+                function () {
+        
+                    const selectedDate =
+                        this.value;
+        
+        
+                    // ---------------------------------------------
+                    // 超過 30 天
+                    // ---------------------------------------------
+        
+                    if (
+                        selectedDate > maxDateStr
+                    ) {
+        
+                        alert(
+                            "❌ 查詢日期最多只能選擇今天起 30 天內！"
+                        );
+        
+        
+                        this.value =
+                            maxDateStr;
+        
+        
+                        return;
+        
+                    }
+        
+        
+                    // ---------------------------------------------
+                    // 今天以前
+                    // ---------------------------------------------
+        
+                    if (
+                        selectedDate < todayStr
+                    ) {
+        
+                        alert(
+                            "❌ 查詢日期不能選擇今天以前的日期！"
+                        );
+        
+        
+                        this.value =
+                            todayStr;
+        
+        
+                        return;
+        
+                    }
+        
+        
+                    // ---------------------------------------------
+                    // 結束日期不能早於開始日期
+                    // ---------------------------------------------
+        
+                    if (
+                        startInput.value &&
+                        selectedDate < startInput.value
+                    ) {
+        
+                        alert(
+                            "❌ 結束日期不能早於開始日期！"
+                        );
+        
+        
+                        this.value =
+                            startInput.value;
+        
+                    }
+        
+                }
+            );
+        
+        }
 
 
         // =================================================
@@ -3374,9 +3624,11 @@ function initializeDates() {
         document.addEventListener(
             "DOMContentLoaded",
             function () {
-
+        
                 initializeDates();
-
+        
+                initializeQueryDates();
+        
             }
         );
 
