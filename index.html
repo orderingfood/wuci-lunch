@@ -731,7 +731,7 @@
         
         .system-nav {
         
-            max-width: 700px;
+            max-width: 400px;
         
             margin: 0 auto 20px auto;
         
@@ -1348,16 +1348,13 @@
                         🏢 公司名稱
                     </label>
     
-                    <select
-                        id="queryCompany"
-                        class="input-field"
-                    >
-    
-                        <option value="">
-                            全部公司
-                        </option>
-    
-                    </select>
+                <input
+                    type="text"
+                    id="queryCompany"
+                    class="input-field"
+                    placeholder="全部公司請留白"
+                    autocomplete="off"
+                >
     
                 </div>
     
@@ -2451,6 +2448,47 @@ function initializeDates() {
         );
 
     }
+    
+        // =================================================
+        // 查詢／統計日期限制
+        // 今天～未來30天
+        // =================================================
+    
+        const queryStartDate =
+            document.getElementById(
+                "queryStartDate"
+            );
+    
+        const queryEndDate =
+            document.getElementById(
+                "queryEndDate"
+            );
+    
+    
+        if (
+            queryStartDate &&
+            queryEndDate
+        ) {
+    
+            queryStartDate.min =
+                minStr;
+    
+            queryStartDate.max =
+                maxStr;
+    
+            queryEndDate.min =
+                minStr;
+    
+            queryEndDate.max =
+                maxStr;
+    
+            queryStartDate.value =
+                minStr;
+    
+            queryEndDate.value =
+                maxStr;
+    
+        }
 
 }
 
