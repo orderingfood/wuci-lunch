@@ -1827,13 +1827,6 @@ inputField.addEventListener(
                     currentTime >= deadline
                 ) {
         
-                    if (warningElement) {
-        
-                        warningElement.innerHTML =
-                            "❌ 今日午餐已超過 09:00 截止時間，無法報餐。";
-        
-                    }
-        
                     return false;
         
                 }
@@ -1858,13 +1851,6 @@ inputField.addEventListener(
                     currentTime >= deadline
                 ) {
         
-                    if (warningElement) {
-        
-                        warningElement.innerHTML =
-                            "❌ 今日晚餐已超過 14:00 截止時間，無法報餐。";
-        
-                    }
-        
                     return false;
         
                 }
@@ -1875,13 +1861,6 @@ inputField.addEventListener(
             // -------------------------------------------------
             // 可以報餐
             // -------------------------------------------------
-        
-            if (warningElement) {
-        
-                warningElement.innerHTML =
-                    "";
-        
-            }
         
         
             return true;
@@ -2729,23 +2708,15 @@ function initializeDates() {
                     </div>
                 
                 
-                    ${
-                        skippedToday
-                        ?
-                        `
+                    ${skippedToday ? `
                         <div style="
                             color:#dc3545;
                             text-align:center;
                             margin-bottom:12px;
                         ">
-                
                             ⚠️ 今天因已超過報餐截止時間，無法報餐
-                
                         </div>
-                        `
-                        :
-                        ""
-                    }
+                    ` : ""}
                 
                 
                     <div style="
@@ -2754,9 +2725,8 @@ function initializeDates() {
                     ">
                 
                         成功
-                        ${totalSuccessCount}
+                        ${result.successCount || 0}
                         天　
-                
                         失敗
                         ${totalFailCount}
                         天
@@ -2767,10 +2737,8 @@ function initializeDates() {
                     ${resultMessages.join("")}
                 
                 `;
-
                 
-                
-                catch (error) {
+                } catch (error) {
                 
                     console.error(
                         "報餐系統錯誤：",
