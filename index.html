@@ -2584,111 +2584,141 @@ function initializeDates() {
                     console.log(
                         "Google 回應：",
                         result
-                    );
+                    );             
+
+                // =================================================
+                // 處理 GAS 回傳的每一天結果
+                // =================================================
                 
+                if (
+                    Array.isArray(result.results)
+                ) {
                 
-                    // =================================================
-                    // 顯示結果
-                    // =================================================
+                    result.results.forEach(
+                        item => {
                 
-                    let resultMessages = [];
+                            if (
+                                item.success
+                            ) {
                 
+                                resultMessages.push(`
                 
-                    if (
-                        Array.isArray(
-                            result.results
-                        )
-                    ) {
+                                    <div class="result-success">
                 
-                        result.results.forEach(
-                            item => {
+                                        ✅ ${item.date}
+                                        報餐成功
                 
-                                if (
-                                    item.success
-                                ) {
+                                    </div>
                 
-                                    resultMessages.push(`
-                
-                                        <div class="result-success">
-                
-                                            ✅ ${item.date}
-                                            報餐成功
-                
-                                        </div>
-                
-                                    `);
-                
-                                }
-                
-                                else {
-                
-                                    resultMessages.push(`
-                
-                                        <div class="result-fail">
-                
-                                            ❌ ${item.date}
-                                            報餐失敗：
-                                            ${
-                                                item.message ||
-                                                "未知錯誤"
-                                            }
-                
-                                        </div>
-                
-                                    `);
-                
-                                }
+                                `);
                 
                             }
-                        );
                 
-                    }
+                            else {
+                
+                                resultMessages.push(`
+                
+                                    <div class="result-fail">
+                
+                                        ❌ ${item.date}
+                                        報餐失敗：
+                                        ${
+                                            item.message ||
+                                            "未知錯誤"
+                                        }
+                
+                                    </div>
+                
+                                `);
+                
+                            }
+                
+                        }
+                    );
+                
+                }
                 
                 
-                    // =================================================
-                    // 顏色
-                    // =================================================
-                
-                    if (
-                        result.failCount === 0
-                    ) {
-                
-                        status.style.color =
-                            "#28a745";
-                
-                    }
-                
-                    else if (
-                        result.successCount > 0
-                    ) {
-                
-                        status.style.color =
-                            "#ff9800";
-                
-                    }
-                
-                    else {
-                
-                        status.style.color =
-                            "#dc3545";
-                
-                    }
-                                
                 // =================================================
-                // 顯示最後結果
+                // 今天是否因截止時間被跳過
                 // =================================================
+                //
+                // selectedDates = 使用者原本選的日期
+                //
+                // validDates = 實際送給 GAS 的日期
+                //
+                // 如果今天原本有選，但被 validDates 排除
+                // 就代表今天因為超過截止時間而失敗
+                //
                 
                 const skippedToday =
                     selectedDates.includes(today) &&
                     !validDates.includes(today);
                 
+                
+                // =================================================
+                // 截止時間造成的失敗數
+                // =================================================
+                
                 const skippedFailCount =
                     skippedToday ? 1 : 0;
+                
+                
+                // =================================================
+                // 最終失敗總數
+                // =================================================
+                //
+                // GAS 回報的失敗
+                // +
+                // 今天因截止時間被排除的失敗
+                //
                 
                 const totalFailCount =
                     (result.failCount || 0) +
                     skippedFailCount;
                 
+                
+                // =================================================
+                // 最終成功數
+                // =================================================
+                
+                const totalSuccessCount =
+                    result.successCount || 0;
+                
+                
+                // =================================================
+                // 顏色
+                // =================================================
+                
+                if (
+                    totalFailCount === 0
+                ) {
+                
+                    status.style.color =
+                        "#28a745";
+                
+                }
+                
+                else if (
+                    totalSuccessCount > 0
+                ) {
+                
+                    status.style.color =
+                        "#ff9800";
+                
+                }
+                
+                else {
+                
+                    status.style.color =
+                        "#dc3545";
+                
+                }
+                
+                
+                // =================================================
+                // 顯示最後結果
+                // =================================================
                 
                 status.innerHTML = `
                 
@@ -2699,15 +2729,23 @@ function initializeDates() {
                     </div>
                 
                 
-                    ${skippedToday ? `
+                    ${
+                        skippedToday
+                        ?
+                        `
                         <div style="
                             color:#dc3545;
                             text-align:center;
                             margin-bottom:12px;
                         ">
+                
                             ⚠️ 今天因已超過報餐截止時間，無法報餐
+                
                         </div>
-                    ` : ""}
+                        `
+                        :
+                        ""
+                    }
                 
                 
                     <div style="
@@ -2716,8 +2754,9 @@ function initializeDates() {
                     ">
                 
                         成功
-                        ${result.successCount || 0}
+                        ${totalSuccessCount}
                         天　
+                
                         失敗
                         ${totalFailCount}
                         天
@@ -2728,6 +2767,7 @@ function initializeDates() {
                     ${resultMessages.join("")}
                 
                 `;
+
                 
                 
                 catch (error) {
