@@ -964,6 +964,90 @@
         }
 
 
+        /* =================================================
+           查詢結果：取消按鈕
+        ================================================= */
+        
+        .cancel-order-btn {
+        
+            border: none;
+        
+            background: #fee2e2;
+        
+            color: #dc2626;
+        
+            padding: 7px 14px;
+        
+            border-radius: 999px;
+        
+            font-size: 14px;
+        
+            font-weight: bold;
+        
+            cursor: pointer;
+        
+            white-space: nowrap;
+        
+            transition:
+                background-color 0.2s ease,
+                color 0.2s ease,
+                transform 0.15s ease,
+                box-shadow 0.2s ease;
+        
+        }
+        
+        
+        /* 滑鼠移過去 */
+        
+        .cancel-order-btn:hover {
+        
+            background: #dc2626;
+        
+            color: white;
+        
+            box-shadow:
+                0 3px 8px
+                rgba(220, 38, 38, 0.25);
+        
+        }
+        
+        
+        /* 按下去 */
+        
+        .cancel-order-btn:active {
+        
+            transform: scale(0.95);
+        
+        }
+        
+        
+        /* =================================================
+           不可取消
+        ================================================= */
+        
+        .status-disabled {
+        
+            display: inline-block;
+        
+            color: #9ca3af;
+        
+            background: #f3f4f6;
+        
+            padding: 7px 12px;
+        
+            border-radius: 999px;
+        
+            font-size: 14px;
+        
+            font-weight: bold;
+        
+            white-space: nowrap;
+        
+            cursor: not-allowed;
+        
+        }
+
+
     </style>
 
 </head>
@@ -3937,7 +4021,7 @@ function initializeDates() {
                             class="status-disabled"
                             title="此筆報餐目前不可取消"
                         >
-                            🚫 不可取消
+                            不可取消
                         </span>
                     
                     `;
@@ -4046,6 +4130,183 @@ function initializeDates() {
             }
         
         }
+
+        // =================================================
+        // 取消報餐
+        // =================================================
+        
+        async function cancelOrder(
+            orderDate,
+            employeeId,
+            mealTime
+        ) {
+        
+            // =================================================
+            // 確認取消
+            // =================================================
+        
+            const confirmCancel =
+                confirm(
+                    "⚠️ 確定要取消這筆報餐嗎？\n\n" +
+                    "報餐日期：" +
+                    orderDate +
+                    "\n" +
+                    "工號：" +
+                    employeeId +
+                    "\n" +
+                    "餐別：" +
+                    mealTime +
+                    "\n\n" +
+                    "取消後將無法復原。"
+                );
+        
+        
+            // -------------------------------------------------
+            // 使用者選擇「取消」
+            // -------------------------------------------------
+        
+            if (!confirmCancel) {
+        
+                return;
+        
+            }
+        
+        
+            // =================================================
+            // 取得查詢結果區域
+            // =================================================
+        
+            const resultBox =
+                document.getElementById(
+                    "queryResult"
+                );
+        
+        
+            // =================================================
+            // 顯示處理中
+            // =================================================
+        
+            resultBox.innerHTML = `
+            
+                <div class="hint">
+                    ⏳ 正在取消報餐，請稍候...
+                </div>
+            
+            `;
+        
+        
+            try {
+        
+                // =================================================
+                // 建立取消 API
+                // =================================================
+        
+                const url =
+                    GOOGLE_SCRIPT_URL +
+                    "?action=cancelOrder" +
+                    "&employeeId=" +
+                    encodeURIComponent(
+                        employeeId
+                    ) +
+                    "&orderDate=" +
+                    encodeURIComponent(
+                        orderDate
+                    ) +
+                    "&mealTime=" +
+                    encodeURIComponent(
+                        mealTime
+                    );
+        
+        
+                console.log(
+                    "取消報餐 API：",
+                    url
+                );
+        
+        
+                // =================================================
+                // 呼叫 Google Apps Script
+                // =================================================
+        
+                const response =
+                    await fetch(
+                        url
+                    );
+        
+        
+                const result =
+                    await response.json();
+        
+        
+                console.log(
+                    "取消報餐結果：",
+                    result
+                );
+        
+        
+                // =================================================
+                // 取消失敗
+                // =================================================
+        
+                if (
+                    !result.success
+                ) {
+        
+                    resultBox.innerHTML = `
+                    
+                        <div class="result-fail">
+                            ❌ ${
+                                result.message ||
+                                "取消報餐失敗"
+                            }
+                        </div>
+                    
+                    `;
+        
+                    return;
+        
+                }
+        
+        
+                // =================================================
+                // 取消成功
+                // =================================================
+        
+                alert(
+                    "✅ 報餐已成功取消！"
+                );
+        
+        
+                // =================================================
+                // 重新查詢
+                // =================================================
+        
+                await queryOrders();
+        
+        
+            }
+        
+        
+            catch (error) {
+        
+                console.error(
+                    "取消報餐失敗：",
+                    error
+                );
+        
+        
+                resultBox.innerHTML = `
+                
+                    <div class="result-fail">
+                        ❌ 取消報餐失敗，請稍後再試。
+                    </div>
+                
+                `;
+        
+            }
+        
+        }
+
 
 
     </script>
