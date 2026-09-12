@@ -2401,13 +2401,7 @@ function initializeDates() {
             status.style.color =
                 "#ff9800";
         
-            status.innerHTML =
-                "⚠️ 今日已超過報餐截止時間，將只報餐尚未截止的日期。";
-        
         }
-
-
-
 
 
                 // -------------------------------------------------
@@ -2679,42 +2673,61 @@ function initializeDates() {
                             "#dc3545";
                 
                     }
+                                
+                // =================================================
+                // 顯示最後結果
+                // =================================================
+                
+                const skippedToday =
+                    selectedDates.includes(today) &&
+                    !validDates.includes(today);
+                
+                const skippedFailCount =
+                    skippedToday ? 1 : 0;
+                
+                const totalFailCount =
+                    (result.failCount || 0) +
+                    skippedFailCount;
                 
                 
-                    // =================================================
-                    // 顯示最後結果
-                    // =================================================
+                status.innerHTML = `
                 
-                    status.innerHTML = `
+                    <div class="status-title">
                 
-                        <div class="status-title">
+                        🎉 報餐處理完成
                 
-                            🎉 報餐處理完成
-                
-                        </div>
+                    </div>
                 
                 
+                    ${skippedToday ? `
                         <div style="
+                            color:#dc3545;
                             text-align:center;
                             margin-bottom:12px;
                         ">
-                
-                            成功
-                            ${result.successCount || 0}
-                            天　
-                            失敗
-                            ${result.failCount || 0}
-                            天
-                
+                            ⚠️ 今天因已超過報餐截止時間，無法報餐
                         </div>
+                    ` : ""}
                 
                 
-                        ${resultMessages.join("")}
+                    <div style="
+                        text-align:center;
+                        margin-bottom:12px;
+                    ">
                 
-                    `;
+                        成功
+                        ${result.successCount || 0}
+                        天　
+                        失敗
+                        ${totalFailCount}
+                        天
+                
+                    </div>
                 
                 
-                }
+                    ${resultMessages.join("")}
+                
+                `;
                 
                 
                 catch (error) {
