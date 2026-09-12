@@ -1195,16 +1195,6 @@
         );
 
 
-
-
-        // =================================================
-        // localStorage
-        // =================================================
-
-        const STORAGE_KEY =
-            "company_lunch_employee_id";
-
-
 // =================================================
 // 工號查詢員工資料
 // =================================================
@@ -2037,52 +2027,8 @@ function initializeDates() {
                 status.innerHTML =
                     "⏳ 正在傳送報餐資料...";
 
-
-
-                // -------------------------------------------------
-                // 儲存資料
-                // -------------------------------------------------
-
-                try {
-
-                    localStorage.setItem(
-                        STORAGE_KEY,
-                        empId
-                    );
-
-
-                    localStorage.setItem(
-                        NAME_STORAGE_KEY,
-                        name
-                    );
-
-
-                    localStorage.setItem(
-                        COMPANY_STORAGE_KEY,
-                        company
-                    );
-
-
-                    localStorage.setItem(
-                        UNIT_STORAGE_KEY,
-                        unit
-                    );
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "儲存資料失敗：",
-                        error
-                    );
-
-                }
-
-
-
                 // =================================================
-                // 開始逐日傳送
+                // 一次傳送全部日期
                 // =================================================
 
                 let successCount =
@@ -2096,264 +2042,215 @@ function initializeDates() {
                 let resultMessages =
                     [];
 
-
-
                 try {
-
-
-                    for (
-                        const orderDate
-                        of selectedDates
-                    ) {
-
-
-                        const data = {
-
-                            orderDate:
-                                orderDate,
-
-                            mealTime:
-                                mealTime,
-
-                            category:
-                                category,
-
-                            employeeId:
-                                empId,
-
-                            name:
-                                name,
-
-                            company:
-                                company,
-
-                            unit:
-                                unit,
-                        
-                            proxyEmployeeId:
-                                proxyEmpId
-
-                        };
-
-
-                        console.log(
-                            "傳送資料：",
-                            data
+                
+                    const data = {
+                
+                        dates:
+                            selectedDates,
+                
+                        mealTime:
+                            mealTime,
+                
+                        category:
+                            category,
+                
+                        employeeId:
+                            empId,
+                
+                        name:
+                            name,
+                
+                        company:
+                            company,
+                
+                        unit:
+                            unit,
+                
+                        proxyEmployeeId:
+                            proxyEmpId
+                
+                    };
+                
+                
+                    console.log(
+                        "一次傳送報餐資料：",
+                        data
+                    );
+                
+                
+                    const response =
+                        await fetch(
+                            GOOGLE_SCRIPT_URL,
+                            {
+                
+                                method:
+                                    "POST",
+                
+                                headers: {
+                
+                                    "Content-Type":
+                                        "text/plain;charset=utf-8"
+                
+                                },
+                
+                                body:
+                                    JSON.stringify(data)
+                
+                            }
                         );
-
-
-
-                        try {
-
-
-                            const response =
-                                await fetch(
-                                    GOOGLE_SCRIPT_URL,
-                                    {
-
-                                        method:
-                                            "POST",
-
-                                        headers: {
-
-                                            "Content-Type":
-                                                "text/plain;charset=utf-8"
-
-                                        },
-
-                                        body:
-                                            JSON.stringify(
-                                                data
-                                            )
-
-                                    }
-                                );
-
-
-
-                            // -------------------------------------------------
-                            // Google 回應
-                            // -------------------------------------------------
-
-                            const result =
-                                await response.json();
-
-
-                            console.log(
-                                "Google 回應：",
-                                result
-                            );
-
-
-
-                            // -------------------------------------------------
-                            // 成功
-                            // -------------------------------------------------
-
-                            if (
-                                result.success
-                            ) {
-
-
-                                successCount++;
-
-
-                                resultMessages.push(`
-
-                                    <div class="result-success">
-
-                                        ✅ ${orderDate}
-                                        報餐成功
-
-                                    </div>
-
-                                `);
-
+                
+                
+                    const result =
+                        await response.json();
+                
+                
+                    console.log(
+                        "Google 回應：",
+                        result
+                    );
+                
+                
+                    // =================================================
+                    // 顯示結果
+                    // =================================================
+                
+                    let resultMessages = [];
+                
+                
+                    if (
+                        Array.isArray(
+                            result.results
+                        )
+                    ) {
+                
+                        result.results.forEach(
+                            item => {
+                
+                                if (
+                                    item.success
+                                ) {
+                
+                                    resultMessages.push(`
+                
+                                        <div class="result-success">
+                
+                                            ✅ ${item.date}
+                                            報餐成功
+                
+                                        </div>
+                
+                                    `);
+                
+                                }
+                
+                                else {
+                
+                                    resultMessages.push(`
+                
+                                        <div class="result-fail">
+                
+                                            ❌ ${item.date}
+                                            報餐失敗：
+                                            ${
+                                                item.message ||
+                                                "未知錯誤"
+                                            }
+                
+                                        </div>
+                
+                                    `);
+                
+                                }
+                
                             }
-
-
-
-                            // -------------------------------------------------
-                            // 失敗
-                            // -------------------------------------------------
-
-                            else {
-
-
-                                failCount++;
-
-
-                                resultMessages.push(`
-
-                                    <div class="result-fail">
-
-                                        ❌ ${orderDate}
-                                        報餐失敗：
-                                        ${
-                                            result.message ||
-                                            "未知錯誤"
-                                        }
-
-                                    </div>
-
-                                `);
-
-                            }
-
-
-                        }
-
-
-                        catch (error) {
-
-
-                            console.error(
-                                `${orderDate} 傳送失敗：`,
-                                error
-                            );
-
-
-                            failCount++;
-
-
-                            resultMessages.push(`
-
-                                <div class="result-fail">
-
-                                    ❌ ${orderDate}
-                                    報餐失敗：
-                                    無法連線到 Google
-
-                                </div>
-
-                            `);
-
-                        }
-
+                        );
+                
                     }
-
-
-
+                
+                
+                    // =================================================
+                    // 顏色
+                    // =================================================
+                
+                    if (
+                        result.failCount === 0
+                    ) {
+                
+                        status.style.color =
+                            "#28a745";
+                
+                    }
+                
+                    else if (
+                        result.successCount > 0
+                    ) {
+                
+                        status.style.color =
+                            "#ff9800";
+                
+                    }
+                
+                    else {
+                
+                        status.style.color =
+                            "#dc3545";
+                
+                    }
+                
+                
                     // =================================================
                     // 顯示最後結果
                     // =================================================
-
-                    if (
-                        failCount === 0
-                    ) {
-
-                        status.style.color =
-                            "#28a745";
-
-                    }
-
-                    else if (
-                        successCount > 0
-                    ) {
-
-                        status.style.color =
-                            "#ff9800";
-
-                    }
-
-                    else {
-
-                        status.style.color =
-                            "#dc3545";
-
-                    }
-
-
-
+                
                     status.innerHTML = `
-
+                
                         <div class="status-title">
-
+                
                             🎉 報餐處理完成
-
+                
                         </div>
-
-
+                
+                
                         <div style="
                             text-align:center;
                             margin-bottom:12px;
                         ">
-
+                
                             成功
-                            ${successCount}
+                            ${result.successCount || 0}
                             天　
                             失敗
-                            ${failCount}
+                            ${result.failCount || 0}
                             天
-
+                
                         </div>
-
-
+                
+                
                         ${resultMessages.join("")}
-
+                
                     `;
-
-
+                
+                
                 }
-
-
+                
+                
                 catch (error) {
-
-
+                
                     console.error(
                         "報餐系統錯誤：",
                         error
                     );
-
-
+                
+                
                     status.style.color =
                         "#dc3545";
-
-
+                
                     status.innerHTML =
                         "❌ 報餐處理失敗，請稍後再試。";
-
+                
                 }
+
 
 
 
