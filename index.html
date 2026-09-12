@@ -725,6 +725,102 @@
             display: block;
         }
 
+        /* =================================================
+           系統第一層主導覽
+        ================================================= */
+        
+        .system-nav {
+        
+            max-width: 700px;
+        
+            margin: 0 auto 20px auto;
+        
+            display: grid;
+        
+            grid-template-columns:
+                repeat(4, 1fr);
+        
+            gap: 8px;
+        
+            background: white;
+        
+            padding: 8px;
+        
+            border-radius: 12px;
+        
+            box-shadow:
+                0 4px 10px
+                rgba(0,0,0,0.08);
+        
+        }
+        
+        
+        .system-nav-btn {
+        
+            border: none;
+        
+            background: transparent;
+        
+            padding: 12px 6px;
+        
+            border-radius: 8px;
+        
+            cursor: pointer;
+        
+            font-size: 15px;
+        
+            font-weight: bold;
+        
+            color: #666;
+        
+            transition: 0.2s;
+        
+        }
+        
+        
+        .system-nav-btn span {
+        
+            display: block;
+        
+            margin-top: 4px;
+        
+        }
+        
+        
+        .system-nav-btn:hover {
+        
+            background: #f0f8ff;
+        
+            color: #007bff;
+        
+        }
+        
+        
+        .system-nav-btn.active {
+        
+            background: #007bff;
+        
+            color: white;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           手機版
+        ------------------------------------------------- */
+        
+        @media (max-width: 500px) {
+        
+            .system-nav-btn {
+        
+                font-size: 13px;
+        
+                padding: 10px 3px;
+        
+            }
+        
+        }
+
     </style>
 
 </head>
@@ -819,12 +915,7 @@
         </div>
     
     </div>
-
-    <section
-        id="page-order"
-        class="system-page active"
-    >
-                
+               
             <div class="card">
     
     
