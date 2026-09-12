@@ -3890,50 +3890,71 @@ function initializeDates() {
                 `;
                 
                 
-                result.results.forEach(
-                    function(item) {
-                
-                        let statusText = "";
-                
-                        let statusClass = "";
-                
-                
-                        // -------------------------------------------------
-                        // J欄 O = 可取消
-                        // J欄 X = 不可取消
-                        // -------------------------------------------------
-                
-                        if (
-                            item.status === "O"
-                        ) {
-                
-                            statusText =
-                                "可取消";
-                
-                            statusClass =
-                                "status-cancel";
-                
-                        }
-                
-                        else if (
-                            item.status === "X"
-                        ) {
-                
-                            statusText =
-                                "不可取消";
-                
-                            statusClass =
-                                "status-disabled";
-                
-                        }
-                
-                        else {
-                
-                            statusText =
-                                item.status || "";
-                
-                        }
-                
+        result.results.forEach(
+            function(item) {
+        
+                let statusHtml = "";
+        
+        
+                // =================================================
+                // J欄 O = 可取消
+                // =================================================
+        
+                if (
+                    item.status === "O"
+                ) {
+        
+                    statusHtml = `
+                    
+                        <button
+                            type="button"
+                            class="cancel-order-btn"
+                            onclick="cancelOrder(
+                                '${item.orderDate}',
+                                '${item.employeeId}',
+                                '${item.mealTime}'
+                            )"
+                        >
+                            可取消
+                        </button>
+                    
+                    `;
+        
+                }
+        
+        
+                // =================================================
+                // J欄 X = 不可取消
+                // =================================================
+        
+                else if (
+                    item.status === "X"
+                ) {
+        
+                    statusHtml = `
+                    
+                        <span
+                            class="status-disabled"
+                            title="此筆報餐目前不可取消"
+                        >
+                            🚫 不可取消
+                        </span>
+                    
+                    `;
+        
+                }
+        
+        
+                // =================================================
+                // 其他狀態
+                // =================================================
+        
+                else {
+        
+                    statusHtml =
+                        item.status || "";
+        
+                }
                 
                         html += `
                 
@@ -3978,8 +3999,8 @@ function initializeDates() {
                                     ${item.orderTime || ""}
                                 </td>
                 
-                                <td class="${statusClass}">
-                                    ${statusText}
+                                <td>
+                                    ${statusHtml}
                                 </td>
                 
                             </tr>
