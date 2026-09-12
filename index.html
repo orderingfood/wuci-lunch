@@ -821,6 +821,36 @@
         
         }
 
+        /* =================================================
+           查詢日期區間
+           手機版防止日期欄位突出
+        ================================================= */
+        
+        #page-query input[type="date"] {
+            min-width: 0;
+            width: 100%;
+        }
+        
+        #page-query .input-group > div[style*="display:flex"] {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 600px) {
+        
+            #page-query .input-group > div[style*="display:flex"] {
+                gap: 6px !important;
+            }
+        
+            #page-query input[type="date"] {
+                min-width: 0;
+                width: 0;
+                flex: 1 1 0;
+                box-sizing: border-box;
+            }
+        
+        }
+
     </style>
 
 </head>
