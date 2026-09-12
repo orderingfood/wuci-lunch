@@ -3990,17 +3990,18 @@ function initializeDates() {
         
                     statusHtml = `
                     
-                        <button
-                            type="button"
-                            class="cancel-order-btn"
-                            onclick="cancelOrder(
-                                '${item.orderDate}',
-                                '${item.employeeId}',
-                                '${item.mealTime}'
-                            )"
-                        >
-                            可取消
-                        </button>
+                    <button
+                        type="button"
+                        class="cancel-order-btn"
+                        onclick="cancelOrder(
+                            '${item.rowNumber}',
+                            '${item.orderDate}',
+                            '${item.employeeId}',
+                            '${item.mealTime}'
+                        )"
+                    >
+                        可取消
+                    </button>
                     
                     `;
         
@@ -4136,6 +4137,7 @@ function initializeDates() {
         // =================================================
         
         async function cancelOrder(
+            rowNumber,
             orderDate,
             employeeId,
             mealTime
@@ -4201,21 +4203,13 @@ function initializeDates() {
                 // 建立取消 API
                 // =================================================
         
-                const url =
-                    GOOGLE_SCRIPT_URL +
-                    "?action=cancelOrder" +
-                    "&employeeId=" +
-                    encodeURIComponent(
-                        employeeId
-                    ) +
-                    "&orderDate=" +
-                    encodeURIComponent(
-                        orderDate
-                    ) +
-                    "&mealTime=" +
-                    encodeURIComponent(
-                        mealTime
-                    );
+            const url =
+                GOOGLE_SCRIPT_URL +
+                "?action=cancelOrder" +
+                "&rowNumber=" +
+                encodeURIComponent(
+                    rowNumber
+                );
         
         
                 console.log(
