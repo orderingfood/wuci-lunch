@@ -1006,27 +1006,47 @@
         ========================================= */
         
         .cancel-order-btn {
-            background: #2563eb;
+        
+            background: #dc3545;
+        
             color: #ffffff;
+        
             border: none;
+        
             border-radius: 8px;
+        
             padding: 7px 14px;
+        
             font-size: 14px;
+        
             font-weight: 600;
+        
             cursor: pointer;
+        
             transition: all 0.2s ease;
+        
         }
+        
         
         /* 滑過去 */
+        
         .cancel-order-btn:hover {
-            background: #1d4ed8;
+        
+            background: #c82333;
+        
             transform: translateY(-1px);
+        
         }
         
+        
         /* 按下去 */
+        
         .cancel-order-btn:active {
-            background: #1e40af;
+        
+            background: #a71d2a;
+        
             transform: translateY(0);
+        
         }
         
         
@@ -1035,13 +1055,21 @@
         ========================================= */
         
         .status-disabled {
+        
             color: #888888;
+        
             background: #eeeeee;
+        
             border-radius: 8px;
+        
             padding: 7px 14px;
+        
             font-size: 14px;
+        
             cursor: not-allowed;
+        
             display: inline-block;
+        
         }
 
 
@@ -1733,57 +1761,73 @@
         // =================================================
 
         function switchSystemPage(page) {
-
+        
             document
                 .querySelectorAll(".system-page")
                 .forEach(function (section) {
-
+        
                     section.classList.remove("active");
-
+        
                 });
-
-
+        
+        
             document
                 .querySelectorAll(".system-nav-btn")
                 .forEach(function (button) {
-
+        
                     button.classList.remove("active");
-
+        
                 });
-
-
+        
+        
             const targetPage =
                 document.getElementById(
                     "page-" + page
                 );
-
-
+        
+        
             if (targetPage) {
-
+        
                 targetPage.classList.add(
                     "active"
                 );
-
+        
             }
-
-
+        
+        
             const targetButton =
                 document.querySelector(
                     '.system-nav-btn[data-page="' +
                     page +
                     '"]'
                 );
-
-
+        
+        
             if (targetButton) {
-
+        
                 targetButton.classList.add(
                     "active"
                 );
-
+        
             }
-
+        
+        
+            // =================================================
+            // 每次切換頁面都先恢復白色背景
+            // 只有使用者在「報餐」頁面重新點晚餐
+            // 才會透過 blackInput 的 change 事件變黑
+            // =================================================
+        
+            document.body.classList.remove(
+                "dark-mode"
+            );
+        
+            document.body.classList.add(
+                "white-mode"
+            );
+        
         }
+
         
         const GOOGLE_SCRIPT_URL =
             "https://script.google.com/macros/s/AKfycbz5A0b2thyY6D2ExzqC_IEizobQmFf6mxSHrw2rl7nWaBjsnjqOijuNf13rElb4aQPKUg/exec";
