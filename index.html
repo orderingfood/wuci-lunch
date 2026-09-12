@@ -1278,24 +1278,50 @@
         
             }
         );
+        
+        // =================================================
+        // 工號輸入內容改變時清除目前員工的資料
+        // =================================================
 
-
-// =================================================
-// 工號查詢員工資料
-// =================================================
-
-inputField.addEventListener(
-    "blur",
-    async function () {
-
-        const empId =
-            inputField.value
-                .trim()
-                .toUpperCase();
-
-
-        inputField.value =
-            empId;
+        inputField.addEventListener(
+            "input",
+            function () {
+        
+        
+                // 只要工號被修改，就清除原本員工資料
+                nameInput.value = "";
+        
+                companySelect.value = "";
+        
+                unitSelect.value = "";
+        
+                // 清除代報人工號
+                proxyEmpIdInput.value = "";
+        
+                // 清除狀態訊息
+                status.innerHTML = "";
+        
+            }
+        );
+        
+                
+        
+        // =================================================
+        // 工號查詢員工資料
+        // =================================================
+        
+        inputField.addEventListener(
+            "blur",
+            async function () {
+        
+                const empId =
+                    inputField.value
+                        .trim()
+                        .toUpperCase();
+        
+        
+                inputField.value =
+                    empId;
 
 
         // =================================================
