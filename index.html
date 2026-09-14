@@ -1072,6 +1072,22 @@
         
         }
 
+        /* =================================================
+           查詢頁面：授權公司鎖定欄位
+        ================================================= */
+        
+        .query-company-locked {
+            background-color: #eff6ff !important;
+            border-color: #bfdbfe !important;
+            color: #374151;
+            font-weight: bold;
+            cursor: not-allowed !important;
+        }
+        
+        .query-company-locked:hover {
+            cursor: not-allowed !important;
+        }
+
 
     </style>
 
@@ -1587,7 +1603,7 @@
                         type="text"
                         id="queryEmployeeId"
                         class="input-field"
-                        placeholder="全部員工請留白"
+                        placeholder=""
                         autocomplete="off"
                     >
     
@@ -1603,9 +1619,10 @@
                 <input
                     type="text"
                     id="queryCompany"
-                    class="input-field"
-                    placeholder="全部公司請留白"
+                    class="input-field query-company-locked"
+                    placeholder=""
                     autocomplete="off"
+                    readonly
                 >
     
                 </div>
@@ -1832,7 +1849,129 @@
         const GOOGLE_SCRIPT_URL =
             "https://script.google.com/macros/s/AKfycbz5A0b2thyY6D2ExzqC_IEizobQmFf6mxSHrw2rl7nWaBjsnjqOijuNf13rElb4aQPKUg/exec";
 
+        // =================================================
+        // 查詢頁面：網址授權公司
+        // =================================================
+        
+        async function initializeQueryCompanyAuth() {
+        
+            const queryCompany =
+                document.getElementById(
+                    "queryCompany"
+                );
+        
+            if (!queryCompany) {
+                return;
+            }
+        
+            // -------------------------------------------------
+            // 公司欄位固定鎖定
+            // -------------------------------------------------
+        
+            queryCompany.readOnly = true;
+        
+            queryCompany.classList.add(
+                "query-company-locked"
+            );
+        
+            // -------------------------------------------------
+            // 取得網址後面的帳號
+            // -------------------------------------------------
+        
+            const search =
+                window.location.search;
+        
+            const account =
+                search
+                    .replace("?", "")
+                    .trim();
+        
+            // -------------------------------------------------
+            // 沒有帳號
+            // -------------------------------------------------
+        
+            if (!account) {
+        
+                queryCompany.value = "";
+        
+                return;
+        
+            }
+        
+            console.log(
+                "網址授權帳號：",
+                account
+            );
+        
+            try {
+        
+                // -------------------------------------------------
+                // 呼叫 GAS 查詢權限
+                // -------------------------------------------------
+        
+                const url =
+                    GOOGLE_SCRIPT_URL +
+                    "?action=checkQueryAuth" +
+                    "&account=" +
+                    encodeURIComponent(account);
+        
+                const response =
+                    await fetch(url);
+        
+                const result =
+                    await response.json();
+        
+                console.log(
+                    "網址授權結果：",
+                    result
+                );
+        
+                // -------------------------------------------------
+                // 有授權
+                // -------------------------------------------------
+        
+                if (
+                    result.success &&
+                    result.company
+                ) {
+        
+                    queryCompany.value =
+                        result.company;
+        
+                    console.log(
+                        "授權公司：",
+                        result.company
+                    );
+        
+                }
+        
+                // -------------------------------------------------
+                // 沒有授權
+                // -------------------------------------------------
+        
+                else {
+        
+                    queryCompany.value = "";
+        
+                }
+        
+            }
+        
+            catch (error) {
+        
+                console.error(
+                    "查詢網址授權失敗：",
+                    error
+                );
+        
+                queryCompany.value = "";
+        
+            }
+        
+        }
 
+
+        
 
         // =================================================
         // 目前分頁
@@ -3862,6 +4001,8 @@ function initializeDates() {
                 initializeDates();
         
                 initializeQueryDates();
+
+                initializeQueryCompanyAuth();
         
             }
         );
@@ -3913,7 +4054,23 @@ function initializeDates() {
                 document.getElementById(
                     "queryResult"
                 );
-        
+
+
+                // =================================================
+                // 工號／公司至少要填寫一個
+                // =================================================
+                
+                if (!employeeId && !company) {
+                
+                    resultBox.innerHTML = `
+                        <div class="result-fail">
+                            ❌ 請輸入員工工號或公司名稱！
+                        </div>
+                    `;
+                
+                    return;
+                
+                }
         
             resultBox.innerHTML =
                 "⏳ 查詢中，請稍候...";
