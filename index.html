@@ -1346,6 +1346,199 @@
         }
 
 
+        /* =================================================
+           七天菜單
+           ================================================= */
+        
+        .seven-day-menu {
+        
+            display: grid;
+        
+            grid-template-columns:
+                repeat(7, minmax(150px, 1fr));
+        
+            gap: 10px;
+        
+            width: 100%;
+        
+            overflow-x: auto;
+        
+        }
+        
+        
+        /* =================================================
+           每一天
+           ================================================= */
+        
+        .menu-day {
+        
+            background: #ffffff;
+        
+            border-radius: 12px;
+        
+            overflow: hidden;
+        
+            box-shadow:
+                0 2px 8px
+                rgba(0, 0, 0, 0.08);
+        
+            min-width: 150px;
+        
+        }
+        
+        
+        /* =================================================
+           日期標題
+           ================================================= */
+        
+        .menu-day-header {
+        
+            background:
+                linear-gradient(
+                    135deg,
+                    #667eea,
+                    #764ba2
+                );
+        
+            color: #ffffff;
+        
+            text-align: center;
+        
+            padding: 12px 6px;
+        
+        }
+        
+        
+        .menu-date {
+        
+            font-size: 16px;
+        
+            font-weight: bold;
+        
+        }
+        
+        
+        .menu-week {
+        
+            font-size: 14px;
+        
+            margin-top: 4px;
+        
+            opacity: 0.95;
+        
+        }
+        
+        
+        /* =================================================
+           每日菜單內容
+           ================================================= */
+        
+        .menu-day-body {
+        
+            padding: 8px;
+        
+        }
+        
+        
+        /* =================================================
+           菜色
+           ================================================= */
+        
+        .menu-item {
+        
+            padding: 8px 4px;
+        
+            border-bottom:
+                1px solid #eeeeee;
+        
+        }
+        
+        
+        .menu-item:last-child {
+        
+            border-bottom:
+                none;
+        
+        }
+        
+        
+        .menu-category {
+        
+            font-size: 12px;
+        
+            color: #888888;
+        
+            margin-bottom: 2px;
+        
+        }
+        
+        
+        .menu-name {
+        
+            font-size: 14px;
+        
+            color: #333333;
+        
+            line-height: 1.4;
+        
+        }
+        
+        
+        /* =================================================
+           沒有菜單
+           ================================================= */
+        
+        .menu-empty {
+        
+            text-align: center;
+        
+            color: #999999;
+        
+            padding: 20px 5px;
+        
+            font-size: 14px;
+        
+        }
+        
+        
+        /* =================================================
+           手機
+           ================================================= */
+        
+        @media (
+            max-width: 768px
+        ) {
+        
+            .seven-day-menu {
+        
+                display: flex;
+        
+                overflow-x: auto;
+        
+                gap: 8px;
+        
+                padding-bottom: 10px;
+        
+                -webkit-overflow-scrolling:
+                    touch;
+        
+            }
+        
+        
+            .menu-day {
+        
+                flex:
+                    0 0 145px;
+        
+                min-width:
+                    145px;
+        
+            }
+        
+        }
+
+
+
         
     </style>
 
@@ -2023,12 +2216,7 @@
         
             <div class="menu-date-selector">
         
-                <button
-                    type="button"
-                    id="menuPrevBtn"
-                    class="menu-arrow-btn"
-                    onclick="changeMenuDay(-1)"
-                >
+
                     ◀
                 </button>
         
@@ -2041,14 +2229,7 @@
                 </div>
         
         
-                <button
-                    type="button"
-                    id="menuNextBtn"
-                    class="menu-arrow-btn"
-                    onclick="changeMenuDay(1)"
-                >
-                    ▶
-                </button>
+
         
             </div>
         
@@ -4820,13 +5001,14 @@ function initializeDates() {
         
         }
 
-        // =================================================
+
+        
+        
+         // =================================================
         // 菜單
         // =================================================
         
         let menuData = [];
-        
-        let currentMenuDay = 0;
         
         
         // =================================================
@@ -4840,11 +5022,6 @@ function initializeDates() {
                     "menuCompany"
                 );
         
-            const menuDate =
-                document.getElementById(
-                    "menuDate"
-                );
-        
             const menuList =
                 document.getElementById(
                     "menuList"
@@ -4856,9 +5033,10 @@ function initializeDates() {
                 );
         
         
-            if (!menuCompany ||
-                !menuDate ||
-                !menuList) {
+            if (
+                !menuCompany ||
+                !menuList
+            ) {
         
                 return;
         
@@ -4869,16 +5047,11 @@ function initializeDates() {
                 "正在載入菜單...";
         
         
-            menuDate.innerText =
-                "載入中...";
-        
-        
-            menuList.innerHTML =
-                `
+            menuList.innerHTML = `
                 <div class="hint">
                     ⏳ 正在讀取菜單...
                 </div>
-                `;
+            `;
         
         
             try {
@@ -4900,28 +5073,34 @@ function initializeDates() {
                 );
         
         
-                if (!result.success) {
+                // =================================================
+                // 查詢失敗
+                // =================================================
+        
+                if (
+                    !result.success
+                ) {
         
                     menuCompany.innerText =
                         "";
         
-                    menuDate.innerText =
-                        "";
-        
-                    menuList.innerHTML =
-                        `
+                    menuList.innerHTML = `
                         <div class="result-fail">
                             ❌ ${
                                 result.message ||
                                 "菜單讀取失敗"
                             }
                         </div>
-                        `;
+                    `;
         
                     return;
         
                 }
         
+        
+                // =================================================
+                // 取得七天菜單
+                // =================================================
         
                 menuData =
                     Array.isArray(
@@ -4931,16 +5110,20 @@ function initializeDates() {
                         : [];
         
         
+                // =================================================
+                // 公司名稱
+                // =================================================
+        
                 menuCompany.innerText =
                     result.company ||
                     "";
         
         
-                currentMenuDay =
-                    0;
+                // =================================================
+                // 顯示七天
+                // =================================================
         
-        
-                renderMenu();
+                renderSevenDayMenu();
         
         
                 if (menuStatus) {
@@ -4965,16 +5148,11 @@ function initializeDates() {
                     "";
         
         
-                menuDate.innerText =
-                    "";
-        
-        
-                menuList.innerHTML =
-                    `
+                menuList.innerHTML = `
                     <div class="result-fail">
                         ❌ 無法取得菜單資料，請稍後再試。
                     </div>
-                    `;
+                `;
         
             }
         
@@ -4982,34 +5160,18 @@ function initializeDates() {
         
         
         // =================================================
-        // 顯示目前日期菜單
+        // 一次顯示七天菜單
         // =================================================
         
-        function renderMenu() {
-        
-            const menuDate =
-                document.getElementById(
-                    "menuDate"
-                );
+        function renderSevenDayMenu() {
         
             const menuList =
                 document.getElementById(
                     "menuList"
                 );
         
-            const prevBtn =
-                document.getElementById(
-                    "menuPrevBtn"
-                );
         
-            const nextBtn =
-                document.getElementById(
-                    "menuNextBtn"
-                );
-        
-        
-            if (!menuDate ||
-                !menuList) {
+            if (!menuList) {
         
                 return;
         
@@ -5017,220 +5179,144 @@ function initializeDates() {
         
         
             if (
+                !Array.isArray(menuData) ||
                 menuData.length === 0
             ) {
         
-                menuDate.innerText =
-                    "目前沒有菜單";
-        
-                menuList.innerHTML =
-                    `
+                menuList.innerHTML = `
                     <div class="menu-empty">
                         目前沒有菜單資料
                     </div>
-                    `;
+                `;
         
                 return;
         
             }
         
         
-            // -------------------------------------------------
-            // 保護索引
-            // -------------------------------------------------
+            // =================================================
+            // 建立七天欄位
+            // =================================================
         
-            if (
-                currentMenuDay < 0
-            ) {
+            let html = `
         
-                currentMenuDay =
-                    0;
+                <div class="seven-day-menu">
         
-            }
+            `;
         
         
-            if (
-                currentMenuDay >=
-                menuData.length
-            ) {
+            menuData.forEach(
+                function(menu) {
         
-                currentMenuDay =
-                    menuData.length - 1;
+                    html += `
         
-            }
+                        <div class="menu-day">
         
+                            <div class="menu-day-header">
         
-            const menu =
-                menuData[
-                    currentMenuDay
-                ];
+                                <div class="menu-date">
+                                    ${
+                                        menu.date ||
+                                        ""
+                                    }
+                                </div>
         
+                                <div class="menu-week">
+                                    ${
+                                        menu.week ||
+                                        ""
+                                    }
+                                </div>
         
-            // -------------------------------------------------
-            // 日期
-            // -------------------------------------------------
+                            </div>
         
-            menuDate.innerText =
-                (
-                    menu.date ||
-                    ""
-                ) +
-                " " +
-                (
-                    menu.week ||
-                    ""
-                );
+                            <div class="menu-day-body">
         
-        
-            // -------------------------------------------------
-            // 上一天 / 下一天
-            // -------------------------------------------------
-        
-            if (prevBtn) {
-        
-                prevBtn.disabled =
-                    currentMenuDay === 0;
-        
-            }
-        
-        
-            if (nextBtn) {
-        
-                nextBtn.disabled =
-                    currentMenuDay ===
-                    menuData.length - 1;
-        
-            }
-        
-        
-            // -------------------------------------------------
-            // 菜色
-            // -------------------------------------------------
-        
-            if (
-                !Array.isArray(
-                    menu.items
-                )
-            ) {
-        
-                menuList.innerHTML =
-                    `
-                    <div class="menu-empty">
-                        目前沒有菜單資料
-                    </div>
                     `;
         
-                return;
         
-            }
+                    // =================================================
+                    // 菜色
+                    // =================================================
+        
+                    if (
+                        Array.isArray(
+                            menu.items
+                        ) &&
+                        menu.items.length > 0
+                    ) {
+        
+                        menu.items.forEach(
+                            function(item) {
+        
+                                const category =
+                                    item.category ||
+                                    "";
         
         
-            const validItems =
-                menu.items.filter(
-                    function (item) {
+                                const name =
+                                    item.name ||
+                                    "—";
         
-                        return (
-                            item.category ||
-                            item.name
+        
+                                html += `
+        
+                                    <div class="menu-item">
+        
+                                        <div class="menu-category">
+                                            ${category}
+                                        </div>
+        
+                                        <div class="menu-name">
+                                            ${name}
+                                        </div>
+        
+                                    </div>
+        
+                                `;
+        
+                            }
                         );
         
                     }
-                );
+        
+                    else {
+        
+                        html += `
+        
+                            <div class="menu-empty">
+                                本日尚未提供菜單
+                            </div>
+        
+                        `;
+        
+                    }
         
         
-            if (
-                validItems.length === 0
-            ) {
+                    html += `
         
-                menuList.innerHTML =
-                    `
-                    <div class="menu-empty">
-                        本日尚未提供菜單
-                    </div>
+                            </div>
+        
+                        </div>
+        
                     `;
         
-                return;
+                }
+            );
         
-            }
+        
+            html += `
+        
+                </div>
+        
+            `;
         
         
             menuList.innerHTML =
-                validItems
-                    .map(
-                        function (item) {
-        
-                            return `
-                                <div class="menu-item">
-        
-                                    <div class="menu-category">
-                                        ${
-                                            item.category ||
-                                            ""
-                                        }
-                                    </div>
-        
-                                    <div class="menu-name">
-                                        ${
-                                            item.name ||
-                                            "—"
-                                        }
-                                    </div>
-        
-                                </div>
-                            `;
-        
-                        }
-                    )
-                    .join("");
+                html;
         
         }
-        
-        
-        // =================================================
-        // 切換菜單日期
-        // =================================================
-        
-        function changeMenuDay(
-            direction
-        ) {
-        
-            if (
-                menuData.length === 0
-            ) {
-        
-                return;
-        
-            }
-        
-        
-            currentMenuDay +=
-                direction;
-        
-        
-            if (
-                currentMenuDay < 0
-            ) {
-        
-                currentMenuDay =
-                    0;
-        
-            }
-        
-        
-            if (
-                currentMenuDay >=
-                menuData.length
-            ) {
-        
-                currentMenuDay =
-                    menuData.length - 1;
-        
-            }
-        
-        
-            renderMenu();
-        
-        }
+
 
 
 
