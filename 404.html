@@ -1,0 +1,36 @@
+<script>
+    (function () {
+
+        const path = window.location.pathname;
+
+        const basePath = "/wuci-lunch/";
+
+        // 只處理 /wuci-lunch/1234 這種網址
+        if (
+            path.startsWith(basePath) &&
+            path !== basePath
+        ) {
+
+            const account =
+                path
+                    .substring(basePath.length)
+                    .split("/")[0]
+                    .trim();
+
+            if (account) {
+
+                window.location.replace(
+                    basePath +
+                    "?" +
+                    encodeURIComponent(account)
+                );
+
+                return;
+            }
+        }
+
+        // 沒有授權碼就回首頁
+        window.location.replace(basePath);
+
+    })();
+</script>
