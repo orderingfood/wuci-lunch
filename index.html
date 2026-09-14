@@ -1088,7 +1088,265 @@
             cursor: not-allowed !important;
         }
 
+        /* =================================================
+           菜單頁面
+        ================================================= */
+        
+        .menu-card {
+        
+            max-width: 600px;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           公司名稱
+        ------------------------------------------------- */
+        
+        .menu-company {
+        
+            font-size: 20px;
+        
+            font-weight: bold;
+        
+            color: #374151;
+        
+            margin-bottom: 18px;
+        
+        }
 
+
+        /* -------------------------------------------------
+           日期切換
+        ------------------------------------------------- */
+        
+        .menu-date-selector {
+        
+            display: flex;
+        
+            align-items: center;
+        
+            justify-content: space-between;
+        
+            gap: 10px;
+        
+            margin-bottom: 20px;
+        
+        }
+        
+        
+        .menu-date {
+        
+            flex: 1;
+        
+            text-align: center;
+        
+            font-size: 20px;
+        
+            font-weight: bold;
+        
+            color: #007bff;
+        
+        }
+        
+        
+        .menu-arrow-btn {
+        
+            width: 45px;
+        
+            height: 45px;
+        
+            border: none;
+        
+            border-radius: 10px;
+        
+            background: #007bff;
+        
+            color: white;
+        
+            font-size: 20px;
+        
+            font-weight: bold;
+        
+            cursor: pointer;
+        
+            transition: 0.2s;
+
+        }
+        
+        
+        .menu-arrow-btn:hover {
+        
+            background: #0056b3;
+        
+        }
+        
+        
+        .menu-arrow-btn:disabled {
+        
+            background: #ccc;
+        
+            cursor: not-allowed;
+
+        }
+        
+        
+        /* -------------------------------------------------
+           菜單列表
+        ------------------------------------------------- */
+        
+        .menu-list {
+        
+            display: flex;
+        
+            flex-direction: column;
+        
+            gap: 10px;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           菜單項目
+        ------------------------------------------------- */
+        
+        .menu-item {
+        
+            display: flex;
+        
+            align-items: center;
+        
+            gap: 12px;
+        
+            padding: 12px;
+        
+            background: #f8fafc;
+        
+            border: 1px solid #e5e7eb;
+        
+            border-radius: 10px;
+        
+            text-align: left;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           類別
+        ------------------------------------------------- */
+        
+        .menu-category {
+        
+            flex: 0 0 70px;
+        
+            padding: 6px 8px;
+        
+            border-radius: 6px;
+        
+            background: #dbeafe;
+        
+            color: #1d4ed8;
+        
+            font-size: 14px;
+        
+            font-weight: bold;
+        
+            text-align: center;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           菜名
+        ------------------------------------------------- */
+        
+        .menu-name {
+        
+            flex: 1;
+        
+            font-size: 17px;
+        
+            color: #333;
+        
+            font-weight: bold;
+        
+            word-break: break-word;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           沒有菜色
+        ------------------------------------------------- */
+        
+        .menu-empty {
+        
+            padding: 25px;
+        
+            text-align: center;
+        
+            color: #888;
+        
+            background: #f8fafc;
+        
+            border-radius: 10px;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           手機
+        ------------------------------------------------- */
+        
+        @media (max-width: 500px) {
+        
+            .menu-card {
+        
+                padding: 20px;
+        
+            }
+        
+        
+            .menu-company {
+        
+                font-size: 18px;
+        
+            }
+        
+        
+            .menu-date {
+        
+                font-size: 17px;
+        
+            }
+        
+        
+            .menu-item {
+        
+                padding: 10px;
+        
+            }
+        
+        
+            .menu-category {
+        
+                flex: 0 0 60px;
+        
+                font-size: 13px;
+        
+            }
+        
+        
+            .menu-name {
+        
+                font-size: 16px;
+        
+            }
+        
+        }
+
+
+        
     </style>
 
 </head>
@@ -1740,29 +1998,88 @@
             class="system-page"
         >
     
-            <div class="card">
-    
-                <h2>
-                    📖 菜單
-                </h2>
-    
-                <div class="empty-page">
-    
-                    <div class="empty-page-icon">
-                        📖
-                    </div>
-    
-                    <div>
-                        菜單功能
-                    </div>
-    
-                    <div class="hint">
-                        此功能之後建立
-                    </div>
-    
-                </div>
-    
+        <div class="card menu-card">
+        
+            <h2>
+                📖 菜單
+            </h2>
+        
+        
+            <!-- =================================================
+                 公司名稱
+            ================================================== -->
+        
+            <div
+                id="menuCompany"
+                class="menu-company"
+            >
+                載入中...
             </div>
+        
+        
+            <!-- =================================================
+                 日期切換
+            ================================================== -->
+        
+            <div class="menu-date-selector">
+        
+                <button
+                    type="button"
+                    id="menuPrevBtn"
+                    class="menu-arrow-btn"
+                    onclick="changeMenuDay(-1)"
+                >
+                    ◀
+                </button>
+        
+        
+                <div
+                    id="menuDate"
+                    class="menu-date"
+                >
+                    載入中...
+                </div>
+        
+        
+                <button
+                    type="button"
+                    id="menuNextBtn"
+                    class="menu-arrow-btn"
+                    onclick="changeMenuDay(1)"
+                >
+                    ▶
+                </button>
+        
+            </div>
+        
+        
+            <!-- =================================================
+                 菜單內容
+            ================================================== -->
+        
+            <div
+                id="menuList"
+                class="menu-list"
+            >
+        
+                <div class="hint">
+                    正在載入菜單...
+                </div>
+        
+            </div>
+        
+        
+            <!-- =================================================
+                 狀態
+            ================================================== -->
+        
+            <div
+                id="menuStatus"
+                class="hint"
+            ></div>
+        
+        </div>
+
     
         </section>
 
@@ -1844,6 +2161,18 @@
             document.body.classList.add(
                 "white-mode"
             );
+
+            // =================================================
+            // 點擊「菜單」時讀取 Google 工作表
+            // =================================================
+        
+            if (
+                page === "menu"
+            ) {
+        
+                loadMenu();
+        
+            }
         
         }
 
@@ -4490,6 +4819,419 @@ function initializeDates() {
             }
         
         }
+
+        // =================================================
+        // 菜單
+        // =================================================
+        
+        let menuData = [];
+        
+        let currentMenuDay = 0;
+        
+        
+        // =================================================
+        // 載入菜單
+        // =================================================
+        
+        async function loadMenu() {
+        
+            const menuCompany =
+                document.getElementById(
+                    "menuCompany"
+                );
+        
+            const menuDate =
+                document.getElementById(
+                    "menuDate"
+                );
+        
+            const menuList =
+                document.getElementById(
+                    "menuList"
+                );
+        
+            const menuStatus =
+                document.getElementById(
+                    "menuStatus"
+                );
+        
+        
+            if (!menuCompany ||
+                !menuDate ||
+                !menuList) {
+        
+                return;
+        
+            }
+        
+        
+            menuCompany.innerText =
+                "正在載入菜單...";
+        
+        
+            menuDate.innerText =
+                "載入中...";
+        
+        
+            menuList.innerHTML =
+                `
+                <div class="hint">
+                    ⏳ 正在讀取菜單...
+                </div>
+                `;
+        
+        
+            try {
+        
+                const response =
+                    await fetch(
+                        GOOGLE_SCRIPT_URL +
+                        "?action=getMenu"
+                    );
+        
+        
+                const result =
+                    await response.json();
+        
+        
+                console.log(
+                    "菜單資料：",
+                    result
+                );
+        
+        
+                if (!result.success) {
+        
+                    menuCompany.innerText =
+                        "";
+        
+                    menuDate.innerText =
+                        "";
+        
+                    menuList.innerHTML =
+                        `
+                        <div class="result-fail">
+                            ❌ ${
+                                result.message ||
+                                "菜單讀取失敗"
+                            }
+                        </div>
+                        `;
+        
+                    return;
+        
+                }
+        
+        
+                menuData =
+                    Array.isArray(
+                        result.menus
+                    )
+                        ? result.menus
+                        : [];
+        
+        
+                menuCompany.innerText =
+                    result.company ||
+                    "";
+        
+        
+                currentMenuDay =
+                    0;
+        
+        
+                renderMenu();
+        
+        
+                if (menuStatus) {
+        
+                    menuStatus.innerText =
+                        "菜單資料已更新";
+        
+                }
+        
+            }
+        
+        
+            catch (error) {
+        
+                console.error(
+                    "載入菜單失敗：",
+                    error
+                );
+        
+        
+                menuCompany.innerText =
+                    "";
+        
+        
+                menuDate.innerText =
+                    "";
+        
+        
+                menuList.innerHTML =
+                    `
+                    <div class="result-fail">
+                        ❌ 無法取得菜單資料，請稍後再試。
+                    </div>
+                    `;
+        
+            }
+        
+        }
+        
+        
+        // =================================================
+        // 顯示目前日期菜單
+        // =================================================
+        
+        function renderMenu() {
+        
+            const menuDate =
+                document.getElementById(
+                    "menuDate"
+                );
+        
+            const menuList =
+                document.getElementById(
+                    "menuList"
+                );
+        
+            const prevBtn =
+                document.getElementById(
+                    "menuPrevBtn"
+                );
+        
+            const nextBtn =
+                document.getElementById(
+                    "menuNextBtn"
+                );
+        
+        
+            if (!menuDate ||
+                !menuList) {
+        
+                return;
+        
+            }
+        
+        
+            if (
+                menuData.length === 0
+            ) {
+        
+                menuDate.innerText =
+                    "目前沒有菜單";
+        
+                menuList.innerHTML =
+                    `
+                    <div class="menu-empty">
+                        目前沒有菜單資料
+                    </div>
+                    `;
+        
+                return;
+        
+            }
+        
+        
+            // -------------------------------------------------
+            // 保護索引
+            // -------------------------------------------------
+        
+            if (
+                currentMenuDay < 0
+            ) {
+        
+                currentMenuDay =
+                    0;
+        
+            }
+        
+        
+            if (
+                currentMenuDay >=
+                menuData.length
+            ) {
+        
+                currentMenuDay =
+                    menuData.length - 1;
+        
+            }
+        
+        
+            const menu =
+                menuData[
+                    currentMenuDay
+                ];
+        
+        
+            // -------------------------------------------------
+            // 日期
+            // -------------------------------------------------
+        
+            menuDate.innerText =
+                (
+                    menu.date ||
+                    ""
+                ) +
+                " " +
+                (
+                    menu.week ||
+                    ""
+                );
+        
+        
+            // -------------------------------------------------
+            // 上一天 / 下一天
+            // -------------------------------------------------
+        
+            if (prevBtn) {
+        
+                prevBtn.disabled =
+                    currentMenuDay === 0;
+        
+            }
+        
+        
+            if (nextBtn) {
+        
+                nextBtn.disabled =
+                    currentMenuDay ===
+                    menuData.length - 1;
+        
+            }
+        
+        
+            // -------------------------------------------------
+            // 菜色
+            // -------------------------------------------------
+        
+            if (
+                !Array.isArray(
+                    menu.items
+                )
+            ) {
+        
+                menuList.innerHTML =
+                    `
+                    <div class="menu-empty">
+                        目前沒有菜單資料
+                    </div>
+                    `;
+        
+                return;
+        
+            }
+        
+        
+            const validItems =
+                menu.items.filter(
+                    function (item) {
+        
+                        return (
+                            item.category ||
+                            item.name
+                        );
+        
+                    }
+                );
+        
+        
+            if (
+                validItems.length === 0
+            ) {
+        
+                menuList.innerHTML =
+                    `
+                    <div class="menu-empty">
+                        本日尚未提供菜單
+                    </div>
+                    `;
+        
+                return;
+        
+            }
+        
+        
+            menuList.innerHTML =
+                validItems
+                    .map(
+                        function (item) {
+        
+                            return `
+                                <div class="menu-item">
+        
+                                    <div class="menu-category">
+                                        ${
+                                            item.category ||
+                                            ""
+                                        }
+                                    </div>
+        
+                                    <div class="menu-name">
+                                        ${
+                                            item.name ||
+                                            "—"
+                                        }
+                                    </div>
+        
+                                </div>
+                            `;
+        
+                        }
+                    )
+                    .join("");
+        
+        }
+        
+        
+        // =================================================
+        // 切換菜單日期
+        // =================================================
+        
+        function changeMenuDay(
+            direction
+        ) {
+        
+            if (
+                menuData.length === 0
+            ) {
+        
+                return;
+        
+            }
+        
+        
+            currentMenuDay +=
+                direction;
+        
+        
+            if (
+                currentMenuDay < 0
+            ) {
+        
+                currentMenuDay =
+                    0;
+        
+            }
+        
+        
+            if (
+                currentMenuDay >=
+                menuData.length
+            ) {
+        
+                currentMenuDay =
+                    menuData.length - 1;
+        
+            }
+        
+        
+            renderMenu();
+        
+        }
+
 
 
 
