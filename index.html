@@ -1878,13 +1878,23 @@
             // 取得網址後面的帳號
             // -------------------------------------------------
         
-            const search =
-                window.location.search;
-        
-            const account =
-                search
-                    .replace("?", "")
-                    .trim();
+            const pathname =
+                window.location.pathname;
+            
+            const basePath =
+                "/wuci-lunch/";
+            
+            let account = "";
+            
+            if (pathname.startsWith(basePath)) {
+            
+                account =
+                    pathname
+                        .substring(basePath.length)
+                        .split("/")[0]
+                        .trim();
+            
+            }
         
             // -------------------------------------------------
             // 沒有帳號
@@ -3973,7 +3983,7 @@ function initializeDates() {
 
             navigator.serviceWorker
                 .register(
-                    "/sw.js"
+                    "/wuci-lunch/sw.js"
                 )
                 .catch(
                     err => {
