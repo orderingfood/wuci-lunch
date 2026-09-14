@@ -731,6 +731,8 @@
         
         .system-nav {
         
+            width: 100%;
+        
             max-width: 400px;
         
             margin: 0 auto 20px auto;
@@ -746,14 +748,34 @@
         
             padding: 8px;
         
-            border-radius: 12px;
+            border-radius: 14px;
         
             box-shadow:
-                0 4px 10px
+                0 4px 12px
                 rgba(0,0,0,0.08);
+        
+            box-sizing: border-box;
+        
+            transition:
+                max-width 0.3s ease;
         
         }
         
+        
+        /* =================================================
+           查詢頁面有結果時
+        ================================================= */
+        
+        body.query-wide .system-nav {
+        
+            max-width: 1400px;
+        
+        }
+        
+        
+        /* =================================================
+           分頁按鈕
+        ================================================= */
         
         .system-nav-btn {
         
@@ -761,9 +783,9 @@
         
             background: transparent;
         
-            padding: 12px 6px;
+            padding: 13px 8px;
         
-            border-radius: 8px;
+            border-radius: 10px;
         
             cursor: pointer;
         
@@ -771,9 +793,12 @@
         
             font-weight: bold;
         
-            color: #666;
+            color: #64748b;
         
-            transition: 0.2s;
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                transform 0.15s ease;
         
         }
         
@@ -782,40 +807,137 @@
         
             display: block;
         
-            margin-top: 4px;
+            margin-top: 5px;
+        
+            font-size: 14px;
         
         }
         
         
         .system-nav-btn:hover {
         
-            background: #f0f8ff;
+            background: #eff6ff;
         
-            color: #007bff;
+            color: #2563eb;
         
         }
         
         
         .system-nav-btn.active {
         
-            background: #007bff;
+            background:
+                linear-gradient(
+                    135deg,
+                    #007bff,
+                    #2563eb
+                );
         
             color: white;
+        
+            box-shadow:
+                0 3px 8px
+                rgba(37,99,235,0.25);
         
         }
         
         
-        /* -------------------------------------------------
-           手機版
-        ------------------------------------------------- */
+        .system-nav-btn:active {
         
-        @media (max-width: 500px) {
+            transform: scale(0.97);
+        
+        }
+        
+        
+        /* =================================================
+           查詢頁面有結果時
+           查詢內容同步變寬
+        ================================================= */
+        
+        body.query-wide #page-query .card {
+        
+            max-width: 1400px;
+        
+        }
+        
+        
+        /* =================================================
+           手機版
+        ================================================= */
+        
+        @media (max-width: 768px) {
+        
+            .system-nav {
+        
+                width: 100%;
+        
+                max-width: 400px;
+        
+                padding: 6px;
+        
+                gap: 5px;
+        
+            }
+        
+        
+            body.query-wide .system-nav {
+        
+                max-width: 100%;
+        
+            }
+        
+        
+            body.query-wide #page-query .card {
+        
+                max-width: 100%;
+        
+            }
+        
         
             .system-nav-btn {
         
+                padding: 11px 4px;
+        
+                font-size: 14px;
+        
+            }
+        
+        
+            .system-nav-btn span {
+        
                 font-size: 13px;
         
-                padding: 10px 3px;
+            }
+        
+        }
+        
+        
+        /* =================================================
+           小手機
+        ================================================= */
+        
+        @media (max-width: 500px) {
+        
+            .system-nav {
+        
+                padding: 5px;
+        
+                gap: 4px;
+        
+            }
+        
+        
+            .system-nav-btn {
+        
+                padding: 10px 2px;
+        
+                font-size: 13px;
+        
+            }
+        
+        
+            .system-nav-btn span {
+        
+                font-size: 12px;
         
             }
         
@@ -1778,6 +1900,14 @@
         // =================================================
 
         function switchSystemPage(page) {
+
+             if (page !== "query") {
+                
+                    document.body.classList.remove(
+                        "query-wide"
+                    );
+                
+                }
         
             document
                 .querySelectorAll(".system-page")
@@ -4297,6 +4427,10 @@ function initializeDates() {
                 
                 resultBox.innerHTML =
                     html;
+                
+                document.body.classList.add(
+                    "query-wide"
+                );
         
         
             }
