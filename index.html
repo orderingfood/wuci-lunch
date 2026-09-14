@@ -1874,27 +1874,103 @@
                 "query-company-locked"
             );
         
+        // -------------------------------------------------
+        // 取得網址授權帳號
+        // -------------------------------------------------
+        
+        const pathname =
+            window.location.pathname;
+        
+        const search =
+            window.location.search;
+        
+        const basePath =
+            "/wuci-lunch/";
+        
+        let account = "";
+        
+        
+        // =================================================
+        // 方式一：/wuci-lunch/1234
+        // =================================================
+        
+        if (
+            pathname.startsWith(basePath)
+        ) {
+        
+            account =
+                pathname
+                    .substring(basePath.length)
+                    .split("/")[0]
+                    .trim();
+        
+        }
+        
+        
+        // =================================================
+        // 方式二：/?1234
+        // =================================================
+        //
+        // 例如：
+        // https://你的網站/?1234
+        //
+        // search 會是：
+        // ?1234
+        //
+        
+        if (
+            !account &&
+            search &&
+            search !== "?"
+        ) {
+        
+            const rawQuery =
+                search
+                    .substring(1)
+                    .trim();
+        
             // -------------------------------------------------
-            // 取得網址後面的帳號
+            // 如果是 ?account=1234
             // -------------------------------------------------
         
-            const pathname =
-                window.location.pathname;
-            
-            const basePath =
-                "/wuci-lunch/";
-            
-            let account = "";
-            
-            if (pathname.startsWith(basePath)) {
-            
+            if (
+                rawQuery.startsWith("account=")
+            ) {
+        
                 account =
-                    pathname
-                        .substring(basePath.length)
-                        .split("/")[0]
-                        .trim();
-            
+                    decodeURIComponent(
+                        rawQuery
+                            .substring(8)
+                    )
+                    .trim();
+        
             }
+        
+            // -------------------------------------------------
+            // 如果是 ?1234
+            // -------------------------------------------------
+        
+            else {
+        
+                // 避免把一般 query 參數誤當成帳號
+                // 例如 ?foo=bar
+                if (
+                    !rawQuery.includes("=") &&
+                    !rawQuery.includes("&")
+                ) {
+        
+                    account =
+                        decodeURIComponent(
+                            rawQuery
+                        )
+                        .trim();
+        
+                }
+        
+            }
+        
+        }
+
         
             // -------------------------------------------------
             // 沒有帳號
