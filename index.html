@@ -1850,71 +1850,38 @@
             "https://script.google.com/macros/s/AKfycbz5A0b2thyY6D2ExzqC_IEizobQmFf6mxSHrw2rl7nWaBjsnjqOijuNf13rElb4aQPKUg/exec";
         
         // =================================================
-        // 查詢頁面：網址授權公司
-        // 快速版：localStorage 快取 + 背景重新驗證
+        // 網址授權公司
+        // 網頁一開就背景認證
         // =================================================
         
         async function initializeQueryCompanyAuth() {
         
             const queryCompany =
-                document.getElementById(
-                    "queryCompany"
-                );
+                document.getElementById("queryCompany");
         
-            if (!queryCompany) {
-                return;
-            }
+            if (!queryCompany) return;
         
         
-            // =================================================
-            // 公司欄位固定鎖定
-            // =================================================
-        
-            queryCompany.readOnly = true;
-        
-            queryCompany.classList.add(
-                "query-company-locked"
-            );
-        
-        
-            // =================================================
-            // 取得網址授權帳號
-            // =================================================
-        
+            // 取得網址帳號
             const pathname =
                 window.location.pathname;
         
             const search =
                 window.location.search;
         
-            const basePath =
-                "/wuci-lunch/";
-        
             let account = "";
         
-        
-            // =================================================
-            // 方式一：
-            // /wuci-lunch/1234
-            // =================================================
-        
             if (
-                pathname.startsWith(basePath)
+                pathname.startsWith("/wuci-lunch/")
             ) {
         
                 account =
                     pathname
-                        .substring(basePath.length)
+                        .substring("/wuci-lunch/".length)
                         .split("/")[0]
                         .trim();
         
             }
-        
-        
-            // =================================================
-            // 方式二：
-            // ?1234
-            // =================================================
         
             if (
                 !account &&
@@ -1922,262 +1889,79 @@
                 search !== "?"
             ) {
         
-                const rawQuery =
-                    search
-                        .substring(1)
-                        .trim();
+                const q =
+                    search.substring(1).trim();
         
-        
-                // -------------------------------------------------
-                // ?account=1234
-                // -------------------------------------------------
-        
-                if (
-                    rawQuery.startsWith("account=")
-                ) {
-        
-                    account =
-                        decodeURIComponent(
-                            rawQuery.substring(8)
-                        ).trim();
-        
-                }
-        
-        
-                // -------------------------------------------------
-                // ?1234
-                // -------------------------------------------------
-        
-                else {
-        
-                    if (
-                        !rawQuery.includes("=") &&
-                        !rawQuery.includes("&")
-                    ) {
-        
-                        account =
-                            decodeURIComponent(
-                                rawQuery
-                            ).trim();
-        
-                    }
-        
-                }
+                account =
+                    q.startsWith("account=")
+                        ? decodeURIComponent(q.substring(8))
+                        : (
+                            !q.includes("=") &&
+                            !q.includes("&")
+                                ? decodeURIComponent(q)
+                                : ""
+                        );
         
             }
         
         
-            // =================================================
-            // 沒有網址授權帳號
-            // =================================================
-        
-            if (!account) {
-        
-                queryCompany.value = "";
-        
-                return;
-        
-            }
+            if (!account) return;
         
         
-            console.log(
-                "網址授權帳號：",
-                account
-            );
-        
-        
-            // =================================================
-            // 建立此帳號專用的快取 Key
-            // =================================================
-        
+            // 先讀取快取
             const cacheKey =
-                "query_company_auth_" +
-                account;
+                "query_company_" + account;
         
+            const cached =
+                localStorage.getItem(cacheKey);
         
-            // =================================================
-            // ⭐ 第一階段：
-            // 立即讀取 localStorage
-            // =================================================
-        
-            try {
-        
-                const cachedCompany =
-                    localStorage.getItem(
-                        cacheKey
-                    );
-        
-        
-                if (
-                    cachedCompany
-                ) {
-        
-                    queryCompany.value =
-                        cachedCompany;
-        
-        
-                    console.log(
-                        "立即使用授權公司快取：",
-                        cachedCompany
-                    );
-        
-                }
-        
-            }
-            catch (error) {
-        
-                console.warn(
-                    "讀取授權公司快取失敗：",
-                    error
-                );
-        
+            if (cached) {
+                queryCompany.value = cached;
             }
         
         
-            // =================================================
-            // ⭐ 第二階段：
-            // 背景向 GAS 重新確認授權
-            // =================================================
-        
+            // 背景向 GAS 認證
             try {
-        
-                const url =
-                    GOOGLE_SCRIPT_URL +
-                    "?action=checkQueryAuth" +
-                    "&account=" +
-                    encodeURIComponent(
-                        account
-                    );
-        
         
                 const response =
                     await fetch(
-                        url
+                        GOOGLE_SCRIPT_URL +
+                        "?action=checkQueryAuth" +
+                        "&account=" +
+                        encodeURIComponent(account)
                     );
-        
         
                 const result =
                     await response.json();
         
-        
-                console.log(
-                    "網址授權結果：",
-                    result
-                );
-        
-        
-                // =================================================
-                // 有授權
-                // =================================================
         
                 if (
                     result.success &&
                     result.company
                 ) {
         
-                    const company =
-                        result.company.trim();
-        
-        
-                    // -------------------------------------------------
-                    // 更新畫面
-                    // -------------------------------------------------
-        
                     queryCompany.value =
-                        company;
+                        result.company;
         
-        
-                    // -------------------------------------------------
-                    // 更新快取
-                    // -------------------------------------------------
-        
-                    try {
-        
-                        localStorage.setItem(
-                            cacheKey,
-                            company
-                        );
-        
-                    }
-                    catch (cacheError) {
-        
-                        console.warn(
-                            "儲存授權公司快取失敗：",
-                            cacheError
-                        );
-        
-                    }
-        
-        
-                    console.log(
-                        "授權公司已更新：",
-                        company
-                    );
-        
-                }
-        
-        
-                // =================================================
-                // 沒有授權
-                // =================================================
-        
-                else {
-        
-                    /*
-                     * 注意：
-                     *
-                     * 這裡故意「不清除畫面上的快取」。
-                     *
-                     * 原因是 GAS 可能只是暫時異常，
-                     * 不希望因為一次網路問題，
-                     * 就讓使用者看到公司名稱突然消失。
-                     *
-                     * 如果 GAS 明確確認此帳號已取消授權，
-                     * 才建議再另外設計清除快取機制。
-                     */
-        
-                    console.log(
-                        "目前沒有取得新的授權公司資料"
+                    localStorage.setItem(
+                        cacheKey,
+                        result.company
                     );
         
                 }
         
             }
-        
-        
             catch (error) {
         
                 console.error(
-                    "查詢網址授權失敗：",
+                    "授權查詢失敗：",
                     error
                 );
-        
-        
-                /*
-                 * GAS 查詢失敗時：
-                 *
-                 * 如果畫面原本已經有 localStorage
-                 * 的公司名稱，就繼續保留。
-                 *
-                 * 不要因為 GAS 暫時慢或失敗，
-                 * 把使用者已看到的公司名稱清掉。
-                 */
-        
-                if (
-                    !queryCompany.value
-                ) {
-        
-                    queryCompany.value = "";
-        
-                }
         
             }
         
         }
-
-
-
-        
+      
 
         // =================================================
         // 目前分頁
