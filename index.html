@@ -5056,7 +5056,24 @@ function initializeDates() {
         
                 console.log(
                     "菜單資料：",
-                    result
+                    JSON.stringify(result, null, 2)
+                );
+                
+                console.log(
+                    "menus：",
+                    result.menus
+                );
+                
+                console.log(
+                    "menus 是否為陣列：",
+                    Array.isArray(result.menus)
+                );
+                
+                console.log(
+                    "menus 筆數：",
+                    Array.isArray(result.menus)
+                        ? result.menus.length
+                        : "不是陣列"
                 );
         
         
