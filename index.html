@@ -1628,47 +1628,85 @@
         
         
         /* =================================================
-           七天橫向排列
+           七天菜單表格
         ================================================= */
         
         .menu-list {
-            display: grid;
-            grid-template-columns: repeat(7, minmax(150px, 1fr));
-            gap: 14px;
             width: 100%;
+        
             overflow-x: auto;
+        
             padding: 5px 2px 15px;
         }
         
         
         /* =================================================
-           每一天的卡片
+           菜單表格
         ================================================= */
         
-        .menu-day {
-            min-width: 150px;
+        .menu-table {
+            width: 100%;
+            min-width: 850px;
+        
+            border-collapse: separate;
+            border-spacing: 0;
+        
             background: #ffffff;
+        
             border-radius: 16px;
+        
             overflow: hidden;
         
-            border: 1px solid #e8e8e8;
-        
             box-shadow:
-                0 4px 12px rgba(0, 0, 0, 0.08);
+                0 4px 15px rgba(0, 0, 0, 0.08);
         
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease;
+            border: 1px solid #e8e8e8;
         }
         
         
-        /* 滑鼠移過去 */
+        /* =================================================
+           所有儲存格
+        ================================================= */
         
-        .menu-day:hover {
-            transform: translateY(-4px);
+        .menu-table th,
+        .menu-table td {
+            padding: 13px 10px;
         
-            box-shadow:
-                0 8px 20px rgba(0, 0, 0, 0.13);
+            text-align: center;
+        
+            border-right:
+                1px solid #eeeeee;
+        
+            border-bottom:
+                1px solid #eeeeee;
+        }
+        
+        
+        /* =================================================
+           左側分類欄
+        ================================================= */
+        
+        .menu-category-column {
+            width: 100px;
+        
+            min-width: 100px;
+        
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff5f5,
+                    #ffe8e8
+                );
+        
+            color: #d85c5c;
+        
+            font-weight: 800;
+        
+            position: sticky;
+        
+            left: 0;
+        
+            z-index: 3;
         }
         
         
@@ -1676,11 +1714,7 @@
            日期標題
         ================================================= */
         
-        .menu-day-header {
-            padding: 15px 10px;
-        
-            text-align: center;
-        
+        .menu-table thead th {
             background:
                 linear-gradient(
                     135deg,
@@ -1689,76 +1723,91 @@
                 );
         
             color: #ffffff;
+        
+            font-weight: 700;
+        
+            height: 65px;
+        }
+        
+        
+        /* 左上角分類標題 */
+        
+        .menu-table thead th:first-child {
+            background:
+                linear-gradient(
+                    135deg,
+                    #f47b82,
+                    #f5a6a9
+                );
+        
+            position: sticky;
+        
+            left: 0;
+        
+            z-index: 4;
         }
         
         
         /* 日期 */
         
-        .menu-date {
-            font-size: 18px;
+        .menu-table-date {
+            font-size: 16px;
+        
             font-weight: 800;
-            letter-spacing: 0.5px;
         }
         
         
         /* 星期 */
         
-        .menu-week {
-            margin-top: 5px;
+        .menu-table-week {
+            margin-top: 4px;
         
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
         
             opacity: 0.95;
         }
         
         
         /* =================================================
-           菜單內容
+           菜色內容
         ================================================= */
         
-        .menu-day-body {
-            padding: 10px;
+        .menu-table td {
+            color: #444;
+        
+            font-size: 15px;
+        
+            line-height: 1.5;
+        
+            background: #ffffff;
+        }
+        
+        
+        /* 滑鼠移過去 */
+        
+        .menu-table tbody tr:hover td {
+            background: #fffafa;
         }
         
         
         /* =================================================
-           每一道菜
+           分類名稱
         ================================================= */
         
-        .menu-item {
-            padding: 11px 8px;
+        .menu-row-category {
+            font-size: 14px;
         
-            border-bottom:
-                1px solid #eeeeee;
+            font-weight: 800;
         
-            text-align: center;
-        }
+            color: #d85c5c;
         
+            background: #fff7f7 !important;
         
-        .menu-item:last-child {
-            border-bottom: none;
-        }
+            position: sticky;
         
+            left: 0;
         
-        /* =================================================
-           葷素分類
-        ================================================= */
-        
-        .menu-category {
-            display: inline-block;
-        
-            padding: 3px 8px;
-            margin-bottom: 5px;
-        
-            border-radius: 20px;
-        
-            background: #f3f3f3;
-        
-            color: #777;
-        
-            font-size: 12px;
-            font-weight: 600;
+            z-index: 2;
         }
         
         
@@ -1766,60 +1815,23 @@
            菜名
         ================================================= */
         
-        .menu-name {
-            color: #333;
-        
-            font-size: 15px;
+        .menu-food-name {
             font-weight: 600;
         
-            line-height: 1.5;
+            color: #333;
         
             word-break: break-word;
         }
         
         
         /* =================================================
-           沒有菜單
+           沒有菜色
         ================================================= */
         
-        .menu-empty {
-            grid-column: 1 / -1;
+        .menu-food-empty {
+            color: #aaa;
         
-            text-align: center;
-        
-            padding: 40px 20px;
-        
-            color: #888;
-        
-            background: #fafafa;
-        
-            border-radius: 14px;
-        }
-        
-        
-        /* =================================================
-           菜單載入狀態
-        ================================================= */
-        
-        #menuStatus {
-            text-align: center;
-            margin-top: 15px;
-        }
-        
-        
-        /* =================================================
-           平板
-        ================================================= */
-        
-        @media (max-width: 1100px) {
-        
-            .menu-list {
-                grid-template-columns:
-                    repeat(4, minmax(160px, 1fr));
-        
-                overflow-x: auto;
-            }
-        
+            font-weight: 400;
         }
         
         
@@ -1829,38 +1841,18 @@
         
         @media (max-width: 700px) {
         
-            .menu-list {
-                display: flex;
-        
-                gap: 12px;
-        
-                overflow-x: auto;
-        
-                padding:
-                    5px
-                    4px
-                    15px;
-        
-                scroll-snap-type: x mandatory;
+            .menu-table {
+                min-width: 850px;
             }
         
-        
-            .menu-day {
-                flex: 0 0 78%;
-        
-                min-width: 78%;
-        
-                scroll-snap-align: start;
+            .menu-table th,
+            .menu-table td {
+                padding: 11px 8px;
             }
         
-        
-            .menu-date {
-                font-size: 17px;
-            }
-        
-        
-            .menu-name {
-                font-size: 15px;
+            .menu-category-column {
+                width: 85px;
+                min-width: 85px;
             }
         
         }
@@ -5573,100 +5565,221 @@ function initializeDates() {
         
         
             // =================================================
-            // 建立七天菜單
+            // 取得所有分類
+            //
+            // 例如：
+            // 主食
+            // 配菜
+            // 湯品
+            //
+            // 自動從七天資料抓出來
             // =================================================
         
-            let html = "";
+            const categories = [];
         
         
             menuData.forEach(
-                function(menu, dayIndex) {
+                function(day) {
+        
+                    if (
+                        !Array.isArray(day.items)
+                    ) {
+        
+                        return;
+        
+                    }
+        
+        
+                    day.items.forEach(
+                        function(item) {
+        
+                            const category =
+                                (
+                                    item.category ||
+                                    "其他"
+                                ).trim();
+        
+        
+                            if (
+                                !categories.includes(
+                                    category
+                                )
+                            ) {
+        
+                                categories.push(
+                                    category
+                                );
+        
+                            }
+        
+                        }
+                    );
+        
+                }
+            );
+        
+        
+            // =================================================
+            // 建立表格
+            // =================================================
+        
+            let html = `
+        
+                <table class="menu-table">
+        
+                    <thead>
+        
+                        <tr>
+        
+                            <th class="menu-category-column">
+                                餐點
+                            </th>
+        
+            `;
+        
+        
+            // =================================================
+            // 七天標題
+            // =================================================
+        
+            menuData.forEach(
+                function(day) {
+        
+                    html += `
+        
+                        <th>
+        
+                            <div class="menu-table-date">
+                                ${day.date || ""}
+                            </div>
+        
+                            <div class="menu-table-week">
+                                ${day.week || ""}
+                            </div>
+        
+                        </th>
+        
+                    `;
+        
+                }
+            );
+        
+        
+            html += `
+        
+                        </tr>
+        
+                    </thead>
+        
+                    <tbody>
+        
+            `;
+        
+        
+            // =================================================
+            // 每一個分類建立一列
+            // =================================================
+        
+            categories.forEach(
+                function(category) {
         
         
                     html += `
-                        <div class="menu-day">
         
-                            <!-- =========================
-                                 日期
-                            ========================== -->
+                        <tr>
         
-                            <div class="menu-day-header">
+                            <td class="menu-row-category">
+                                ${category}
+                            </td>
         
-                                <div class="menu-date">
-                                    ${menu.date || ""}
-                                </div>
-        
-                                <div class="menu-week">
-                                    ${menu.week || ""}
-                                </div>
-        
-                            </div>
-        
-        
-                            <!-- =========================
-                                 菜色
-                            ========================== -->
-        
-                            <div class="menu-day-body">
                     `;
         
         
                     // =================================================
-                    // 菜色
+                    // 逐日尋找該分類的菜色
                     // =================================================
         
-                    if (
-                        Array.isArray(menu.items) &&
-                        menu.items.length > 0
-                    ) {
+                    menuData.forEach(
+                        function(day) {
         
-                        menu.items.forEach(
-                            function(item) {
+        
+                            let foodName = "";
+        
+        
+                            if (
+                                Array.isArray(day.items)
+                            ) {
+        
+                                const item =
+                                    day.items.find(
+                                        function(item) {
+        
+                                            return (
+                                                (
+                                                    item.category ||
+                                                    "其他"
+                                                ).trim() ===
+                                                category
+                                            );
+        
+                                        }
+                                    );
+        
+        
+                                if (item) {
+        
+                                    foodName =
+                                        item.name || "";
+        
+                                }
+        
+                            }
+        
+        
+                            // =================================================
+                            // 顯示菜名
+                            // =================================================
+        
+                            if (foodName) {
         
                                 html += `
-                                    <div class="menu-item">
         
-                                        <div class="menu-category">
-                                            ${item.category || "餐點"}
+                                    <td>
+        
+                                        <div class="menu-food-name">
+                                            ${foodName}
                                         </div>
         
-                                        <div class="menu-name">
-                                            ${
-                                                item.name
-                                                    ? item.name
-                                                    : "—"
-                                            }
-                                        </div>
+                                    </td>
         
-                                    </div>
                                 `;
         
                             }
-                        );
         
-                    }
+                            else {
         
-                    else {
+                                html += `
         
-                        html += `
-                            <div
-                                class="menu-item"
-                                style="
-                                    color:#999;
-                                    padding:25px 5px;
-                                "
-                            >
-                                今日無菜單
-                            </div>
-                        `;
+                                    <td>
         
-                    }
+                                        <div class="menu-food-empty">
+                                            —
+                                        </div>
+        
+                                    </td>
+        
+                                `;
+        
+                            }
+        
+                        }
+                    );
         
         
                     html += `
-                            </div>
         
-                        </div>
+                        </tr>
+        
                     `;
         
                 }
@@ -5674,10 +5787,25 @@ function initializeDates() {
         
         
             // =================================================
-            // 一次顯示七天
+            // 結束
             // =================================================
         
-            menuList.innerHTML = html;
+            html += `
+        
+                    </tbody>
+        
+                </table>
+        
+            `;
+        
+        
+            menuList.innerHTML =
+                html;
+        
+        
+            console.log(
+                "✅ 七天菜單表格已完成渲染"
+            );
         
         }
 
