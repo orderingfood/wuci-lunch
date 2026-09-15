@@ -4947,64 +4947,107 @@ function initializeDates() {
 
 
         
-        
-         // =================================================
+        // =================================================
         // 菜單
         // =================================================
         
         let menuData = [];
         
+        // 是否第一次載入
+        let menuHasLoaded = false;
+        
+        // 防止同時重複讀取
+        let menuLoading = false;
+        
         
         // =================================================
         // 載入菜單
+        // 每次進入菜單頁面都會重新讀取
         // =================================================
         
         async function loadMenu() {
         
             const menuCompany =
-                document.getElementById(
-                    "menuCompany"
-                );
+                document.getElementById("menuCompany");
         
             const menuList =
-                document.getElementById(
-                    "menuList"
-                );
+                document.getElementById("menuList");
         
             const menuStatus =
-                document.getElementById(
-                    "menuStatus"
-                );
+                document.getElementById("menuStatus");
         
         
-            if (
-                !menuCompany ||
-                !menuList
-            ) {
-        
+            if (!menuCompany || !menuList) {
                 return;
+            }
+        
+        
+            // -------------------------------------------------
+            // 防止短時間內重複載入
+            // -------------------------------------------------
+        
+            if (menuLoading) {
+                return;
+            }
+        
+            menuLoading = true;
+        
+        
+            // =================================================
+            // 第一次載入
+            // =================================================
+        
+            if (!menuHasLoaded) {
+        
+                menuCompany.innerText =
+                    "正在載入菜單...";
+        
+                menuList.innerHTML = `
+                    <div class="hint">
+                        ⏳ 正在讀取七天菜單，請稍候...
+                    </div>
+                `;
+        
+            }
+        
+            // =================================================
+            // 已經有菜單資料
+            // 不清除畫面
+            // =================================================
+        
+            else {
+        
+                if (menuStatus) {
+        
+                    menuStatus.innerText =
+                        "⏳ 菜單更新中...";
+        
+                }
         
             }
         
         
-            menuCompany.innerText =
-                "正在載入菜單...";
-        
-        
-            menuList.innerHTML = `
-                <div class="hint">
-                    ⏳ 正在讀取菜單...
-                </div>
-            `;
-        
-        
             try {
+        
+                // =================================================
+                // 呼叫 GAS
+                // =================================================
         
                 const response =
                     await fetch(
                         GOOGLE_SCRIPT_URL +
-                        "?action=getMenu"
+                        "?action=getMenu&_=" +
+                        Date.now()
                     );
+        
+        
+                if (!response.ok) {
+        
+                    throw new Error(
+                        "HTTP " + response.status
+                    );
+        
+                }
         
         
                 const result =
@@ -5018,12 +5061,33 @@ function initializeDates() {
         
         
                 // =================================================
-                // 查詢失敗
+                // GAS 回傳失敗
                 // =================================================
         
-                if (
-                    !result.success
-                ) {
+                if (!result.success) {
+        
+                    // ---------------------------------------------
+                    // 如果以前已經有成功資料
+                    // 不要把舊菜單清掉
+                    // ---------------------------------------------
+        
+                    if (menuHasLoaded) {
+        
+                        if (menuStatus) {
+        
+                            menuStatus.innerText =
+                                "⚠️ 菜單更新失敗，仍顯示上次資料";
+        
+                        }
+        
+                        return;
+        
+                    }
+        
+        
+                    // ---------------------------------------------
+                    // 第一次載入就失敗
+                    // ---------------------------------------------
         
                     menuCompany.innerText =
                         "";
@@ -5046,12 +5110,22 @@ function initializeDates() {
                 // 取得七天菜單
                 // =================================================
         
-                menuData =
-                    Array.isArray(
-                        result.menus
-                    )
+                const newMenuData =
+                    Array.isArray(result.menus)
                         ? result.menus
                         : [];
+        
+        
+                // =================================================
+                // 更新資料
+                // =================================================
+        
+                menuData =
+                    newMenuData;
+        
+        
+                menuHasLoaded =
+                    true;
         
         
                 // =================================================
@@ -5059,27 +5133,29 @@ function initializeDates() {
                 // =================================================
         
                 menuCompany.innerText =
-                    result.company ||
-                    "";
+                    result.company || "";
         
         
                 // =================================================
-                // 顯示七天
+                // 一次顯示七天
                 // =================================================
         
                 renderSevenDayMenu();
         
         
+                // =================================================
+                // 更新完成
+                // =================================================
+        
                 if (menuStatus) {
         
                     menuStatus.innerText =
-                        "菜單資料已更新";
+                        "✅ 菜單已更新";
         
                 }
         
+        
             }
-        
-        
             catch (error) {
         
                 console.error(
@@ -5088,15 +5164,61 @@ function initializeDates() {
                 );
         
         
-                menuCompany.innerText =
-                    "";
+                // =================================================
+                // 如果以前有成功資料
+                // 保留舊菜單
+                // =================================================
         
+                if (menuHasLoaded) {
         
-                menuList.innerHTML = `
-                    <div class="result-fail">
-                        ❌ 無法取得菜單資料，請稍後再試。
-                    </div>
-                `;
+                    if (menuStatus) {
+        
+                        menuStatus.innerText =
+                            "⚠️ 暫時無法更新菜單，仍顯示上次資料";
+        
+                    }
+        
+                }
+        
+                // =================================================
+                // 第一次載入失敗
+                // =================================================
+        
+                else {
+        
+                    menuCompany.innerText =
+                        "";
+        
+                    menuList.innerHTML = `
+                        <div class="result-fail">
+                            ❌ 無法取得菜單資料，請稍後再試。
+                            <br>
+                            <button
+                                type="button"
+                                onclick="loadMenu()"
+                                style="
+                                    margin-top:12px;
+                                    padding:8px 16px;
+                                    border:0;
+                                    border-radius:8px;
+                                    background:#007bff;
+                                    color:white;
+                                    cursor:pointer;
+                                "
+                            >
+                                🔄 重新載入
+                            </button>
+                        </div>
+                    `;
+        
+                }
+        
+            }
+        
+            finally {
+        
+                menuLoading =
+                    false;
         
             }
         
@@ -5116,11 +5238,13 @@ function initializeDates() {
         
         
             if (!menuList) {
-        
                 return;
-        
             }
         
+        
+            // =================================================
+            // 沒有資料
+            // =================================================
         
             if (
                 !Array.isArray(menuData) ||
@@ -5139,43 +5263,47 @@ function initializeDates() {
         
         
             // =================================================
-            // 建立七天欄位
+            // 只取前七天
+            // =================================================
+        
+            const sevenDays =
+                menuData.slice(0, 7);
+        
+        
+            // =================================================
+            // 建立七天菜單
             // =================================================
         
             let html = `
-        
                 <div class="seven-day-menu">
-        
             `;
         
         
-            menuData.forEach(
+            sevenDays.forEach(
                 function(menu) {
         
                     html += `
-        
                         <div class="menu-day">
         
                             <div class="menu-day-header">
         
-                                <div class="menu-day-date">
+                                <div class="menu-date">
                                     ${
                                         menu.date ||
                                         ""
                                     }
                                 </div>
-                                
-                                <div class="menu-day-week">
+        
+                                <div class="menu-week">
                                     ${
                                         menu.week ||
                                         ""
                                     }
                                 </div>
-                                
+        
                             </div>
         
                             <div class="menu-day-body">
-        
                     `;
         
         
@@ -5184,9 +5312,7 @@ function initializeDates() {
                     // =================================================
         
                     if (
-                        Array.isArray(
-                            menu.items
-                        ) &&
+                        Array.isArray(menu.items) &&
                         menu.items.length > 0
                     ) {
         
@@ -5194,17 +5320,13 @@ function initializeDates() {
                             function(item) {
         
                                 const category =
-                                    item.category ||
-                                    "";
-        
+                                    item.category || "";
         
                                 const name =
-                                    item.name ||
-                                    "—";
+                                    item.name || "—";
         
         
                                 html += `
-        
                                     <div class="menu-item">
         
                                         <div class="menu-category">
@@ -5216,7 +5338,6 @@ function initializeDates() {
                                         </div>
         
                                     </div>
-        
                                 `;
         
                             }
@@ -5227,22 +5348,17 @@ function initializeDates() {
                     else {
         
                         html += `
-        
                             <div class="menu-empty">
                                 本日尚未提供菜單
                             </div>
-        
                         `;
         
                     }
         
         
                     html += `
-        
                             </div>
-        
                         </div>
-        
                     `;
         
                 }
@@ -5250,9 +5366,7 @@ function initializeDates() {
         
         
             html += `
-        
                 </div>
-        
             `;
         
         
@@ -5260,6 +5374,7 @@ function initializeDates() {
                 html;
         
         }
+
 
 
 
