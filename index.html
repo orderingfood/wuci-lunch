@@ -1094,11 +1094,54 @@
         
         
         /* =================================================
-           菜單表格
+           菜單頁面
+        ================================================= */
+        
+        .menu-card {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        
+        .menu-company {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: #555;
+            margin: 8px 0 22px;
+        }
+        
+        
+        /* =================================================
+           七天菜單列表
+        ================================================= */
+        
+        .menu-list {
+            width: 100%;
+            overflow-x: auto;
+            padding: 5px 2px 15px;
+            box-sizing: border-box;
+        }
+
+
+        /* =================================================
+           七天菜單表格
         ================================================= */
         
         .menu-table {
             width: 100%;
+        
+            /*
+               左側餐點欄 + 星期一～星期日
+               固定表格配置，避免某一天被內容撐寬
+            */
+            table-layout: fixed;
+        
+            /*
+               手機仍保留最小寬度，
+               避免七天全部擠在一起
+            */
             min-width: 850px;
         
             border-collapse: separate;
@@ -1107,7 +1150,6 @@
             background: #ffffff;
         
             border-radius: 16px;
-        
             overflow: hidden;
         
             box-shadow:
@@ -1126,23 +1168,33 @@
             padding: 13px 10px;
         
             text-align: center;
+            vertical-align: middle;
         
             border-right:
                 1px solid #eeeeee;
         
             border-bottom:
                 1px solid #eeeeee;
+        
+            box-sizing: border-box;
+        
+            /*
+               文字太長時自動換行
+               不允許內容把欄位撐寬
+            */
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
-        
-        
+
+
         /* =================================================
-           左側分類欄
+           左側「餐點」分類欄
         ================================================= */
         
         .menu-category-column {
             width: 100px;
-        
             min-width: 100px;
+            max-width: 100px;
         
             background:
                 linear-gradient(
@@ -1152,13 +1204,10 @@
                 );
         
             color: #d85c5c;
-        
             font-weight: 800;
         
             position: sticky;
-        
             left: 0;
-        
             z-index: 3;
         }
         
@@ -1176,16 +1225,21 @@
                 );
         
             color: #ffffff;
-        
             font-weight: 700;
         
             height: 65px;
         }
         
         
-        /* 左上角分類標題 */
+        /* =================================================
+           左上角「餐點」
+        ================================================= */
         
         .menu-table thead th:first-child {
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+        
             background:
                 linear-gradient(
                     135deg,
@@ -1194,29 +1248,39 @@
                 );
         
             position: sticky;
-        
             left: 0;
-        
             z-index: 4;
         }
         
         
-        /* 日期 */
+        /* =================================================
+           星期一～星期日
+           7 欄平均分配
+        ================================================= */
+        
+        .menu-table thead th:not(:first-child),
+        .menu-table tbody td:not(.menu-row-category) {
+            width: calc((100% - 100px) / 7);
+        }
+        
+        
+        /* =================================================
+           日期
+        ================================================= */
         
         .menu-table-date {
             font-size: 16px;
-        
             font-weight: 800;
         }
         
         
-        /* 星期 */
+        /* =================================================
+           星期
+        ================================================= */
         
         .menu-table-week {
             margin-top: 4px;
-        
             font-size: 13px;
-        
             opacity: 0.95;
         }
         
@@ -1227,16 +1291,15 @@
         
         .menu-table td {
             color: #444;
-        
             font-size: 15px;
-        
             line-height: 1.5;
-        
             background: #ffffff;
         }
         
         
-        /* 滑鼠移過去 */
+        /* =================================================
+           滑鼠移過去
+        ================================================= */
         
         .menu-table tbody tr:hover td {
             background: #fffafa;
@@ -1244,22 +1307,22 @@
         
         
         /* =================================================
-           分類名稱
+           左側分類名稱
         ================================================= */
         
         .menu-row-category {
-            font-size: 14px;
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
         
+            font-size: 14px;
             font-weight: 800;
         
             color: #d85c5c;
-        
             background: #fff7f7 !important;
         
             position: sticky;
-        
             left: 0;
-        
             z-index: 2;
         }
         
@@ -1270,10 +1333,10 @@
         
         .menu-food-name {
             font-weight: 600;
-        
             color: #333;
         
             word-break: break-word;
+            overflow-wrap: anywhere;
         }
         
         
@@ -1283,18 +1346,44 @@
         
         .menu-food-empty {
             color: #aaa;
-        
             font-weight: 400;
         }
         
         
         /* =================================================
-           手機
+           沒有菜單
+        ================================================= */
+        
+        .menu-empty {
+            padding: 20px;
+        
+            text-align: center;
+        
+            color: #999999;
+        }
+        
+        
+        /* =================================================
+           菜單狀態
+        ================================================= */
+        
+        #menuStatus {
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        
+        /* =================================================
+           手機版
         ================================================= */
         
         @media (max-width: 700px) {
         
             .menu-table {
+                /*
+                   850px = 左側 100px
+                         + 7 × 約107px
+                */
                 min-width: 850px;
             }
         
@@ -1303,14 +1392,20 @@
                 padding: 11px 8px;
             }
         
-            .menu-category-column {
+            .menu-category-column,
+            .menu-table thead th:first-child,
+            .menu-row-category {
                 width: 85px;
                 min-width: 85px;
+                max-width: 85px;
+            }
+        
+            .menu-table thead th:not(:first-child),
+            .menu-table tbody td:not(.menu-row-category) {
+                width: calc((100% - 85px) / 7);
             }
         
         }
-
-
         
     </style>
 
