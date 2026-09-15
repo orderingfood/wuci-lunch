@@ -5527,6 +5527,7 @@ function initializeDates() {
         // 顯示七天菜單
         // =================================================
         
+        
         function renderSevenDayMenu() {
         
             const menuList =
@@ -5565,14 +5566,13 @@ function initializeDates() {
         
         
             // =================================================
-            // 取得所有分類
+            // 找出所有分類
             //
-            // 例如：
             // 主食
             // 配菜
-            // 湯品
-            //
-            // 自動從七天資料抓出來
+            // 甜湯
+            // 鹹湯
+            // 副食
             // =================================================
         
             const categories = [];
@@ -5639,7 +5639,7 @@ function initializeDates() {
         
         
             // =================================================
-            // 七天標題
+            // 七天日期
             // =================================================
         
             menuData.forEach(
@@ -5677,98 +5677,65 @@ function initializeDates() {
         
         
             // =================================================
-            // 每一個分類建立一列
+            // 每一個分類
             // =================================================
         
             categories.forEach(
                 function(category) {
         
         
-                    html += `
-        
-                        <tr>
-        
-                            <td class="menu-row-category">
-                                ${category}
-                            </td>
-        
-                    `;
-        
-        
                     // =================================================
-                    // 逐日尋找該分類的菜色
+                    // 找出「所有天數」中，
+                    // 這個分類最多有幾筆
+                    //
+                    // 例如：
+                    //
+                    // 主食：
+                    // 星期一 2筆
+                    // 星期二 1筆
+                    // 星期三 2筆
+                    //
+                    // 那這一列就會以最多筆數來顯示
                     // =================================================
+        
+                    let maxItemCount = 1;
+        
         
                     menuData.forEach(
                         function(day) {
         
+                            if (
+                                !Array.isArray(day.items)
+                            ) {
         
-                            let foodName = "";
+                                return;
+        
+                            }
+        
+        
+                            const items =
+                                day.items.filter(
+                                    function(item) {
+        
+                                        return (
+                                            (
+                                                item.category ||
+                                                "其他"
+                                            ).trim() ===
+                                            category
+                                        );
+        
+                                    }
+                                );
         
         
                             if (
-                                Array.isArray(day.items)
+                                items.length >
+                                maxItemCount
                             ) {
         
-                                const item =
-                                    day.items.find(
-                                        function(item) {
-        
-                                            return (
-                                                (
-                                                    item.category ||
-                                                    "其他"
-                                                ).trim() ===
-                                                category
-                                            );
-        
-                                        }
-                                    );
-        
-        
-                                if (item) {
-        
-                                    foodName =
-                                        item.name || "";
-        
-                                }
-        
-                            }
-        
-        
-                            // =================================================
-                            // 顯示菜名
-                            // =================================================
-        
-                            if (foodName) {
-        
-                                html += `
-        
-                                    <td>
-        
-                                        <div class="menu-food-name">
-                                            ${foodName}
-                                        </div>
-        
-                                    </td>
-        
-                                `;
-        
-                            }
-        
-                            else {
-        
-                                html += `
-        
-                                    <td>
-        
-                                        <div class="menu-food-empty">
-                                            —
-                                        </div>
-        
-                                    </td>
-        
-                                `;
+                                maxItemCount =
+                                    items.length;
         
                             }
         
@@ -5776,18 +5743,159 @@ function initializeDates() {
                     );
         
         
-                    html += `
+                    // =================================================
+                    // 建立分類列
+                    //
+                    // 每一個分類可能需要多列
+                    // =================================================
         
-                        </tr>
+                    for (
+                        let rowIndex = 0;
+                        rowIndex < maxItemCount;
+                        rowIndex++
+                    ) {
         
-                    `;
+        
+                        html += `
+        
+                            <tr>
+        
+                        `;
+        
+        
+                        // =================================================
+                        // 左側分類
+                        //
+                        // 只有第一列顯示分類名稱
+                        // =================================================
+        
+                        if (
+                            rowIndex === 0
+                        ) {
+        
+                            html += `
+        
+                                <td
+                                    class="menu-row-category"
+                                    rowspan="${maxItemCount}"
+                                >
+                                    ${category}
+                                </td>
+        
+                            `;
+        
+                        }
+        
+        
+                        // =================================================
+                        // 每一天
+                        // =================================================
+        
+                        menuData.forEach(
+                            function(day) {
+        
+        
+                                let foodName = "";
+        
+        
+                                if (
+                                    Array.isArray(day.items)
+                                ) {
+        
+                                    const items =
+                                        day.items.filter(
+                                            function(item) {
+        
+                                                return (
+                                                    (
+                                                        item.category ||
+                                                        "其他"
+                                                    ).trim() ===
+                                                    category
+                                                );
+        
+                                            }
+                                        );
+        
+        
+                                    // -----------------------------------------
+                                    // 取得目前這一列的菜色
+                                    // -----------------------------------------
+        
+                                    if (
+                                        items[rowIndex]
+                                    ) {
+        
+                                        foodName =
+                                            items[rowIndex].name ||
+                                            "";
+        
+                                    }
+        
+                                }
+        
+        
+                                // =================================================
+                                // 顯示菜名
+                                // =================================================
+        
+                                if (
+                                    foodName &&
+                                    foodName !== "-"
+                                ) {
+        
+                                    html += `
+        
+                                        <td>
+        
+                                            <div class="menu-food-name">
+                                                ${foodName}
+                                            </div>
+        
+                                        </td>
+        
+                                    `;
+        
+                                }
+        
+                                else {
+        
+                                    html += `
+        
+                                        <td>
+        
+                                            <div class="menu-food-empty">
+                                                ${
+                                                    foodName === "-"
+                                                        ? "-"
+                                                        : ""
+                                                }
+                                            </div>
+        
+                                        </td>
+        
+                                    `;
+        
+                                }
+        
+                            }
+                        );
+        
+        
+                        html += `
+        
+                            </tr>
+        
+                        `;
+        
+                    }
         
                 }
             );
         
         
             // =================================================
-            // 結束
+            // 結束表格
             // =================================================
         
             html += `
