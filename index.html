@@ -147,30 +147,6 @@
 
         }
 
-        .proxy-input-field{
-
-            display: block;
-
-            width: 100%;
-
-            padding: 12px;
-
-            font-size: 18px;
-
-            border:
-                2px solid #ccc;
-
-            border-radius: 8px;
-
-            box-sizing: border-box;
-
-            text-align: center;
-
-            background-color: #fff8e1;
-
-        }
-
-
         .input-field:focus {
 
             border-color: #007bff;
@@ -1086,531 +1062,8 @@
         
         .query-company-locked:hover {
             cursor: not-allowed !important;
-        }
+        }     
 
-        /* =================================================
-           菜單頁面
-        ================================================= */
-        
-        .menu-card {
-        
-            max-width: 1400px;
-        
-            width: 100%;
-        
-            box-sizing: border-box;
-        
-            padding: 25px;
-        
-        }
-        
-        
-        /* -------------------------------------------------
-           菜單標題
-        ------------------------------------------------- */
-        
-        .menu-card h2 {
-        
-            margin-bottom: 15px;
-        
-        }
-        
-        
-        /* -------------------------------------------------
-           公司名稱
-        ------------------------------------------------- */
-        
-        .menu-company {
-        
-            font-size: 20px;
-        
-            font-weight: bold;
-        
-            color: #374151;
-        
-            text-align: center;
-        
-            margin-bottom: 20px;
-        
-        }
-        
-        
-        /* =================================================
-           七天菜單容器
-        ================================================= */
-        
-        .seven-day-menu {
-        
-            display: grid;
-        
-            grid-template-columns:
-                repeat(7, minmax(150px, 1fr));
-        
-            gap: 10px;
-        
-            width: 100%;
-        
-        }
-        
-        
-        /* =================================================
-           每一天
-        ================================================= */
-        
-         {
-        
-            min-width: 0;
-        
-            background: #ffffff;
-        
-            border:
-                1px solid #e5e7eb;
-        
-            border-radius: 12px;
-        
-            overflow: hidden;
-        
-            box-shadow:
-                0 3px 8px
-                rgba(0, 0, 0, 0.08);
-        
-        }
-        
-        
-        /* =================================================
-           日期標題
-        ================================================= */
-        
-        .menu-day-header {
-        
-            background:
-                linear-gradient(
-                    135deg,
-                    #667eea 0%,
-                    #764ba2 100%
-                );
-        
-            color: white;
-        
-            text-align: center;
-        
-            padding: 12px 6px;
-        
-        }
-        
-        
-        /* 日期 */
-        
-        .menu-day-date {
-        
-            font-size: 17px;
-        
-            font-weight: bold;
-        
-            line-height: 1.4;
-        
-        }
-        
-        
-        /* 星期 */
-        
-        .menu-day-week {
-        
-            font-size: 14px;
-        
-            margin-top: 4px;
-        
-            opacity: 0.95;
-        
-        }
-        
-        
-        /* =================================================
-           每日菜單內容
-        ================================================= */
-        
-        .menu-day-body {
-        
-            padding: 8px;
-        
-            min-height: 180px;
-        
-        }
-        
-        
-        /* =================================================
-           菜色
-        ================================================= */
-        
-        .menu-item {
-        
-            display: block;
-        
-            padding: 9px 6px;
-        
-            border-bottom:
-                1px solid #eeeeee;
-        
-        }
-        
-        
-        .menu-item:last-child {
-        
-            border-bottom:
-                none;
-        
-        }
-        
-        
-        /* =================================================
-           菜色類別
-        ================================================= */
-        
-        .menu-category {
-        
-            font-size: 12px;
-        
-            color: #2563eb;
-        
-            font-weight: bold;
-        
-            margin-bottom: 3px;
-        
-        }
-        
-        
-        /* =================================================
-           菜名
-        ================================================= */
-        
-        .menu-name {
-        
-            font-size: 15px;
-        
-            color: #333333;
-        
-            line-height: 1.5;
-        
-            word-break: break-word;
-        
-        }
-        
-        
-        /* =================================================
-           沒有菜單
-        ================================================= */
-        
-        .menu-empty {
-        
-            display: flex;
-        
-            align-items: center;
-        
-            justify-content: center;
-        
-            min-height: 160px;
-        
-            text-align: center;
-        
-            color: #999999;
-        
-            font-size: 14px;
-        
-            line-height: 1.5;
-        
-        }
-        
-        
-        /* =================================================
-           菜單狀態
-        ================================================= */
-        
-        #menuStatus {
-        
-            margin-top: 15px;
-        
-            text-align: center;
-        
-        }
-        
-        
-        /* =================================================
-           平板
-        ================================================= */
-        
-        @media (max-width: 1100px) {
-        
-            .seven-day-menu {
-        
-                grid-template-columns:
-                    repeat(7, 145px);
-        
-                overflow-x: auto;
-        
-                padding-bottom: 10px;
-        
-            }
-        
-            .menu-day {
-        
-                width: 145px;
-        
-            }
-        
-        }
-        
-        
-        /* =================================================
-           手機
-        ================================================= */
-        
-        @media (max-width: 768px) {
-        
-            .menu-card {
-        
-                padding: 15px;
-        
-            }
-        
-        
-            .menu-company {
-        
-                font-size: 18px;
-        
-            }
-        
-        
-            .seven-day-menu {
-        
-                display: flex;
-        
-                flex-direction: row;
-        
-                gap: 8px;
-        
-                overflow-x: auto;
-        
-                padding-bottom: 12px;
-        
-                -webkit-overflow-scrolling:
-                    touch;
-        
-                scrollbar-width: thin;
-        
-            }
-        
-        
-            .menu-day {
-        
-                flex:
-                    0 0 145px;
-        
-                width: 145px;
-        
-                min-width: 145px;
-        
-            }
-        
-        
-            .menu-day-header {
-        
-                padding: 10px 5px;
-        
-            }
-        
-        
-            .menu-day-date {
-        
-                font-size: 16px;
-        
-            }
-        
-        
-            .menu-day-week {
-        
-                font-size: 13px;
-        
-            }
-        
-        
-            .menu-day-body {
-        
-                padding: 7px;
-        
-                min-height: 170px;
-        
-            }
-        
-        
-            .menu-name {
-        
-                font-size: 14px;
-        
-            }
-        
-        }
-
-        /* =================================================
-           七天菜單
-           ================================================= */
-        
-        .seven-day-menu {
-            display: grid;
-            grid-template-columns: repeat(7, minmax(180px, 1fr));
-            gap: 12px;
-        
-            width: 100%;
-            box-sizing: border-box;
-        
-            overflow-x: auto;
-        }
-        
-        
-        /* =================================================
-           每一天
-           ================================================= */
-        
-        .menu-day {
-            background: #ffffff;
-        
-            border: 1px solid #dddddd;
-            border-radius: 12px;
-        
-            overflow: hidden;
-        
-            min-width: 180px;
-        
-            box-shadow:
-                0 2px 6px rgba(0, 0, 0, 0.08);
-        }
-        
-        
-        /* =================================================
-           日期標題
-           ================================================= */
-        
-        .menu-day-header {
-            background: #f5f5f5;
-        
-            padding: 12px;
-        
-            text-align: center;
-        
-            border-bottom: 1px solid #dddddd;
-        }
-        
-        
-        /* 日期 */
-        
-        .menu-day-header .menu-date {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333333;
-        }
-        
-        
-        /* 星期 */
-        
-        .menu-day-header .menu-week {
-            margin-top: 4px;
-        
-            font-size: 14px;
-            color: #777777;
-        }
-        
-        
-        /* =================================================
-           每一天內容
-           ================================================= */
-        
-        .menu-day-body {
-            padding: 8px;
-        }
-        
-        
-        /* =================================================
-           每一道菜
-           ================================================= */
-        
-        .menu-item {
-            display: grid;
-        
-            grid-template-columns: 55px 1fr;
-        
-            gap: 8px;
-        
-            padding: 8px 4px;
-        
-            border-bottom: 1px solid #eeeeee;
-        
-            font-size: 14px;
-        }
-        
-        
-        /* 最後一筆不要底線 */
-        
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-        
-        
-        /* =================================================
-           類別
-           ================================================= */
-        
-        .menu-category {
-            color: #888888;
-        
-            font-size: 13px;
-        
-            font-weight: bold;
-        }
-        
-        
-        /* =================================================
-           菜名
-           ================================================= */
-        
-        .menu-name {
-            color: #222222;
-        
-            font-weight: 500;
-        
-            word-break: break-word;
-        }
-        
-        
-        /* =================================================
-           沒有菜單
-           ================================================= */
-        
-        .menu-empty {
-            padding: 20px;
-        
-            text-align: center;
-        
-            color: #999999;
-        }
-        
-        
-        /* =================================================
-           手機版
-           ================================================= */
-        
-        @media (max-width: 900px) {
-        
-            .seven-day-menu {
-                grid-template-columns:
-                    repeat(7, 180px);
-        
-                overflow-x: auto;
-            }
-        
-        }
-
-        /* =================================================
-           七天菜單
-        ================================================= */
         
         .menu-card {
             width: 100%;
@@ -1628,7 +1081,7 @@
         
         
         /* =================================================
-           七天菜單表格
+           表格
         ================================================= */
         
         .menu-list {
@@ -2509,7 +1962,7 @@
             <div class="card menu-card">
         
                 <h2>
-                    📖 七天菜單
+                    📖 本週菜單
                 </h2>
         
                 <div
@@ -2524,7 +1977,7 @@
                     class="menu-list"
                 >
                     <div class="hint">
-                        ⏳ 正在載入七天菜單...
+                        ⏳ 正在載入...
                     </div>
                 </div>
         
@@ -5332,7 +4785,7 @@ function initializeDates() {
         
             menuList.innerHTML = `
                 <div class="hint">
-                    ⏳ 正在讀取七天菜單...
+                    ⏳ 正在讀取...
                 </div>
             `;
         
@@ -5419,7 +4872,7 @@ function initializeDates() {
         
         
                 // =================================================
-                // 取得七天菜單
+                // 取得
                 // =================================================
         
                 if (
@@ -5475,7 +4928,7 @@ function initializeDates() {
         
         
                 // =================================================
-                // 顯示七天菜單
+                // 顯示
                 // =================================================
         
                 renderSevenDayMenu();
@@ -5524,7 +4977,7 @@ function initializeDates() {
         
         
         // =================================================
-        // 顯示七天菜單
+        // 顯示
         // =================================================
         
         
