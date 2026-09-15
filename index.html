@@ -2166,20 +2166,6 @@
                 "white-mode"
             );
 
-            // =================================================
-            // 點擊「菜單」時讀取 Google 工作表
-            // =================================================
-        
-            if (
-                page === "menu"
-            ) {
-        
-                loadMenu();
-        
-            }
-        
-        }
-
         
         const GOOGLE_SCRIPT_URL =
             "https://script.google.com/macros/s/AKfycbz5A0b2thyY6D2ExzqC_IEizobQmFf6mxSHrw2rl7nWaBjsnjqOijuNf13rElb4aQPKUg/exec";
@@ -4325,9 +4311,13 @@ function initializeDates() {
         
                 initializeDates();
         
-                initializeQueryDates();
-
                 initializeQueryCompanyAuth();
+        
+                // =================================================
+                // 網頁載入時直接讀取菜單
+                // =================================================
+        
+                loadMenu();
         
             }
         );
@@ -4897,14 +4887,12 @@ function initializeDates() {
         
                 // =================================================
                 // 取得菜單
-                // 加入 Date.now() 避免瀏覽器快取
                 // =================================================
         
                 const response =
                     await fetch(
                         GOOGLE_SCRIPT_URL +
                         "?action=getMenu&_=" +
-                        Date.now()
                     );
         
         
