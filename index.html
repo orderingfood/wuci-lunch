@@ -1449,6 +1449,165 @@
             }
         
         }
+
+        /* =================================================
+           七天菜單
+           ================================================= */
+        
+        .seven-day-menu {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(180px, 1fr));
+            gap: 12px;
+        
+            width: 100%;
+            box-sizing: border-box;
+        
+            overflow-x: auto;
+        }
+        
+        
+        /* =================================================
+           每一天
+           ================================================= */
+        
+        .menu-day {
+            background: #ffffff;
+        
+            border: 1px solid #dddddd;
+            border-radius: 12px;
+        
+            overflow: hidden;
+        
+            min-width: 180px;
+        
+            box-shadow:
+                0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        
+        /* =================================================
+           日期標題
+           ================================================= */
+        
+        .menu-day-header {
+            background: #f5f5f5;
+        
+            padding: 12px;
+        
+            text-align: center;
+        
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        
+        /* 日期 */
+        
+        .menu-day-header .menu-date {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333333;
+        }
+        
+        
+        /* 星期 */
+        
+        .menu-day-header .menu-week {
+            margin-top: 4px;
+        
+            font-size: 14px;
+            color: #777777;
+        }
+        
+        
+        /* =================================================
+           每一天內容
+           ================================================= */
+        
+        .menu-day-body {
+            padding: 8px;
+        }
+        
+        
+        /* =================================================
+           每一道菜
+           ================================================= */
+        
+        .menu-item {
+            display: grid;
+        
+            grid-template-columns: 55px 1fr;
+        
+            gap: 8px;
+        
+            padding: 8px 4px;
+        
+            border-bottom: 1px solid #eeeeee;
+        
+            font-size: 14px;
+        }
+        
+        
+        /* 最後一筆不要底線 */
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        
+        /* =================================================
+           類別
+           ================================================= */
+        
+        .menu-category {
+            color: #888888;
+        
+            font-size: 13px;
+        
+            font-weight: bold;
+        }
+        
+        
+        /* =================================================
+           菜名
+           ================================================= */
+        
+        .menu-name {
+            color: #222222;
+        
+            font-weight: 500;
+        
+            word-break: break-word;
+        }
+        
+        
+        /* =================================================
+           沒有菜單
+           ================================================= */
+        
+        .menu-empty {
+            padding: 20px;
+        
+            text-align: center;
+        
+            color: #999999;
+        }
+        
+        
+        /* =================================================
+           手機版
+           ================================================= */
+        
+        @media (max-width: 900px) {
+        
+            .seven-day-menu {
+                grid-template-columns:
+                    repeat(7, 180px);
+        
+                overflow-x: auto;
+            }
+        
+        }
+
         
     </style>
 
@@ -2101,109 +2260,62 @@
             class="system-page"
         >
     
-        <div class="card menu-card">
+             <!-- =================================================
+             第一層：菜單
+        ================================================== -->
         
-            <h2>
-                📖 菜單
-            </h2>
+        <section
+            id="page-menu"
+            class="system-page"
+        >
         
+            <div class="card menu-card">
         
-            <!-- =================================================
-                 公司名稱
-            ================================================== -->
-        
-            <div
-                id="menuCompany"
-                class="menu-company"
-            >
-                載入中...
-            </div>
+                <h2>
+                    📖 七天菜單
+                </h2>
         
         
-            <!-- =================================================
-                 菜單頁面
-            ================================================= -->
-            
-            <section
-                id="page-menu"
-                class="system-page"
-            >
-            
-                <div class="card menu-card">
-            
-                    <h2>
-                        📖 七天菜單
-                    </h2>
-            
-            
-                    <!-- =================================================
-                         公司名稱
-                    ================================================== -->
-            
-                    <div
-                        id="menuCompany"
-                        class="menu-company"
-                    >
-                        載入中...
-                    </div>
-            
-            
-                    <!-- =================================================
-                         七天菜單
-                    ================================================== -->
-            
-                    <div
-                        id="menuList"
-                        class="menu-list"
-                    >
-            
-                        <div class="hint">
-                            ⏳ 正在載入七天菜單...
-                        </div>
-            
-                    </div>
-            
-            
-                    <!-- =================================================
-                         狀態
-                    ================================================== -->
-            
-                    <div
-                        id="menuStatus"
-                        class="hint"
-                    ></div>
-            
+                <!-- =================================================
+                     公司名稱
+                ================================================== -->
+        
+                <div
+                    id="menuCompany"
+                    class="menu-company"
+                >
+                    載入中...
                 </div>
-            
-            </section>
         
         
-            <!-- =================================================
-                 菜單內容
-            ================================================== -->
+                <!-- =================================================
+                     七天菜單
+                ================================================== -->
         
-            <div
-                id="menuList"
-                class="menu-list"
-            >
+                <div
+                    id="menuList"
+                    class="menu-list"
+                >
         
-                <div class="hint">
-                    正在載入菜單...
+                    <div class="hint">
+                        ⏳ 正在載入七天菜單...
+                    </div>
+        
                 </div>
+        
+        
+                <!-- =================================================
+                     狀態
+                ================================================== -->
+        
+                <div
+                    id="menuStatus"
+                    class="hint"
+                ></div>
         
             </div>
         
-        
-            <!-- =================================================
-                 狀態
-            ================================================== -->
-        
-            <div
-                id="menuStatus"
-                class="hint"
-            ></div>
-        
-        </div>
+        </section>
 
     
         </section>
@@ -5199,20 +5311,39 @@ function initializeDates() {
         function renderSevenDayMenu() {
         
             const menuList =
-                document.getElementById(
-                    "menuList"
-                );
+                document.getElementById("menuList");
+        
+        
+            console.log(
+                "開始 renderSevenDayMenu()"
+            );
         
         
             if (!menuList) {
+        
+                console.error(
+                    "❌ 找不到 menuList"
+                );
         
                 return;
         
             }
         
         
+            console.log(
+                "menuList 找到了：",
+                menuList
+            );
+        
+        
+            console.log(
+                "目前 menuData：",
+                menuData
+            );
+        
+        
             // =================================================
-            // 確認資料
+            // 確認是否有資料
             // =================================================
         
             if (
@@ -5235,22 +5366,11 @@ function initializeDates() {
             // 建立七天菜單
             // =================================================
         
-            let html = `
-                <div class="seven-day-menu">
-            `;
+            let html = "";
         
         
             menuData.forEach(
-                function(menu, index) {
-        
-                    const date =
-                        menu.date ||
-                        "";
-        
-                    const week =
-                        menu.week ||
-                        "";
-        
+                function(menu, dayIndex) {
         
                     html += `
                         <div class="menu-day">
@@ -5258,11 +5378,11 @@ function initializeDates() {
                             <div class="menu-day-header">
         
                                 <div class="menu-date">
-                                    ${date}
+                                    ${menu.date || ""}
                                 </div>
         
                                 <div class="menu-week">
-                                    ${week}
+                                    ${menu.week || ""}
                                 </div>
         
                             </div>
@@ -5276,35 +5396,24 @@ function initializeDates() {
                     // =================================================
         
                     if (
-                        Array.isArray(
-                            menu.items
-                        ) &&
-                        menu.items.length > 0
+                        Array.isArray(menu.items)
                     ) {
         
                         menu.items.forEach(
                             function(item) {
         
-                                const category =
-                                    item.category ||
-                                    "";
-        
-                                const name =
-                                    item.name ||
-                                    "";
-        
-        
                                 html += `
                                     <div class="menu-item">
         
                                         <div class="menu-category">
-                                            ${category}
+                                            ${item.category || ""}
                                         </div>
         
                                         <div class="menu-name">
                                             ${
-                                                name ||
-                                                "—"
+                                                item.name
+                                                    ? item.name
+                                                    : "—"
                                             }
                                         </div>
         
@@ -5313,16 +5422,6 @@ function initializeDates() {
         
                             }
                         );
-        
-                    }
-        
-                    else {
-        
-                        html += `
-                            <div class="menu-empty">
-                                本日尚未提供菜單
-                            </div>
-                        `;
         
                     }
         
@@ -5337,17 +5436,16 @@ function initializeDates() {
             );
         
         
-            html += `
-                </div>
-            `;
-        
-        
             // =================================================
-            // 一次把七天菜單放進畫面
+            // 一次顯示七天
             // =================================================
         
-            menuList.innerHTML =
-                html;
+            menuList.innerHTML = html;
+        
+        
+            console.log(
+                "✅ 七天菜單已完成渲染"
+            );
         
         }
 
