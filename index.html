@@ -6154,6 +6154,695 @@ function initializeDates() {
         
         }
 
+        // =================================================
+        // 餐點統計
+        // 單日統計
+        // =================================================
+        
+        async function getMealStatistics() {
+        
+            const dateInput =
+                document.getElementById(
+                    "statisticsStartDate"
+                );
+        
+            const resultBox =
+                document.getElementById(
+                    "mealStatisticsResult"
+                );
+        
+            const statusBox =
+                document.getElementById(
+                    "mealStatisticsStatus"
+                );
+        
+        
+            if (
+                !dateInput ||
+                !resultBox
+            ) {
+        
+                console.error(
+                    "找不到餐點統計 DOM"
+                );
+        
+                return;
+        
+            }
+        
+        
+            const statisticsDate =
+                dateInput.value;
+        
+        
+            // =================================================
+            // 日期檢查
+            // =================================================
+        
+            if (!statisticsDate) {
+        
+                if (statusBox) {
+        
+                    statusBox.innerHTML = `
+                        <div class="result-fail">
+                            ❌ 請選擇統計日期
+                        </div>
+                    `;
+        
+                }
+        
+                return;
+        
+            }
+        
+        
+            // =================================================
+            // 顯示載入中
+            // =================================================
+        
+            resultBox.innerHTML = `
+                <div class="meal-stat-empty">
+                    ⏳ 正在統計 ${statisticsDate} 的餐點資料...
+                </div>
+            `;
+        
+        
+            if (statusBox) {
+        
+                statusBox.innerHTML = "";
+        
+            }
+        
+        
+            try {
+        
+                // =================================================
+                // 建立 API
+                // =================================================
+        
+                const url =
+                    GOOGLE_SCRIPT_URL +
+                    "?action=getMealStatistics" +
+                    "&startDate=" +
+                    encodeURIComponent(
+                        statisticsDate
+                    ) +
+                    "&endDate=" +
+                    encodeURIComponent(
+                        statisticsDate
+                    );
+        
+        
+                console.log(
+                    "餐點統計 API：",
+                    url
+                );
+        
+        
+                // =================================================
+                // 呼叫 GAS
+                // =================================================
+        
+                const response =
+                    await fetch(
+                        url
+                    );
+        
+        
+                if (!response.ok) {
+        
+                    throw new Error(
+                        "HTTP " +
+                        response.status
+                    );
+        
+                }
+        
+        
+                const result =
+                    await response.json();
+        
+        
+                console.log(
+                    "餐點統計結果：",
+                    result
+                );
+        
+        
+                // =================================================
+                // GAS 失敗
+                // =================================================
+        
+                if (
+                    !result.success
+                ) {
+        
+                    resultBox.innerHTML = `
+                        <div class="meal-stat-empty">
+                            ❌ ${
+                                result.message ||
+                                "餐點統計失敗"
+                            }
+                        </div>
+                    `;
+        
+                    return;
+        
+                }
+        
+        
+                // =================================================
+                // 沒有資料
+                // =================================================
+        
+                if (
+                    !Array.isArray(
+                        result.results
+                    ) ||
+                    result.results.length === 0
+                ) {
+        
+                    resultBox.innerHTML = `
+                        <div class="meal-stat-empty">
+                            📭 ${statisticsDate}
+                            查無餐點統計資料
+                        </div>
+                    `;
+        
+                    if (statusBox) {
+        
+                        statusBox.innerHTML = `
+                            <div class="hint">
+                                📅 統計日期：${statisticsDate}
+                            </div>
+                        `;
+        
+                    }
+        
+                    return;
+        
+                }
+        
+        
+                // =================================================
+                // 建立公司 CARD
+                // =================================================
+        
+                let html = "";
+        
+        
+                result.results.forEach(
+                    function(item) {
+        
+                        html +=
+                            createCompanyStatisticCard(
+                                item
+                            );
+        
+                    }
+                );
+        
+        
+                // =================================================
+                // 全部合計
+                // =================================================
+        
+                if (
+                    result.total
+                ) {
+        
+                    html +=
+                        createTotalStatisticCard(
+                            result.total
+                        );
+        
+                }
+        
+        
+                resultBox.innerHTML =
+                    html;
+        
+        
+                // =================================================
+                // 狀態
+                // =================================================
+        
+                if (statusBox) {
+        
+                    statusBox.innerHTML = `
+                        <div class="hint">
+                            📅 統計日期：
+                            <strong>${statisticsDate}</strong>
+                            　
+                            🏢 共
+                            <strong>${result.companyCount || result.results.length}</strong>
+                            間公司
+                        </div>
+                    `;
+        
+                }
+        
+            }
+        
+        
+            catch (error) {
+        
+                console.error(
+                    "餐點統計失敗：",
+                    error
+                );
+        
+        
+                resultBox.innerHTML = `
+                    <div class="meal-stat-empty">
+                        ❌ 無法取得餐點統計
+                        <br>
+                        <small>
+                            ${
+                                error.message ||
+                                ""
+                            }
+                        </small>
+                    </div>
+                `;
+        
+            }
+        
+        }
+        
+        
+        
+        // =================================================
+        // 公司統計 CARD
+        // =================================================
+        
+        function createCompanyStatisticCard(
+            item
+        ) {
+        
+            const company =
+                escapeHtml(
+                    item.company || "未設定公司"
+                );
+        
+        
+            return `
+        
+                <div class="meal-stat-card">
+        
+                    <!-- 公司名稱 -->
+        
+                    <div class="meal-stat-company">
+        
+                        <span class="company-icon">
+                            🏢
+                        </span>
+        
+                        <span>
+                            ${company}
+                        </span>
+        
+                    </div>
+        
+        
+                    <!-- ============================= -->
+                    <!-- 午餐 -->
+                    <!-- ============================= -->
+        
+                    <div class="meal-stat-section">
+        
+                        <div class="meal-stat-title lunch-title">
+        
+                            <span>🍱</span>
+        
+                            <span>午餐</span>
+        
+                        </div>
+        
+        
+                        <div class="meal-stat-row">
+        
+        
+                            <div class="meal-stat-item">
+        
+                                <div class="meal-stat-item-label">
+                                    葷
+                                </div>
+        
+                                <div class="meal-stat-item-value meat">
+                                    ${item.lunchMeat || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="meal-stat-item">
+        
+                                <div class="meal-stat-item-label">
+                                    素
+                                </div>
+        
+                                <div class="meal-stat-item-value vegetarian">
+                                    ${item.lunchVegetarian || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="meal-stat-item total">
+        
+                                <div class="meal-stat-item-label">
+                                    合計
+                                </div>
+        
+                                <div class="meal-stat-item-value">
+                                    ${item.lunchTotal || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                        </div>
+        
+                    </div>
+        
+        
+        
+                    <!-- ============================= -->
+                    <!-- 晚餐 -->
+                    <!-- ============================= -->
+        
+                    <div class="meal-stat-section">
+        
+                        <div class="meal-stat-title dinner-title">
+        
+                            <span>🍽️</span>
+        
+                            <span>晚餐</span>
+        
+                        </div>
+        
+        
+                        <div class="meal-stat-row">
+        
+        
+                            <div class="meal-stat-item">
+        
+                                <div class="meal-stat-item-label">
+                                    葷
+                                </div>
+        
+                                <div class="meal-stat-item-value meat">
+                                    ${item.dinnerMeat || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="meal-stat-item">
+        
+                                <div class="meal-stat-item-label">
+                                    素
+                                </div>
+        
+                                <div class="meal-stat-item-value vegetarian">
+                                    ${item.dinnerVegetarian || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="meal-stat-item total">
+        
+                                <div class="meal-stat-item-label">
+                                    合計
+                                </div>
+        
+                                <div class="meal-stat-item-value">
+                                    ${item.dinnerTotal || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                        </div>
+        
+                    </div>
+        
+        
+        
+                    <!-- ============================= -->
+                    <!-- 公司總計 -->
+                    <!-- ============================= -->
+        
+                    <div class="meal-stat-grand-total">
+        
+                        <div class="meal-stat-grand-total-label">
+        
+                            公司總報餐數
+        
+                        </div>
+        
+                        <div class="meal-stat-grand-total-value">
+        
+                            ${item.total || 0}
+        
+                            <span class="meal-stat-unit">
+                                份
+                            </span>
+        
+                        </div>
+        
+                    </div>
+        
+                </div>
+        
+            `;
+        
+        }
+        
+        
+        
+        // =================================================
+        // 全部合計 CARD
+        // =================================================
+        
+        function createTotalStatisticCard(
+            item
+        ) {
+        
+            return `
+        
+                <div class="meal-stat-card total-card">
+        
+                    <!-- 標題 -->
+        
+                    <div class="meal-stat-company total-company">
+        
+                        <span class="company-icon">
+                            📊
+                        </span>
+        
+                        <span>
+                            全部公司合計
+                        </span>
+        
+                    </div>
+        
+        
+                    <!-- ============================= -->
+                    <!-- 午餐 -->
+                    <!-- ============================= -->
+        
+                    <div class="meal-stat-section">
+        
+                        <div class="meal-stat-title lunch-title">
+        
+                            <span>🍱</span>
+        
+                            <span>午餐</span>
+        
+                        </div>
+        
+        
+                        <div class="meal-stat-row">
+        
+        
+                            <div class="meal-stat-item">
+        
+                                <div class="meal-stat-item-label">
+                                    葷
+                                </div>
+        
+                                <div class="meal-stat-item-value meat">
+                                    ${item.lunchMeat || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="meal-stat-item">
+        
+                                <div class="meal-stat-item-label">
+                                    素
+                                </div>
+        
+                                <div class="meal-stat-item-value vegetarian">
+                                    ${item.lunchVegetarian || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="meal-stat-item total">
+        
+                                <div class="meal-stat-item-label">
+                                    合計
+                                </div>
+        
+                                <div class="meal-stat-item-value">
+                                    ${item.lunchTotal || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                        </div>
+        
+                    </div>
+        
+        
+        
+                    <!-- ============================= -->
+                    <!-- 晚餐 -->
+                    <!-- ============================= -->
+        
+                    <div class="meal-stat-section">
+        
+                        <div class="meal-stat-title dinner-title">
+        
+                            <span>🍽️</span>
+        
+                            <span>晚餐</span>
+        
+                        </div>
+        
+        
+                        <div class="meal-stat-row">
+        
+        
+                            <div class="meal-stat-item">
+        
+                                <div class="meal-stat-item-label">
+                                    葷
+                                </div>
+        
+                                <div class="meal-stat-item-value meat">
+                                    ${item.dinnerMeat || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="meal-stat-item">
+        
+                                <div class="meal-stat-item-label">
+                                    素
+                                </div>
+        
+                                <div class="meal-stat-item-value vegetarian">
+                                    ${item.dinnerVegetarian || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="meal-stat-item total">
+        
+                                <div class="meal-stat-item-label">
+                                    合計
+                                </div>
+        
+                                <div class="meal-stat-item-value">
+                                    ${item.dinnerTotal || 0}
+                                </div>
+        
+                            </div>
+        
+        
+                        </div>
+        
+                    </div>
+        
+        
+        
+                    <!-- ============================= -->
+                    <!-- 全部總計 -->
+                    <!-- ============================= -->
+        
+                    <div class="meal-stat-grand-total">
+        
+                        <div class="meal-stat-grand-total-label">
+        
+                            全部公司總報餐數
+        
+                        </div>
+        
+                        <div class="meal-stat-grand-total-value">
+        
+                            ${item.total || 0}
+        
+                            <span class="meal-stat-unit">
+                                份
+                            </span>
+        
+                        </div>
+        
+                    </div>
+        
+                </div>
+        
+            `;
+        
+        }
+        
+        
+        
+        // =================================================
+        // HTML 安全處理
+        // =================================================
+        
+        function escapeHtml(
+            value
+        ) {
+        
+            return String(
+                value || ""
+            )
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+        
+        }
+
+
 
 
 
