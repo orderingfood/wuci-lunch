@@ -5496,27 +5496,7 @@ function initializeDates() {
             // =================================================
         
             let html = `
-        
-                <div class="query-result-count">
-        
-                    共
-                    <strong>
-                        ${queryResults.length}
-                    </strong>
-                    筆資料，
-                    
-                    顯示第
-                    <strong>
-                        ${startIndex + 1}
-                    </strong>
-                    -
-                    <strong>
-                        ${endIndex}
-                    </strong>
-                    筆
-        
-                </div>
-        
+     
         
                 <div class="query-table-wrapper">
         
@@ -5678,6 +5658,26 @@ function initializeDates() {
                         </tbody>
         
                     </table>
+        
+                </div>
+
+                <div class="query-result-count">
+        
+                    共
+                    <strong>
+                        ${queryResults.length}
+                    </strong>
+                    筆資料，
+                    
+                    顯示第
+                    <strong>
+                        ${startIndex + 1}
+                    </strong>
+                    -
+                    <strong>
+                        ${endIndex}
+                    </strong>
+                    筆
         
                 </div>
         
