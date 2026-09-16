@@ -3842,6 +3842,31 @@ function initializeDates() {
 
         }
 
+        // =================================================
+        // 檢查是否選到「週日晚餐」
+        // =================================================
+        
+        function hasSundayDinner(selectedDates, mealTime) {
+        
+            if (mealTime !== "晚餐") {
+                return false;
+            }
+        
+            return selectedDates.some(
+                function(dateString) {
+        
+                    const date =
+                        new Date(
+                            dateString + "T00:00:00"
+                        );
+        
+                    return date.getDay() === 0;
+        
+                }
+            );
+        
+        }
+
 
 
         // =================================================
@@ -3980,6 +4005,35 @@ function initializeDates() {
 
                 const selectedDates =
                     getSelectedDates();
+
+        // =================================================
+        // 週日晚餐禁止報餐
+        // 單日、多日只要包含星期日
+        // 整次報餐直接停止
+        // =================================================
+        
+        if (
+            hasSundayDinner(
+                selectedDates,
+                mealTime
+            )
+        ) {
+        
+            alert(
+                "⚠️ 週日不提供晚餐！\n\n" +
+                "您選擇的報餐日期包含星期日，" +
+                "請重新選擇報餐日期或改選其他餐別。"
+            );
+        
+            status.style.color =
+                "#dc3545";
+        
+            status.innerHTML =
+                "❌ 週日不提供晚餐，請重新選擇報餐日期或餐別。";
+        
+            return;
+        
+        }
 
         // -------------------------------------------------
         // 檢查當天報餐截止時間
