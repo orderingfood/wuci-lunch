@@ -1492,12 +1492,12 @@
         
             padding: 14px 18px;
         
-            background:
-                linear-gradient(
-                    135deg,
-                    #1976d2,
-                    #42a5f5
-                );
+        background:
+            linear-gradient(
+                135deg,
+                #d32f2f,
+                #ef5350
+            );
         
             color: #fff;
         
@@ -2506,7 +2506,7 @@
                         onclick="getMealStatistics()"
                         class="statistics-btn"
                     >
-                        📊 查詢餐點統計
+                        🔎 查詢
                     </button>
         
                 </div>
@@ -6157,10 +6157,7 @@ function initializeDates() {
                 if (statusBox) {
         
                     statusBox.innerHTML = `
-                        <div class="hint">
-                            📅 統計日期：
-                            <strong>${statisticsDate}</strong>
-                            　
+                        <div class="hint">                          　
                             🏢 共
                             <strong>${result.companyCount || result.results.length}</strong>
                             間公司
@@ -6220,10 +6217,6 @@ function initializeDates() {
                     <!-- 公司名稱 -->
         
                     <div class="meal-stat-company">
-        
-                        <span class="company-icon">
-                            🏢
-                        </span>
         
                         <span>
                             ${company}
@@ -6366,7 +6359,7 @@ function initializeDates() {
         
                         <div class="meal-stat-grand-total-label">
         
-                            公司總報餐數
+                            報餐數
         
                         </div>
         
@@ -6406,12 +6399,8 @@ function initializeDates() {
         
                     <div class="meal-stat-company total-company">
         
-                        <span class="company-icon">
-                            📊
-                        </span>
-        
                         <span>
-                            全部公司合計
+                            📊 全部公司合計
                         </span>
         
                     </div>
