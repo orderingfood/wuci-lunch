@@ -1228,6 +1228,13 @@
             font-weight: 700;
         
             height: 65px;
+        
+            /* 手機上下滑時固定第一列 */
+            position: sticky;
+            top: 0;
+        
+            /* 確保表頭蓋住下面內容 */
+            z-index: 5;
         }
         
         
@@ -1247,10 +1254,15 @@
                     #f5a6a9
                 );
         
+            /* 同時固定左邊 + 上方 */
             position: sticky;
             left: 0;
-            z-index: 4;
+            top: 0;
+        
+            /* 左上角層級最高 */
+            z-index: 7;
         }
+
         
         
         /* =================================================
@@ -1406,6 +1418,33 @@
             }
         
         }
+
+        @media (max-width: 700px) {
+
+            /* 第一列固定在最上方 */
+            .menu-table thead th {
+                position: sticky;
+                top: 0;
+                z-index: 5;
+            }
+        
+            /* 左上角同時固定左邊與上方 */
+            .menu-table thead th:first-child {
+                position: sticky;
+                left: 0;
+                top: 0;
+                z-index: 7;
+            }
+        
+            /* 左側分類欄固定在左邊 */
+            .menu-row-category {
+                position: sticky;
+                left: 0;
+                z-index: 4;
+            }
+        
+        }
+
         
         /* =================================================
            餐點統計日期
