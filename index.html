@@ -1447,31 +1447,7 @@
         .statistics-btn:hover {
             background: #125ca8;
         }
-        
-        
-        /* =================================================
-           統計結果 Grid
-           電腦：多欄
-           手機：單欄
-           ================================================= */
-        
-        .meal-stat-grid {
-            display: grid;
-        
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(
-                        320px,
-                        1fr
-                    )
-                );
-        
-            gap: 18px;
-        
-            width: 100%;
-        }
-        
+               
         
         /* =================================================
            公司統計 CARD
@@ -1792,6 +1768,74 @@
             }
         
         }
+
+        /* =================================================
+           餐點統計結果：電腦版自動並排、手機版單欄
+           ================================================= */
+        
+        .meal-statistics-result {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(320px, 1fr)
+            );
+            gap: 20px;
+            align-items: start;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        
+        /* 公司統計卡 */
+        
+        .meal-stat-card {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        
+        /* 全部公司合計 */
+        
+        .meal-stat-card.total-card {
+            grid-column: 1 / -1;
+        }
+        
+        
+        /* =================================================
+           平板
+           ================================================= */
+        
+        @media (max-width: 768px) {
+        
+            .meal-statistics-result {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        
+            .meal-stat-card.total-card {
+                grid-column: auto;
+            }
+        
+        }
+        
+        
+        /* =================================================
+           手機
+           ================================================= */
+        
+        @media (max-width: 480px) {
+        
+            .meal-statistics-result {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        
+            .meal-stat-card {
+                min-width: 0;
+            }
+        
+        }
+
 
 
         
@@ -2400,86 +2444,72 @@
     
         </section>
     
-    
         <!-- =================================================
              第一層：餐點統計
         ================================================== -->
-    
+        
         <section
             id="page-meal-stat"
             class="system-page"
         >
-    
+        
             <div class="card">
-    
+        
                 <h2>
-                    餐點統計
+                    🍱 餐點統計
                 </h2>
-    
-                <div class="empty-page">
-    
-                    <div class="hint">
-                        
-                        <div class="query-section">
-    
-                        
-                            <div class="query-date-row">
-                        
-                                <div class="statistics-date-box">
-                                
-                                    <label for="statisticsDate">
-                                        📅 統計日期
-                                    </label>
-                                
-                                    <input
-                                        type="date"
-                                        id="statisticsDate"
-                                    >
-                                
-                                    <button
-                                        type="button"
-                                        onclick="getMealStatistics()"
-                                        class="statistics-btn"
-                                    >
-                                        📊 查詢餐點統計
-                                    </button>
-                                
-                                </div>
-                                
-                                <div id="mealStatisticsStatus"></div>
-                                
-                                <div id="mealStatisticsResult"
-                                     class="meal-stat-grid">
-                                </div>
-
-                        
-                            </div>
-                        
-                        
-                            <button
-                                type="button"
-                                onclick="getMealStatistics()"
-                            >
-                                📊 查詢餐點統計
-                            </button>
-                        
-                        
-                            <div id="mealStatisticsStatus"></div>
-                        
-                        
-                            <div
-                                id="mealStatisticsResult"
-                                class="meal-statistics-container"
-                            ></div>
-                        
-                        </div>
-                    </div>
-    
+        
+        
+                <!-- =========================================
+                     統計查詢區
+                ========================================== -->
+        
+                <div class="statistics-date-box">
+        
+                    <label for="statisticsDate">
+                        📅 統計日期
+                    </label>
+        
+                    <input
+                        type="date"
+                        id="statisticsDate"
+                    >
+        
+                    <button
+                        type="button"
+                        onclick="getMealStatistics()"
+                        class="statistics-btn"
+                    >
+                        📊 查詢餐點統計
+                    </button>
+        
                 </div>
-    
+        
+        
+                <!-- =========================================
+                     統計狀態
+                ========================================== -->
+        
+                <div
+                    id="mealStatisticsStatus"
+                    class="status"
+                ></div>
+        
+        
+                <!-- =========================================
+                     統計結果
+                     JavaScript 會把各公司卡片放這裡
+                ========================================== -->
+        
+                <div
+                    id="mealStatisticsResult"
+                    class="meal-statistics-result"
+                ></div>
+        
             </div>
-    
+        
         </section>
+
     
     
         <section
