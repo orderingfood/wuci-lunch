@@ -1931,6 +1931,110 @@
         
         }
 
+        /* =================================================
+           查詢結果筆數
+        ================================================= */
+        
+        .query-result-count {
+        
+            margin-top: 15px;
+        
+            margin-bottom: 8px;
+        
+            color: #666;
+        
+            font-size: 14px;
+        
+        }
+        
+        
+        /* =================================================
+           查詢結果分頁
+        ================================================= */
+        
+        .query-pagination {
+        
+            display: flex;
+        
+            align-items: center;
+        
+            justify-content: center;
+        
+            gap: 15px;
+        
+            margin-top: 18px;
+        
+            margin-bottom: 20px;
+        
+        }
+        
+        
+        /* =================================================
+           分頁按鈕
+        ================================================= */
+        
+        .query-page-btn {
+        
+            min-width: 90px;
+        
+            padding: 10px 14px;
+        
+            border: 1px solid #ddd;
+        
+            border-radius: 8px;
+        
+            background: #ffffff;
+        
+            color: #555;
+        
+            font-size: 14px;
+        
+            cursor: pointer;
+        
+        }
+        
+        
+        /* 滑鼠移過去 */
+        
+        .query-page-btn:hover:not(:disabled) {
+        
+            background: #f5f5f5;
+        
+            border-color: #aaa;
+        
+        }
+        
+        
+        /* 目前不能按 */
+        
+        .query-page-btn:disabled {
+        
+            background: #eeeeee;
+        
+            color: #aaaaaa;
+        
+            cursor: not-allowed;
+        
+        }
+        
+        
+        /* =================================================
+           第幾頁
+        ================================================= */
+        
+        .query-page-info {
+        
+            min-width: 80px;
+        
+            text-align: center;
+        
+            color: #555;
+        
+            font-size: 15px;
+        
+        }
+
+
 
         
     </style>
@@ -5042,6 +5146,16 @@ function initializeDates() {
         );
 
         // =================================================
+        // 查詢結果分頁
+        // =================================================
+        
+        const QUERY_PAGE_SIZE = 40;
+        
+        let queryResults = [];
+        
+        let queryCurrentPage = 1;
+
+        // =================================================
         // 查詢報餐
         // =================================================
         
@@ -5168,174 +5282,28 @@ function initializeDates() {
                 }
         
         
-                // =================================================
-                // 顯示查詢結果
-                // =================================================
-                
-                let html = `
-                
-                    <div class="query-table-wrapper">
-                
-                        <table class="query-table">
-                
-                            <thead>
-                
-                                <tr>
-                
-                                    <th>報餐日期</th>
-                                    <th>工號</th>
-                                    <th>姓名</th>
-                                    <th>公司</th>
-                                    <th>單位</th>
-                                    <th>餐別</th>
-                                    <th>葷素別</th>
-                                    <th>代報人</th>
-                                    <th>報餐時間</th>
-                                    <th>狀態</th>
-                
-                                </tr>
-                
-                            </thead>
-                
-                            <tbody>
-                `;
-                
-                
-        result.results.forEach(
-            function(item) {
+        // =================================================
+        // 儲存查詢結果
+        // =================================================
         
-                let statusHtml = "";
+        queryResults =
+            result.results;
         
         
-                // =================================================
-                // J欄 O = 可取消
-                // =================================================
+        // =================================================
+        // 回到第 1 頁
+        // =================================================
         
-                if (
-                    item.status === "O"
-                ) {
-        
-                    statusHtml = `
-                    
-                    <button
-                        type="button"
-                        class="cancel-order-btn"
-                        onclick="cancelOrder(
-                            '${item.rowNumber}',
-                            '${item.orderDate}',
-                            '${item.employeeId}',
-                            '${item.mealTime}'
-                        )"
-                    >
-                        可取消
-                    </button>
-                    
-                    `;
-        
-                }
+        queryCurrentPage = 1;
         
         
-                // =================================================
-                // J欄 X = 不可取消
-                // =================================================
+        // =================================================
+        // 顯示第 1 頁
+        // =================================================
         
-                else if (
-                    item.status === "X"
-                ) {
+        renderQueryResults();
         
-                    statusHtml = `
-                    
-                        <span
-                            class="status-disabled"
-                            title="此筆報餐目前不可取消"
-                        >
-                            不可取消
-                        </span>
-                    
-                    `;
-        
-                }
-        
-        
-                // =================================================
-                // 其他狀態
-                // =================================================
-        
-                else {
-        
-                    statusHtml =
-                        item.status || "";
-        
-                }
-                
-                        html += `
-                
-                            <tr>
-                
-                                <td>
-                                    ${item.orderDate || ""}
-                                </td>
-                
-                                <td>
-                                    ${item.employeeId || ""}
-                                </td>
-                
-                                <td>
-                                    ${item.name || ""}
-                                </td>
-                
-                                <td>
-                                    ${item.company || ""}
-                                </td>
-                
-                                <td>
-                                    ${item.unit || ""}
-                                </td>
-                
-                                <td>
-                                    ${item.mealTime || ""}
-                                </td>
-                
-                                <td>
-                                    ${item.category || ""}
-                                </td>
-                
-                                <td>
-                                    ${
-                                        item.proxyEmployeeId ||
-                                        "本人"
-                                    }
-                                </td>
-                
-                                <td>
-                                    ${item.orderTime || ""}
-                                </td>
-                
-                                <td>
-                                    ${statusHtml}
-                                </td>
-                
-                            </tr>
-                
-                        `;
-                
-                    }
-                );
-                
-                
-                html += `
-                
-                            </tbody>
-                
-                        </table>
-                
-                    </div>
-                
-                `;
-                
-                
-                resultBox.innerHTML =
-                    html;
+
         
         
             }
@@ -5359,6 +5327,425 @@ function initializeDates() {
         
         }
 
+        // =================================================
+        // 查詢結果：顯示指定頁面
+        // 每頁最多 40 筆
+        // =================================================
+        
+        function renderQueryResults() {
+        
+            const resultBox =
+                document.getElementById(
+                    "queryResult"
+                );
+        
+        
+            if (!resultBox) {
+        
+                return;
+        
+            }
+        
+        
+            // =================================================
+            // 沒有資料
+            // =================================================
+        
+            if (
+                !Array.isArray(queryResults) ||
+                queryResults.length === 0
+            ) {
+        
+                resultBox.innerHTML = `
+                    <div class="hint">
+                        查無符合條件的報餐資料
+                    </div>
+                `;
+        
+                return;
+        
+            }
+        
+        
+            // =================================================
+            // 計算總頁數
+            // =================================================
+        
+            const totalPages =
+                Math.ceil(
+                    queryResults.length /
+                    QUERY_PAGE_SIZE
+                );
+        
+        
+            // =================================================
+            // 防止頁碼超出範圍
+            // =================================================
+        
+            if (
+                queryCurrentPage < 1
+            ) {
+        
+                queryCurrentPage = 1;
+        
+            }
+        
+        
+            if (
+                queryCurrentPage > totalPages
+            ) {
+        
+                queryCurrentPage =
+                    totalPages;
+        
+            }
+        
+        
+            // =================================================
+            // 計算目前頁面的資料範圍
+            // =================================================
+        
+            const startIndex =
+                (
+                    queryCurrentPage - 1
+                ) *
+                QUERY_PAGE_SIZE;
+        
+        
+            const endIndex =
+                Math.min(
+                    startIndex +
+                    QUERY_PAGE_SIZE,
+                    queryResults.length
+                );
+        
+        
+            const pageResults =
+                queryResults.slice(
+                    startIndex,
+                    endIndex
+                );
+        
+        
+            // =================================================
+            // 建立表格
+            // =================================================
+        
+            let html = `
+        
+                <div class="query-result-count">
+        
+                    共
+                    <strong>
+                        ${queryResults.length}
+                    </strong>
+                    筆資料，
+                    
+                    顯示第
+                    <strong>
+                        ${startIndex + 1}
+                    </strong>
+                    -
+                    <strong>
+                        ${endIndex}
+                    </strong>
+                    筆
+        
+                </div>
+        
+        
+                <div class="query-table-wrapper">
+        
+                    <table class="query-table">
+        
+                        <thead>
+        
+                            <tr>
+        
+                                <th>報餐日期</th>
+                                <th>工號</th>
+                                <th>姓名</th>
+                                <th>公司</th>
+                                <th>單位</th>
+                                <th>餐別</th>
+                                <th>葷素別</th>
+                                <th>代報人</th>
+                                <th>報餐時間</th>
+                                <th>狀態</th>
+        
+                            </tr>
+        
+                        </thead>
+        
+                        <tbody>
+        
+            `;
+        
+        
+            // =================================================
+            // 顯示目前頁面的資料
+            // =================================================
+        
+            pageResults.forEach(
+                function(item) {
+        
+                    let statusHtml = "";
+        
+        
+                    // =================================================
+                    // J欄 O = 可取消
+                    // =================================================
+        
+                    if (
+                        item.status === "O"
+                    ) {
+        
+                        statusHtml = `
+        
+                            <button
+                                type="button"
+                                class="cancel-order-btn"
+                                onclick="cancelOrder(
+                                    '${item.rowNumber}',
+                                    '${item.orderDate}',
+                                    '${item.employeeId}',
+                                    '${item.mealTime}'
+                                )"
+                            >
+                                可取消
+                            </button>
+        
+                        `;
+        
+                    }
+        
+        
+                    // =================================================
+                    // J欄 X = 不可取消
+                    // =================================================
+        
+                    else if (
+                        item.status === "X"
+                    ) {
+        
+                        statusHtml = `
+        
+                            <span
+                                class="status-disabled"
+                                title="此筆報餐目前不可取消"
+                            >
+                                不可取消
+                            </span>
+        
+                        `;
+        
+                    }
+        
+        
+                    // =================================================
+                    // 其他狀態
+                    // =================================================
+        
+                    else {
+        
+                        statusHtml =
+                            item.status || "";
+        
+                    }
+        
+        
+                    html += `
+        
+                        <tr>
+        
+                            <td>
+                                ${item.orderDate || ""}
+                            </td>
+        
+                            <td>
+                                ${item.employeeId || ""}
+                            </td>
+        
+                            <td>
+                                ${item.name || ""}
+                            </td>
+        
+                            <td>
+                                ${item.company || ""}
+                            </td>
+        
+                            <td>
+                                ${item.unit || ""}
+                            </td>
+        
+                            <td>
+                                ${item.mealTime || ""}
+                            </td>
+        
+                            <td>
+                                ${item.category || ""}
+                            </td>
+        
+                            <td>
+                                ${
+                                    item.proxyEmployeeId ||
+                                    "本人"
+                                }
+                            </td>
+        
+                            <td>
+                                ${item.orderTime || ""}
+                            </td>
+        
+                            <td>
+                                ${statusHtml}
+                            </td>
+        
+                        </tr>
+        
+                    `;
+        
+                }
+            );
+        
+        
+            html += `
+        
+                        </tbody>
+        
+                    </table>
+        
+                </div>
+        
+        
+                <!-- =================================================
+                     分頁按鈕
+                ================================================== -->
+        
+                <div class="query-pagination">
+        
+                    <button
+                        type="button"
+                        class="query-page-btn"
+                        onclick="changeQueryPage(-1)"
+                        ${queryCurrentPage <= 1 ? "disabled" : ""}
+                    >
+                        ‹ 上一頁
+                    </button>
+        
+        
+                    <div class="query-page-info">
+        
+                        第
+                        <strong>
+                            ${queryCurrentPage}
+                        </strong>
+                        /
+                        ${totalPages}
+                        頁
+        
+                    </div>
+        
+        
+                    <button
+                        type="button"
+                        class="query-page-btn"
+                        onclick="changeQueryPage(1)"
+                        ${
+                            queryCurrentPage >= totalPages
+                                ? "disabled"
+                                : ""
+                        }
+                    >
+                        下一頁 ›
+                    </button>
+        
+                </div>
+        
+            `;
+        
+        
+            resultBox.innerHTML =
+                html;
+        
+        }
+
+
+        // =================================================
+        // 查詢結果：切換頁面
+        // direction = -1 上一頁
+        // direction = 1  下一頁
+        // =================================================
+        
+        function changeQueryPage(
+            direction
+        ) {
+        
+            const totalPages =
+                Math.ceil(
+                    queryResults.length /
+                    QUERY_PAGE_SIZE
+                );
+        
+        
+            const newPage =
+                queryCurrentPage +
+                direction;
+        
+        
+            // =================================================
+            // 防止超出頁數
+            // =================================================
+        
+            if (
+                newPage < 1 ||
+                newPage > totalPages
+            ) {
+        
+                return;
+        
+            }
+        
+        
+            // =================================================
+            // 更新目前頁碼
+            // =================================================
+        
+            queryCurrentPage =
+                newPage;
+        
+        
+            // =================================================
+            // 重新顯示
+            // =================================================
+        
+            renderQueryResults();
+        
+        
+            // =================================================
+            // 回到查詢結果頂端
+            // =================================================
+        
+            const resultBox =
+                document.getElementById(
+                    "queryResult"
+                );
+        
+        
+            if (resultBox) {
+        
+                resultBox.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+        
+            }
+        
+        }
+
+
+
+        
         // =================================================
         // 取消報餐
         // =================================================
