@@ -4728,12 +4728,10 @@ function initializeDates() {
             function () {
         
                 initializeDates();
-        
+
+                initializeQueryDates();
+    
                 initializeQueryCompanyAuth();
-        
-                // =================================================
-                // 網頁載入時直接讀取菜單
-                // =================================================
         
                 loadMenu();
         
@@ -5880,7 +5878,7 @@ function initializeDates() {
         
             const dateInput =
                 document.getElementById(
-                    "statisticsStartDate"
+                    "statisticsDate"
                 );
         
             const resultBox =
