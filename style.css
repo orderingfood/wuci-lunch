@@ -1,0 +1,2060 @@
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #E0F2FE 0%,
+                    #FFFBEB 100%
+                );
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #333;
+
+            transition:
+                background 0.3s ease;
+
+        }
+
+
+        /* -------------------------------------------------
+           卡片
+        ------------------------------------------------- */
+
+        .card {
+
+            background: white;
+
+            max-width: 400px;
+
+            margin: 30px auto;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 10px
+                rgba(0,0,0,0.1);
+
+        }
+
+
+        h2 {
+
+            color: #007bff;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        /* -------------------------------------------------
+           輸入區
+        ------------------------------------------------- */
+
+        .input-group {
+
+            margin: 20px 0;
+
+            text-align: left;
+
+        }
+        
+        .input-group label {
+
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+            font-size: 16px;
+
+            color: #555;
+
+        }
+
+
+        .input-field {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 12px;
+
+            font-size: 18px;
+
+            border:
+                2px solid #ccc;
+
+            border-radius: 8px;
+
+            box-sizing: border-box;
+
+            text-align: center;
+
+        }
+
+        .input-field:focus {
+
+            border-color: #007bff;
+
+            outline: none;
+
+        }
+
+
+        /* -------------------------------------------------
+           按鈕
+        ------------------------------------------------- */
+
+        .btn {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 15px;
+
+            margin: 15px 0;
+
+            font-size: 18px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            font-weight: bold;
+
+        }
+
+
+        .btn-lunch {
+
+            background-color: #28a745;
+
+            color: white;
+
+        }
+
+
+        .btn-lunch:hover {
+
+            background-color: #218838;
+
+        }
+
+
+        .btn:disabled {
+
+            background-color: #999;
+
+            cursor: not-allowed;
+
+        }
+
+
+        /* -------------------------------------------------
+           狀態訊息
+        ------------------------------------------------- */
+
+        .status {
+
+            margin-top: 20px;
+
+            font-weight: bold;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+
+            min-height: 24px;
+
+            text-align: left;
+
+            word-break: break-word;
+
+        }
+
+
+        .status-title {
+
+            text-align: center;
+
+            font-size: 18px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .result-success {
+
+            color: #28a745;
+
+        }
+
+
+        .result-fail {
+
+            color: #dc3545;
+
+        }
+
+
+        .hint {
+
+            font-size: 12px;
+
+            color: #888;
+
+            text-align: center;
+
+            margin-top: 5px;
+
+        }
+
+
+        /* -------------------------------------------------
+           午餐 / 晚餐
+        ------------------------------------------------- */
+
+        .meal-options {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 10px;
+
+        }
+
+
+        .meal-option {
+
+            flex: 1;
+
+            cursor: pointer;
+
+        }
+
+
+        .meal-option input {
+
+            display: none;
+
+        }
+
+
+        .meal-option span {
+
+            display: block;
+
+            padding: 14px 10px;
+
+            text-align: center;
+
+            border:
+                2px solid #ccc;
+
+            border-radius: 8px;
+
+            background-color: #fff;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+
+        }
+
+
+        .meal-option input:checked + span {
+
+            background-color: #007bff;
+
+            color: white;
+
+            border-color: #007bff;
+
+        }
+
+
+        /* -------------------------------------------------
+           分頁
+        ------------------------------------------------- */
+
+        .tabs {
+
+            display: flex;
+
+            justify-content: space-around;
+
+            margin-bottom: 20px;
+
+            border-bottom:
+                2px solid #ddd;
+
+        }
+
+
+        .tab-btn {
+
+            background: none;
+
+            border: none;
+
+            padding: 10px 20px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            color: #666;
+
+            border-bottom:
+                3px solid transparent;
+
+            transition: 0.2s;
+
+        }
+
+
+        .tab-btn.active {
+
+            color: #007bff;
+
+            border-bottom-color:
+                #007bff;
+
+        }
+
+
+        .tab-content {
+
+            display: none;
+
+        }
+
+
+        .tab-content.active {
+
+            display: block;
+
+        }
+
+
+        /* -------------------------------------------------
+           多日日期
+        ------------------------------------------------- */
+
+        .date-checkbox-list {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(1, 1fr);
+
+            gap: 10px;
+
+            max-height: 250px;
+
+            overflow-y: auto;
+
+            border:
+                2px solid #ccc;
+
+            border-radius: 8px;
+
+            padding: 10px;
+
+            background: #fafafa;
+
+        }
+
+
+        .date-item {
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 8px;
+
+            background: white;
+
+            border:
+                1px solid #ddd;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+        }
+
+
+        .date-item:hover {
+
+            background: #f0f8ff;
+
+        }
+
+
+        .date-item input {
+
+            margin-right: 8px;
+
+            transform: scale(1.2);
+
+        }
+
+
+        /* -------------------------------------------------
+           午餐背景
+        ------------------------------------------------- */
+
+        body.white-mode {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #E0F2FE 0%,
+                    #FFFBEB 100%
+                );
+
+        }
+
+
+        /* -------------------------------------------------
+           晚餐背景
+        ------------------------------------------------- */
+
+        body.dark-mode {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0F172A 0%,
+                    #1E1B4B 100%
+                );
+
+        }
+
+
+        body.dark-mode .card {
+
+            background: #f8fafc;
+
+        }
+
+    /* =================================================
+       員工資料查詢視窗
+    ================================================= */
+    
+    .loading-overlay {
+    
+        display: none;
+    
+        position: fixed;
+    
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    
+        background: rgba(0, 0, 0, 0.55);
+    
+        z-index: 99999;
+    
+        justify-content: center;
+    
+        align-items: center;
+    
+    }
+    
+    
+    .loading-box {
+    
+        width: 280px;
+    
+        padding: 30px 20px;
+    
+        background: white;
+    
+        border-radius: 15px;
+    
+        text-align: center;
+    
+        box-shadow:
+            0 5px 25px
+            rgba(0, 0, 0, 0.3);
+    
+    }
+    
+    
+    .loading-spinner {
+    
+        width: 45px;
+    
+        height: 45px;
+    
+        margin: 0 auto 20px;
+    
+        border:
+            5px solid #e5e7eb;
+    
+        border-top-color:
+            #007bff;
+    
+        border-radius: 50%;
+    
+        animation:
+            loading-spin 0.8s linear infinite;
+    
+    }
+    
+    
+    .loading-text {
+    
+        font-size: 18px;
+    
+        font-weight: bold;
+    
+        color: #333;
+    
+    }
+    
+    
+    .loading-hint {
+    
+        margin-top: 10px;
+    
+        font-size: 14px;
+    
+        color: #888;
+    
+    }
+    
+    
+    @keyframes loading-spin {
+    
+        from {
+            transform: rotate(0deg);
+        }
+    
+        to {
+            transform: rotate(360deg);
+        }
+    
+    }
+
+    /* -------------------------------------------------
+       系統自動帶入欄位
+    ------------------------------------------------- */
+    
+    .auto-field {
+    
+        display: block;
+    
+        width: 100%;
+    
+        padding: 12px;
+    
+        font-size: 18px;
+    
+        border:
+            2px solid #bfdbfe;
+    
+        border-radius: 8px;
+    
+        box-sizing: border-box;
+    
+        text-align: center;
+    
+        background-color: #eff6ff;
+    
+        color: #374151;
+    
+        font-weight: bold;
+    
+        cursor: not-allowed;
+    
+    }
+
+        /* -------------------------------------------------
+           單日報餐時間資訊
+        ------------------------------------------------- */
+
+        .single-time-info {
+        
+            margin-top: 12px;
+        
+            padding: 14px;
+        
+            background-color: #f8fafc;
+        
+            border:
+                1px solid #dbeafe;
+        
+            border-radius: 8px;
+        
+            text-align: center;
+        
+        }
+        
+        
+        /* 目前時間 */
+        
+        .current-time {
+        
+            font-size: 18px;
+        
+            font-weight: bold;
+        
+            color: #2563eb;
+        
+            margin-bottom: 10px;
+        
+        }
+        
+        
+        /* 報餐規則 */
+        
+        .meal-rule {
+        
+            font-size: 14px;
+        
+            color: #555;
+        
+            line-height: 1.8;
+        
+        }
+
+        /* =================================================
+           系統第一層頁面
+        ================================================= */
+        
+        .system-page {
+            display: none;
+        }
+        
+        .system-page.active {
+            display: block;
+        }
+
+        /* =================================================
+           系統第一層主導覽
+        ================================================= */
+        
+        .system-nav {
+        
+            max-width: 400px;
+        
+            margin: 0 auto 20px auto;
+        
+            display: grid;
+        
+            grid-template-columns:
+                repeat(4, 1fr);
+        
+            gap: 8px;
+        
+            background: white;
+        
+            padding: 8px;
+        
+            border-radius: 12px;
+        
+            box-shadow:
+                0 4px 10px
+                rgba(0,0,0,0.08);
+        
+        }
+        
+        
+        .system-nav-btn {
+        
+            border: none;
+        
+            background: transparent;
+        
+            padding: 12px 6px;
+        
+            border-radius: 8px;
+        
+            cursor: pointer;
+        
+            font-size: 15px;
+        
+            font-weight: bold;
+        
+            color: #666;
+        
+            transition: 0.2s;
+        
+        }
+        
+        
+        .system-nav-btn span {
+        
+            display: block;
+        
+            margin-top: 4px;
+        
+        }
+        
+        
+        .system-nav-btn:hover {
+        
+            background: #f0f8ff;
+        
+            color: #007bff;
+        
+        }
+        
+        
+        .system-nav-btn.active {
+        
+            background: #007bff;
+        
+            color: white;
+        
+        }
+        
+        
+        /* -------------------------------------------------
+           手機版
+        ------------------------------------------------- */
+        
+        @media (max-width: 500px) {
+        
+            .system-nav-btn {
+        
+                font-size: 13px;
+        
+                padding: 10px 3px;
+        
+            }
+        
+        }
+
+        /* =================================================
+           查詢日期區間
+           手機版防止日期欄位突出
+        ================================================= */
+        
+        #page-query input[type="date"] {
+            min-width: 0;
+            width: 100%;
+        }
+        
+        #page-query .input-group > div[style*="display:flex"] {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 600px) {
+        
+            #page-query .input-group > div[style*="display:flex"] {
+                gap: 6px !important;
+            }
+        
+            #page-query input[type="date"] {
+                min-width: 0;
+                width: 0;
+                flex: 1 1 0;
+                box-sizing: border-box;
+        
+                /* 手機版日期文字縮小 */
+                font-size: 15px;
+                padding: 10px 6px;
+            }
+        
+        }
+
+        /* =================================================
+           查詢結果表格
+        ================================================= */
+        
+        .query-result {
+            width: 100%;
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+        
+        .query-table-wrapper {
+        
+            width: 100%;
+        
+            overflow-x: auto;
+        
+            margin-top: 20px;
+        
+            border:
+                1px solid #ddd;
+        
+            border-radius: 10px;
+        
+            background: white;
+        
+        }
+        
+        
+        .query-table {
+        
+            width: 100%;
+        
+            min-width: 1050px;
+        
+            border-collapse: collapse;
+        
+            font-size: 14px;
+        
+        }
+        
+        
+        .query-table th {
+        
+            background: #007bff;
+        
+            color: white;
+        
+            padding: 12px 10px;
+        
+            border:
+                1px solid #ddd;
+        
+            white-space: nowrap;
+        
+            text-align: center;
+        
+        }
+        
+        
+        .query-table td {
+        
+            padding: 11px 10px;
+        
+            border:
+                1px solid #ddd;
+        
+            white-space: nowrap;
+        
+            text-align: center;
+        
+        }
+        
+        
+        .query-table tbody tr:nth-child(even) {
+        
+            background:
+                #f8fafc;
+        
+        }
+        
+        
+        .query-table tbody tr:hover {
+        
+            background:
+                #eff6ff;
+        
+        }
+        
+        
+        /* =================================================
+           電腦版
+        ================================================= */
+        
+        @media (min-width: 769px) {
+        
+            .query-result {
+        
+                width: 100%;
+        
+                max-width: 1400px;
+        
+                padding:
+                    0 20px;
+        
+                box-sizing: border-box;
+        
+            }
+        
+        }
+        
+        
+        /* =================================================
+           手機版
+        ================================================= */
+        
+        @media (max-width: 768px) {
+        
+            .query-result {
+        
+                width: 100%;
+        
+                padding:
+                    0 10px;
+        
+                box-sizing: border-box;
+        
+            }
+        
+            .query-table-wrapper {
+        
+                border-radius: 8px;
+        
+            }
+        
+            .query-table {
+        
+                min-width: 1050px;
+        
+                font-size: 13px;
+        
+            }
+        
+        }
+
+        
+        
+        /* =========================================
+           可取消按鈕
+        ========================================= */
+        
+        .cancel-order-btn {
+        
+            background: #dc3545;
+        
+            color: #ffffff;
+        
+            border: none;
+        
+            border-radius: 8px;
+        
+            padding: 7px 14px;
+        
+            font-size: 14px;
+        
+            font-weight: 600;
+        
+            cursor: pointer;
+        
+            transition: all 0.2s ease;
+        
+        }
+        
+        
+        /* 滑過去 */
+        
+        .cancel-order-btn:hover {
+        
+            background: #c82333;
+        
+            transform: translateY(-1px);
+        
+        }
+        
+        
+        /* 按下去 */
+        
+        .cancel-order-btn:active {
+        
+            background: #a71d2a;
+        
+            transform: translateY(0);
+        
+        }
+        
+        
+        /* =========================================
+           不可取消
+        ========================================= */
+        
+        .status-disabled {
+        
+            color: #888888;
+        
+            background: #eeeeee;
+        
+            border-radius: 8px;
+        
+            padding: 7px 14px;
+        
+            font-size: 14px;
+        
+            cursor: not-allowed;
+        
+            display: inline-block;
+        
+        }
+
+        /* =================================================
+           查詢頁面：授權公司鎖定欄位
+        ================================================= */
+        
+        .query-company-locked {
+            background-color: #eff6ff !important;
+            border-color: #bfdbfe !important;
+            color: #374151;
+            font-weight: bold;
+            cursor: not-allowed !important;
+        }
+        
+        .query-company-locked:hover {
+            cursor: not-allowed !important;
+        }     
+
+        
+        .menu-card {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .menu-company {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #555;
+            margin: 8px 0 22px;
+        }
+        
+        
+        /* =================================================
+           表格
+        ================================================= */
+        
+        .menu-list {
+            width: 100%;
+        
+            overflow-x: auto;
+        
+            padding: 5px 2px 15px;
+        }
+        
+        
+        /* =================================================
+           菜單頁面
+        ================================================= */
+        
+        .menu-card {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        
+        .menu-company {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: #555;
+            margin: 8px 0 22px;
+        }
+        
+        
+        /* =================================================
+           七天菜單列表
+        ================================================= */
+        
+        .menu-list {
+            width: 100%;
+            overflow-x: auto;
+            padding: 5px 2px 15px;
+            box-sizing: border-box;
+        }
+
+
+        /* =================================================
+           七天菜單表格
+        ================================================= */
+        
+        .menu-table {
+            width: 100%;
+        
+            /*
+               左側餐點欄 + 星期一～星期日
+               固定表格配置，避免某一天被內容撐寬
+            */
+            table-layout: fixed;
+        
+            /*
+               手機仍保留最小寬度，
+               避免七天全部擠在一起
+            */
+            min-width: 850px;
+        
+            border-collapse: separate;
+            border-spacing: 0;
+        
+            background: #ffffff;
+        
+            border-radius: 16px;
+            overflow: hidden;
+        
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+        
+            border: 1px solid #e8e8e8;
+        }
+        
+        
+        /* =================================================
+           所有儲存格
+        ================================================= */
+        
+        .menu-table th,
+        .menu-table td {
+            padding: 13px 10px;
+        
+            text-align: center;
+            vertical-align: middle;
+        
+            border-right:
+                1px solid #eeeeee;
+        
+            border-bottom:
+                1px solid #eeeeee;
+        
+            box-sizing: border-box;
+        
+            /*
+               文字太長時自動換行
+               不允許內容把欄位撐寬
+            */
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+
+        /* =================================================
+           左側「餐點」分類欄
+        ================================================= */
+        
+        .menu-category-column {
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+        
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff5f5,
+                    #ffe8e8
+                );
+        
+            color: #d85c5c;
+            font-weight: 800;
+        
+            position: sticky;
+            left: 0;
+            z-index: 3;
+        }
+        
+        
+        /* =================================================
+           日期標題
+        ================================================= */
+        
+        .menu-table thead th {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff9a9e,
+                    #fad0c4
+                );
+        
+            color: #ffffff;
+            font-weight: 700;
+        
+            height: 65px;
+        
+            /* 手機上下滑時固定第一列 */
+            position: sticky;
+            top: 0;
+        
+            /* 確保表頭蓋住下面內容 */
+            z-index: 5;
+        }
+        
+        
+        /* =================================================
+           左上角「餐點」
+        ================================================= */
+        
+        .menu-table thead th:first-child {
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+        
+            background:
+                linear-gradient(
+                    135deg,
+                    #f47b82,
+                    #f5a6a9
+                );
+        
+            /* 同時固定左邊 + 上方 */
+            position: sticky;
+            left: 0;
+            top: 0;
+        
+            /* 左上角層級最高 */
+            z-index: 7;
+        }
+
+        
+        
+        /* =================================================
+           星期一～星期日
+           7 欄平均分配
+        ================================================= */
+        
+        .menu-table thead th:not(:first-child),
+        .menu-table tbody td:not(.menu-row-category) {
+            width: calc((100% - 100px) / 7);
+        }
+        
+        
+        /* =================================================
+           日期
+        ================================================= */
+        
+        .menu-table-date {
+            font-size: 16px;
+            font-weight: 800;
+        }
+        
+        
+        /* =================================================
+           星期
+        ================================================= */
+        
+        .menu-table-week {
+            margin-top: 4px;
+            font-size: 13px;
+            opacity: 0.95;
+        }
+        
+        
+        /* =================================================
+           菜色內容
+        ================================================= */
+        
+        .menu-table td {
+            color: #444;
+            font-size: 15px;
+            line-height: 1.5;
+            background: #ffffff;
+        }
+        
+        
+        /* =================================================
+           滑鼠移過去
+        ================================================= */
+        
+        .menu-table tbody tr:hover td {
+            background: #fffafa;
+        }
+        
+        
+        /* =================================================
+           左側分類名稱
+        ================================================= */
+        
+        .menu-row-category {
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+        
+            font-size: 14px;
+            font-weight: 800;
+        
+            color: #d85c5c;
+            background: #fff7f7 !important;
+        
+            position: sticky;
+            left: 0;
+            z-index: 2;
+        }
+        
+        
+        /* =================================================
+           菜名
+        ================================================= */
+        
+        .menu-food-name {
+            font-weight: 600;
+            color: #333;
+        
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+        
+        
+        /* =================================================
+           沒有菜色
+        ================================================= */
+        
+        .menu-food-empty {
+            color: #aaa;
+            font-weight: 400;
+        }
+        
+        
+        /* =================================================
+           沒有菜單
+        ================================================= */
+        
+        .menu-empty {
+            padding: 20px;
+        
+            text-align: center;
+        
+            color: #999999;
+        }
+        
+        
+        /* =================================================
+           菜單狀態
+        ================================================= */
+        
+        #menuStatus {
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        
+        /* =================================================
+           手機版
+        ================================================= */
+        
+        @media (max-width: 700px) {
+        
+            .menu-table {
+                /*
+                   850px = 左側 100px
+                         + 7 × 約107px
+                */
+                min-width: 850px;
+            }
+        
+            .menu-table th,
+            .menu-table td {
+                padding: 11px 8px;
+            }
+        
+            .menu-category-column,
+            .menu-table thead th:first-child,
+            .menu-row-category {
+                width: 85px;
+                min-width: 85px;
+                max-width: 85px;
+            }
+        
+            .menu-table thead th:not(:first-child),
+            .menu-table tbody td:not(.menu-row-category) {
+                width: calc((100% - 85px) / 7);
+            }
+        
+        }
+        
+        /* =================================================
+           手機版固定最左邊欄位
+           ================================================= */
+        
+        @media (max-width: 700px) {
+        
+            /* 菜單橫向滑動區 */
+            .menu-list {
+                width: 100%;
+                overflow-x: auto;
+                overflow-y: visible;
+                -webkit-overflow-scrolling: touch;
+            }
+        
+            /* 左上角「餐點」 */
+            .menu-table thead th:first-child {        
+                z-index: 20;
+        
+                width: 85px;
+                min-width: 85px;
+                max-width: 85px;
+        
+                background:
+                    linear-gradient(
+                        135deg,
+                        #f47b82,
+                        #f5a6a9
+                    );
+        
+                box-shadow:
+                    2px 0 4px rgba(0, 0, 0, 0.08);
+            }
+        
+            /* 左側「主食／配菜／甜湯」 */
+            .menu-table tbody .menu-row-category {
+                position: sticky;
+                left: 0;
+        
+                z-index: 10;
+        
+                width: 85px;
+                min-width: 85px;
+                max-width: 85px;
+        
+                background: #fff7f7 !important;
+        
+                box-shadow:
+                    2px 0 4px rgba(0, 0, 0, 0.08);
+            }
+        
+        }
+
+
+        
+        /* =================================================
+           餐點統計日期
+           ================================================= */
+        
+        .statistics-date-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 15px 0 20px;
+        }
+        
+        .statistics-date-box label {
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .statistics-date-box input[type="date"] {
+            padding: 9px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        
+        .statistics-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            background: #1976d2;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .statistics-btn:hover {
+            background: #125ca8;
+        }
+               
+        
+        /* =================================================
+           公司統計 CARD
+           ================================================= */
+        
+        .meal-stat-card {
+            background: #fff;
+        
+            border: 1px solid #e1e5ea;
+        
+            border-radius: 14px;
+        
+            overflow: hidden;
+        
+            box-shadow:
+                0 3px 12px
+                rgba(0, 0, 0, 0.07);
+        
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s;
+        }
+        
+        
+        .meal-stat-card:hover {
+        
+            transform:
+                translateY(-2px);
+        
+            box-shadow:
+                0 6px 18px
+                rgba(0, 0, 0, 0.11);
+        
+        }
+        
+        
+        /* =================================================
+           公司名稱
+           ================================================= */
+        
+        .meal-stat-company {
+        
+            padding: 14px 18px;
+        
+        background:
+            linear-gradient(
+                135deg,
+                #1976d2,
+                #42a5f5
+            );
+        
+            color: #fff;
+        
+            font-size: 18px;
+        
+            font-weight: 700;
+        
+        }
+        
+        
+        /* =================================================
+           午餐／晚餐區塊
+           ================================================= */
+        
+        .meal-stat-section {
+        
+            padding: 14px 16px;
+        
+            border-bottom:
+                1px solid #edf0f3;
+        }
+        
+        
+        .meal-stat-title {
+        
+            font-size: 16px;
+        
+            font-weight: 700;
+        
+            color: #333;
+        
+            margin-bottom: 10px;
+        
+        }
+        
+        
+        /* =================================================
+           葷／素／合計
+           ================================================= */
+        
+        .meal-stat-row {
+        
+            display: grid;
+        
+            grid-template-columns:
+                repeat(
+                    3,
+                    1fr
+                );
+        
+            gap: 8px;
+        
+        }
+        
+        
+        .meal-stat-item {
+        
+            text-align: center;
+        
+            background: #f7f9fb;
+        
+            border-radius: 9px;
+        
+            padding: 9px 5px;
+        
+        }
+        
+        
+        .meal-stat-item-label {
+        
+            font-size: 13px;
+        
+            color: #777;
+        
+            margin-bottom: 3px;
+        
+        }
+        
+        
+        .meal-stat-item-value {
+        
+            font-size: 22px;
+        
+            font-weight: 800;
+        
+            color: #333;
+        
+        }
+        
+        
+        /* =================================================
+           合計欄
+           ================================================= */
+        
+        .meal-stat-item.total {
+        
+            background:
+                #e8f3ff;
+        
+        }
+        
+        
+        .meal-stat-item.total
+        .meal-stat-item-label {
+        
+            color:
+                #1976d2;
+        
+        }
+        
+        
+        .meal-stat-item.total
+        .meal-stat-item-value {
+        
+            color:
+                #1565c0;
+        
+        }
+        
+        
+        /* =================================================
+           公司總計
+           ================================================= */
+        
+        .meal-stat-grand-total {
+        
+            display: flex;
+        
+            align-items: center;
+        
+            justify-content: space-between;
+        
+            padding: 14px 18px;
+        
+            background:
+                #f8fafc;
+        
+        }
+        
+        
+        .meal-stat-grand-total-label {
+        
+            font-size: 15px;
+        
+            font-weight: 700;
+        
+            color: #555;
+        
+        }
+        
+        
+        .meal-stat-grand-total-value {
+        
+            font-size: 28px;
+        
+            font-weight: 900;
+        
+            color: #1976d2;
+        
+        }
+        
+        
+        /* =================================================
+           全部公司合計
+           ================================================= */
+        
+        .meal-stat-card.total-card {
+        
+            border:
+                2px solid #d32f2f;
+        
+        }
+        
+        
+        .meal-stat-card.total-card
+        .meal-stat-company {
+        
+        background:
+            linear-gradient(
+                135deg,
+                #d32f2f,
+                #ef5350
+            );
+         }
+        
+        
+        .meal-stat-card.total-card
+        .meal-stat-grand-total {
+        
+            background:
+                #e3f2fd;
+        
+        }
+        
+        
+        .meal-stat-card.total-card
+        .meal-stat-grand-total-value {
+        
+            color:
+                #0d47a1;
+        
+        }
+        
+        
+        /* =================================================
+           沒資料
+           ================================================= */
+        
+        .meal-stat-empty {
+        
+            grid-column:
+                1 / -1;
+        
+            text-align:
+                center;
+        
+            padding:
+                35px 20px;
+        
+            color:
+                #777;
+        
+            background:
+                #f8f9fa;
+        
+            border-radius:
+                12px;
+        
+        }
+        
+        
+        /* =================================================
+           手機版
+           ================================================= */
+        
+        @media (max-width: 700px) {
+        
+            .meal-stat-grid {
+        
+                grid-template-columns:
+                    1fr;
+        
+            }
+        
+        
+            .statistics-date-box {
+        
+                flex-direction:
+                    column;
+        
+                align-items:
+                    stretch;
+        
+            }
+        
+        
+            .statistics-date-box
+            input[type="date"],
+            .statistics-btn {
+        
+                width:
+                    100%;
+        
+                box-sizing:
+                    border-box;
+        
+            }
+        
+        }
+
+        /* =================================================
+           餐點統計結果：電腦版自動並排、手機版單欄
+           ================================================= */
+        
+        .meal-statistics-result {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(320px, 1fr)
+            );
+            gap: 20px;
+            align-items: start;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        
+        /* 公司統計卡 */
+        
+        .meal-stat-card {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        
+        /* 全部公司合計 */
+        
+        .meal-stat-card.total-card {
+            grid-column: 1 / -1;
+        }
+        
+        
+        /* =================================================
+           平板
+           ================================================= */
+        
+        @media (max-width: 768px) {
+        
+            .meal-statistics-result {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        
+            .meal-stat-card.total-card {
+                grid-column: auto;
+            }
+        
+        }
+        
+        
+        /* =================================================
+           手機
+           ================================================= */
+        
+        @media (max-width: 480px) {
+        
+            .meal-statistics-result {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        
+            .meal-stat-card {
+                min-width: 0;
+            }
+        
+        }
+
+        
+        /* 報餐頁：維持窄版 */
+        #page-order .card {
+            max-width: 400px;
+        }
+        
+        /* 查詢頁：寬版 */
+        #page-query .card {
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* 餐點統計：寬版 */
+        #page-meal-stat .card {
+            max-width: 1400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* 菜單：寬版 */
+        #page-menu .card {
+            max-width: 1400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        /* =================================================
+        查詢：用餐時段按鈕
+        ================================================= */
+        
+        .query-meal-time-group {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        }
+        
+        .query-meal-btn {
+        flex: 1;
+        padding: 12px 16px;
+        
+        border: 1px solid #d0d0d0;
+        border-radius: 10px;
+        
+        background: #f5f5f5;
+        color: #555;
+        
+        font-size: 16px;
+        font-weight: 600;
+        
+        cursor: pointer;
+        
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.1s ease;
+        
+        
+        }
+        
+        .query-meal-btn:hover {
+        background: #e9e9e9;
+        }
+        
+        .query-meal-btn:active {
+        transform: scale(0.98);
+        }
+        
+        /* 被選取的按鈕 */
+        
+        .query-meal-btn.active {
+        background: #ff9800;
+        color: #ffffff;
+        border-color: #ff9800;
+        }
+        
+        /* 手機版 */
+        
+        @media (max-width: 480px) {
+        
+        .query-meal-time-group {
+            gap: 8px;
+        }
+        
+        .query-meal-btn {
+            padding: 11px 8px;
+            font-size: 15px;
+        }
+        
+        
+        }
+
+        /* =================================================
+           查詢結果筆數
+        ================================================= */
+        
+        .query-result-count {
+        
+            margin-top: 15px;
+        
+            margin-bottom: 8px;
+        
+            color: #666;
+        
+            font-size: 14px;
+        
+        }
+        
+        
+        /* =================================================
+           查詢結果分頁
+        ================================================= */
+        
+        .query-pagination {
+        
+            display: flex;
+        
+            align-items: center;
+        
+            justify-content: center;
+        
+            gap: 15px;
+        
+            margin-top: 18px;
+        
+            margin-bottom: 20px;
+        
+        }
+        
+        
+        /* =================================================
+           分頁按鈕
+        ================================================= */
+        
+        .query-page-btn {
+        
+            min-width: 90px;
+        
+            padding: 10px 14px;
+        
+            border: 1px solid #ddd;
+        
+            border-radius: 8px;
+        
+            background: #ffffff;
+        
+            color: #555;
+        
+            font-size: 14px;
+        
+            cursor: pointer;
+        
+        }
+        
+        
+        /* 滑鼠移過去 */
+        
+        .query-page-btn:hover:not(:disabled) {
+        
+            background: #f5f5f5;
+        
+            border-color: #aaa;
+        
+        }
+        
+        
+        /* 目前不能按 */
+        
+        .query-page-btn:disabled {
+        
+            background: #eeeeee;
+        
+            color: #aaaaaa;
+        
+            cursor: not-allowed;
+        
+        }
+        
+        
+        /* =================================================
+           第幾頁
+        ================================================= */
+        
+        .query-page-info {
+        
+            min-width: 80px;
+        
+            text-align: center;
+        
+            color: #555;
+        
+            font-size: 15px;
+        
+        }
+
+
+
+        
+    </style>
