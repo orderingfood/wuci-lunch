@@ -5,88 +5,45 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
 
     <title>員工團膳報餐系統</title>
 
+    <link rel="manifest" href="manifest.json" >
+    
+    <meta name="apple-mobile-web-app-capable" content="yes" >
 
-    <!-- =====================================================
-         PWA
-    ====================================================== -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" >
 
-    <link
-        rel="manifest"
-        href="manifest.json"
-    >
-
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
-    >
-
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black"
-    >
-
-    <link
-        rel="apple-touch-icon"
-        href="icon-192.png"
-    >
+    <link rel="apple-touch-icon" href="icon-192.png" >
 
     <link rel="stylesheet" href="style.css">
-
 
 </head>
 
 
 <body>
 
-     <!-- =================================================
-         系統第一層主導覽
-    ================================================== -->
+     <!-- 第一層主導覽 -->
 
     <nav class="system-nav">
 
-        <button
-            type="button"
-            class="system-nav-btn active"
-            onclick="switchSystemPage('order')"
-            data-page="order"
-        >
+        <button type="button" class="system-nav-btn active" onclick="switchSystemPage('order')" data-page="order" >
             🙋
             <span>報餐</span>
         </button>
 
-        <button
-            type="button"
-            class="system-nav-btn"
-            onclick="switchSystemPage('query')"
-            data-page="query"
-        >
+        <button type="button" class="system-nav-btn" onclick="switchSystemPage('query')" data-page="query">
             🔎
             <span>查詢／統計</span>
         </button>
 
-        <button
-            type="button"
-            class="system-nav-btn"
-            onclick="switchSystemPage('meal-stat')"
-            data-page="meal-stat"
-        >
+        <button type="button"class="system-nav-btn" onclick="switchSystemPage('meal-stat')" data-page="meal-stat" >
             🍱
             <span>餐點統計</span>
         </button>
 
-        <button
-            type="button"
-            class="system-nav-btn"
-            onclick="switchSystemPage('menu')"
-            data-page="menu"
-        >
+        <button type="button" class="system-nav-btn" onclick="switchSystemPage('menu')" data-page="menu">
             📖
             <span>菜單</span>
         </button>
@@ -94,110 +51,66 @@
     </nav>
 
 
-    <!-- =================================================
-         系統頁面
-    ================================================== -->
+    <!--  系統頁面 -->
 
     <main class="system-pages">
 
-        <section
-            id="page-order"
-            class="system-page active"
-        >    
+        <section id="page-order" class="system-page active" >    
 
-    <!-- =================================================
-         員工資料查詢視窗
-    ================================================== -->
-    
-    <div
-        id="loadingOverlay"
-        class="loading-overlay"
-    >
-    
-        <div class="loading-box">
-    
-            <div class="loading-spinner"></div>
-    
-            <div
-                id="loadingText"
-                class="loading-text"
-            >
-                正在查詢員工資料...
+        <!--  員工資料查詢視窗 -->
+        
+        <div id="loadingOverlay" class="loading-overlay" >
+        
+            <div class="loading-box">
+        
+                <div class="loading-spinner"></div>
+        
+                <div id="loadingText" class="loading-text" >
+                    正在查詢員工資料...
+                </div>
+        
+                <div class="loading-hint">
+                    請稍候，查詢完成後會自動關閉
+                </div>
+        
             </div>
-    
-            <div class="loading-hint">
-                請稍候，查詢完成後會自動關閉
-            </div>
-    
+        
         </div>
-    
-    </div>
                
-            <div class="card">
+        <div class="card">
     
+            <h2> 員工團膳報餐系統 </h2>
     
-            <h2>
-                員工團膳報餐系統
-            </h2>
-    
-    
-    <!-- =================================================
-         員工工號
-    ================================================== -->
+    <!-- 員工工號 -->
     
     <div class="input-group">
     
-        <label for="empIdInput">
-    
-            🆔 員工工號
-            (運務士為xxxxx，沒有D)：
-    
+        <label for="empIdInput">    
+            🆔 員工工號(運務士為xxxxx，沒有D)：    
         </label>
     
-        <input
-            type="text"
-            id="empIdInput"
-            class="input-field"
-            autocomplete="off"
-            autocapitalize="characters"
-            placeholder="請輸入員工工號"
-        >
+        <input type="text" id="empIdInput" class="input-field" autocomplete="off" autocapitalize="characters" placeholder="請輸入員工工號" >
     
-        <div class="hint">
-    
-            ※ 輸入工號後，姓名、公司、單位會自動帶入。
-    
+        <div class="hint">    
+            ※ 輸入工號後，姓名、公司、單位會自動帶入。    
         </div>
     
     </div>
     
     
-    <!-- =================================================
-         員工姓名
-    ================================================== -->
+    <!-- 員工姓名 -->
     
     <div class="input-group">
     
         <label for="nameInput">
-    
-            👤 姓名：
-    
+            👤 姓名：    
         </label>
     
-        <input
-            type="text"
-            id="nameInput"
-            class="auto-field"
-            readonly
-            placeholder="輸入工號後自動帶入"
-        >
+        <input type="text" id="nameInput" class="auto-field"  readonly placeholder="輸入工號後自動帶入" >
     
     </div>
-    
-    
-        <!-- =================================================
-             公司
-        ================================================== -->
+        
+        <!-- 公司 -->
         
         <div class="input-group">
         
@@ -205,20 +118,11 @@
                 🏢 公司名稱：
             </label>
         
-            <input
-                type="text"
-                id="companySelect"
-                class="auto-field"
-                readonly
-                placeholder="輸入工號後自動帶入"
-            >
+            <input type="text"  id="companySelect" class="auto-field" readonly placeholder="輸入工號後自動帶入" >
         
         </div>
-    
-    
-            <!-- =================================================
-                 單位
-            ================================================== -->
+        
+            <!-- 單位 -->
             
             <div class="input-group">
             
@@ -226,42 +130,23 @@
                     👨‍👩‍👧‍👦 單位組別：
                 </label>
             
-                <input
-                    type="text"
-                    id="unit"
-                    class="auto-field"
-                    readonly
-                    placeholder="輸入工號後自動帶入"
-                >
-            
+                <input type="text" id="unit" class="auto-field" readonly placeholder="輸入工號後自動帶入" >
+        
             </div>
     
-        <!-- =================================================
-             代報人工號
-        ================================================== -->
+        <!-- 代報人工號 -->
         
         <div class="input-group">
         
             <label for="proxyEmpIdInput">
-        
-                ✍️ 代報人工號：
-        
+                ✍️ 代報人工號：        
             </label>
         
-            <input
-                type="text"
-                id="proxyEmpIdInput"
-                class="input-field"
-                autocomplete="off"
-                autocapitalize="characters"
-                placeholder="若為本人報餐請留白"
-            >
+            <input  type="text" id="proxyEmpIdInput"  class="input-field"  autocomplete="off" autocapitalize="characters" placeholder="若為本人報餐請留白" >
         
             <div class="hint">
-        
-                ※ 若由其他人代為報餐，請輸入代報人工號。
-                本人報餐不需填寫。
-        
+                <span>※ 若由其他人代為報餐，請輸入代報人工號。</span>
+                <span>※ 本人報餐不需填寫。</span>    
             </div>
         
         </div>
