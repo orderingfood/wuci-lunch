@@ -1658,6 +1658,8 @@
         }
         
         .meal-stat-grand-total-value {
+
+            width: 100%;
         
             font-size: 28px;
         
