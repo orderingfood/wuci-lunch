@@ -1664,6 +1664,8 @@
             font-weight: 700;
         
             color: #555;
+
+            white-space: nowrap;
         
         }
         
