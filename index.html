@@ -57,285 +57,260 @@
 
         <section id="page-order" class="system-page active">    
 
-        <!--  員工資料查詢視窗 -->
-        
-        <div id="loadingOverlay" class="loading-overlay">
-        
-            <div class="loading-box">
-        
-                <div class="loading-spinner"></div>
-        
-                <div id="loadingText" class="loading-text">
-                    正在查詢員工資料...
+            <!--  員工資料查詢視窗 -->
+            
+            <div id="loadingOverlay" class="loading-overlay">
+            
+                <div class="loading-box">
+            
+                    <div class="loading-spinner"></div>
+            
+                    <div id="loadingText" class="loading-text">
+                        正在查詢員工資料...
+                    </div>
+            
+                    <div class="loading-hint">
+                        請稍候，查詢完成後會自動關閉
+                    </div>
+            
                 </div>
-        
-                <div class="loading-hint">
-                    請稍候，查詢完成後會自動關閉
-                </div>
-        
+            
             </div>
-        
-        </div>
                
-        <div class="card">
-    
-            <h2> 員工團膳報餐系統 </h2>
-    
-    <!-- 員工工號 -->
-    
-    <div class="input-group">
-    
-        <label for="empIdInput">    
-            🆔 員工工號(運務士為xxxxx，沒有D)：    
-        </label>
-    
-        <input type="text" id="empIdInput" class="input-field" autocomplete="off" autocapitalize="characters" placeholder="請輸入員工工號">
-    
-        <div class="hint">    
-            ※ 輸入工號後，姓名、公司、單位會自動帶入。    
-        </div>
-    
-    </div>
-    
-    
-    <!-- 員工姓名 -->
-    
-    <div class="input-group">
-    
-        <label for="nameInput">
-            👤 姓名：    
-        </label>
-    
-        <input type="text" id="nameInput" class="auto-field"  readonly placeholder="輸入工號後自動帶入">
-    
-    </div>
-        
-        <!-- 公司 -->
-        
-        <div class="input-group">
-        
-            <label for="companySelect">
-                🏢 公司名稱：
-            </label>
-        
-            <input type="text"  id="companySelect" class="auto-field" readonly placeholder="輸入工號後自動帶入">
-        
-        </div>
-        
-            <!-- 單位 -->
+            <div class="card">
             
-            <div class="input-group">
-            
-                <label for="unit">
-                    👨‍👩‍👧‍👦 單位組別：
-                </label>
-            
-                <input type="text" id="unit" class="auto-field" readonly placeholder="輸入工號後自動帶入">
-        
-            </div>
-    
-        <!-- 代報人工號 -->
-        
-        <div class="input-group">
-        
-            <label for="proxyEmpIdInput">
-                ✍️ 代報人工號：        
-            </label>
-        
-            <input  type="text" id="proxyEmpIdInput"  class="input-field"  autocomplete="off" autocapitalize="characters" placeholder="若為本人報餐請留白">
-        
-            <div class="hint">
-                ※ 若由其他人代為報餐，請輸入代報人工號。<br>
-                ※ 本人報餐不需填寫。
-            </div>
-        
-        </div>
-    
-        <!-- 用餐時段 -->
-    
-        <div class="input-group">
-
-            <label>
-                用餐時段：
-            </label>   
-
-            <div class="meal-options">
-    
-    
-                <label class="meal-option">
-    
-                    <input type="radio" name="mealTime" value="午餐" checked id="white">
-    
-                    <span>
-                        ☀️ 午餐
-                    </span>
-    
-                </label>    
-    
-                <label class="meal-option">
-    
-                    <input type="radio" name="mealTime" value="晚餐" id="black">
-    
-                    <span>
-                        🌙 晚餐
-                    </span>
-    
-                </label>   
-    
-            </div>
-
-        </div>    
-    
-        <!-- 葷素 -->
-    
-        <div class="input-group">
-
-            <label>
-                訂餐類別：
-            </label>
-
-
-            <div class="meal-options">
-
-                <label class="meal-option">
-
-                    <input type="radio" name="category" value="葷食" checked>
-
-                    <span>
-                        🥩 葷食
-                    </span>
-
-                </label>
-
-                <label class="meal-option">
-
-                    <input type="radio" name="category" value="素食">
-
-                    <span>
-                        🥬 素食
-                    </span>
-
-                </label>
-
-            </div>
-
-        </div>
-    
-        <div id="single-time-info" class="single-time-info">
-        
-            <div id="current-time" class="current-time">
-                🕐 目前時間：讀取中...
-            </div>            
-        
-            <div class="meal-rule">            
-                 午餐：當天報餐截止時間為
-                <strong>09:00</strong>            
-            </div>            
-        
-            <div class="meal-rule">            
-                晚餐：當天報餐截止時間為
-                <strong>14:00</strong>            
-            </div>
-        
-        </div>    
-    
-        <!-- 分頁 -->
-    
-        <div class="tabs">    
-
-            <button class="tab-btn active"  onclick="switchTab('single')" type="button">
-                📅 單日報餐
-            </button>
-
-            <button class="tab-btn" onclick="switchTab('multi')" type="button">
-                🗂️ 多日報餐
-            </button>
-
-        </div>  
-    
-        <!-- 單日報餐 -->
-    
-        <div id="tab-single" class="tab-content active">
-
-            <div class="input-group">
-
-                <label for="single-date">
-                    選擇報餐日期 (單選)
-                </label>
-
-                <input type="date" id="single-date" class="input-field">
-
-            </div>
-
-        </div>
-        
-        <!-- 多日報餐 -->
-
-        <div id="tab-multi" class="tab-content">
-
-
-            <div class="input-group">
-
-                <label>
-                    選擇報餐日期 (可多選)
-                </label>
+                <h2> 員工團膳報餐系統 </h2>
                 
-                <div id="multi-date-list" class="date-checkbox-list">
+                <!-- 員工工號 -->
+                
+                <div class="input-group">
+                
+                    <label for="empIdInput">    
+                        🆔 員工工號(運務士為xxxxx，沒有D)：    
+                    </label>
+                
+                    <input type="text" id="empIdInput" class="input-field" autocomplete="off" autocapitalize="characters" placeholder="請輸入員工工號">
+                
+                    <div class="hint">    
+                        ※ 輸入工號後，姓名、公司、單位會自動帶入。    
+                    </div>
+                
                 </div>
-
-            </div>
+                
+                
+                <!-- 員工姓名 -->
+                
+                <div class="input-group">
+                
+                    <label for="nameInput">
+                        👤 姓名：    
+                    </label>
+                
+                    <input type="text" id="nameInput" class="auto-field"  readonly placeholder="輸入工號後自動帶入">
+                
+                </div>
+                    
+                    <!-- 公司 -->
+                    
+                    <div class="input-group">
+                    
+                        <label for="companySelect">
+                            🏢 公司名稱：
+                        </label>
+                    
+                        <input type="text"  id="companySelect" class="auto-field" readonly placeholder="輸入工號後自動帶入">
+                    
+                    </div>
+                    
+                        <!-- 單位 -->
+                        
+                        <div class="input-group">
+                        
+                            <label for="unit">
+                                👨‍👩‍👧‍👦 單位組別：
+                            </label>
+                        
+                            <input type="text" id="unit" class="auto-field" readonly placeholder="輸入工號後自動帶入">
+                    
+                        </div>
+                
+                    <!-- 代報人工號 -->
+                    
+                    <div class="input-group">
+                    
+                        <label for="proxyEmpIdInput">
+                            ✍️ 代報人工號：        
+                        </label>
+                    
+                        <input  type="text" id="proxyEmpIdInput"  class="input-field"  autocomplete="off" autocapitalize="characters" placeholder="若為本人報餐請留白">
+                    
+                        <div class="hint">
+                            ※ 若由其他人代為報餐，請輸入代報人工號。<br>
+                            ※ 本人報餐不需填寫。
+                        </div>
+                    
+                    </div>
+                
+                    <!-- 用餐時段 -->
+                
+                    <div class="input-group">
             
-        </div>
-    
-    
-            <!-- =================================================
-                 報餐按鈕
-            ================================================== -->
-    
-            <button
-                class="btn btn-lunch"
-                id="submitBtn"
-                onclick="submitOrder()"
-                type="button"
-            >
-    
-                🙋‍♂️ 我要報餐
-    
-            </button>
-    
-    
-            <!-- =================================================
-                 狀態
-            ================================================== -->
-    
-            <div
-                class="status"
-                id="statusMsg"
-            ></div>
-    
-    
-        </div>
-    </section>
+                        <label>
+                            用餐時段：
+                        </label>   
+            
+                        <div class="meal-options">
+                
+                
+                            <label class="meal-option">
+                
+                                <input type="radio" name="mealTime" value="午餐" checked id="white">
+                
+                                <span>
+                                    ☀️ 午餐
+                                </span>
+                
+                            </label>    
+                
+                            <label class="meal-option">
+                
+                                <input type="radio" name="mealTime" value="晚餐" id="black">
+                
+                                <span>
+                                    🌙 晚餐
+                                </span>
+                
+                            </label>   
+                
+                        </div>
+            
+                    </div>    
+                
+                    <!-- 葷素 -->
+                
+                    <div class="input-group">
+            
+                        <label>
+                            訂餐類別：
+                        </label>
+            
+            
+                        <div class="meal-options">
+            
+                            <label class="meal-option">
+            
+                                <input type="radio" name="category" value="葷食" checked>
+            
+                                <span>
+                                    🥩 葷食
+                                </span>
+            
+                            </label>
+            
+                            <label class="meal-option">
+            
+                                <input type="radio" name="category" value="素食">
+            
+                                <span>
+                                    🥬 素食
+                                </span>
+            
+                            </label>
+            
+                        </div>
+            
+                    </div>
+                
+                    <div id="single-time-info" class="single-time-info">
+                    
+                        <div id="current-time" class="current-time">
+                            🕐 目前時間：讀取中...
+                        </div>            
+                    
+                        <div class="meal-rule">            
+                             午餐：當天報餐截止時間為
+                            <strong>09:00</strong>            
+                        </div>            
+                    
+                        <div class="meal-rule">            
+                            晚餐：當天報餐截止時間為
+                            <strong>14:00</strong>            
+                        </div>
+                    
+                    </div>    
+                
+                    <!-- 分頁 -->
+                
+                    <div class="tabs">    
+            
+                        <button class="tab-btn active"  onclick="switchTab('single')" type="button">
+                            📅 單日報餐
+                        </button>
+            
+                        <button class="tab-btn" onclick="switchTab('multi')" type="button">
+                            🗂️ 多日報餐
+                        </button>
+            
+                    </div>  
+                
+                    <!-- 單日報餐 -->
+                
+                    <div id="tab-single" class="tab-content active">
+            
+                        <div class="input-group">
+            
+                            <label for="single-date">
+                                選擇報餐日期 (單選)
+                            </label>
+            
+                            <input type="date" id="single-date" class="input-field">
+            
+                        </div>
+            
+                    </div>
+                    
+                    <!-- 多日報餐 -->
+            
+                    <div id="tab-multi" class="tab-content">
+            
+            
+                        <div class="input-group">
+            
+                            <label>
+                                選擇報餐日期 (可多選)
+                            </label>
+                            
+                            <div id="multi-date-list" class="date-checkbox-list">
+                            </div>
+            
+                        </div>
+                        
+                    </div>    
+                
+                        <!-- 報餐按鈕 -->
+                
+                        <button class="btn btn-lunch" id="submitBtn" onclick="submitOrder()" type="button">    
+                            🙋‍♂️ 我要報餐    
+                        </button>
+                
+                        <!-- 狀態 -->
+                
+                        <div class="status" id="statusMsg"></div>   
+            
+            </div>
+        </section>
 
-        <!-- =================================================
-             第一層：查詢／統計
-        ================================================== -->
+        <!--  第一層：查詢／統計 -->
     
-        <section
-            id="page-query"
-            class="system-page"
-        >
+        <section id="page-query" class="system-page">
     
             <div class="card">
     
                 <h2>
                     🔎 查詢／統計
-                </h2>
+                </h2>   
     
-    
-                <!-- =========================================
-                     查詢條件
-                ========================================== -->
+                <!-- 查詢條件 -->
     
                 <div class="input-group">
     
@@ -343,13 +318,7 @@
                         🆔 員工工號
                     </label>
     
-                    <input
-                        type="text"
-                        id="queryEmployeeId"
-                        class="input-field"
-                        placeholder=""
-                        autocomplete="off"
-                    >
+                    <input type="text" id="queryEmployeeId" class="input-field" placeholder="" autocomplete="off">
     
                 </div>
     
@@ -360,66 +329,35 @@
                         🏢 公司名稱
                     </label>
     
-                <input
-                    type="text"
-                    id="queryCompany"
-                    class="input-field query-company-locked"
-                    placeholder=""
-                    autocomplete="off"
-                    readonly
-                >
+                    <input type="text" id="queryCompany" class="input-field query-company-locked" placeholder="" autocomplete="off" readonly>
     
                 </div>
-
 
                 <div class="input-group">
                     <label>
                         🍽️ 用餐時段
                     </label>
                     
-                    <div
-                        class="query-meal-time-group"
-                        id="queryMealTimeGroup"
-                    >
+                    <div class="query-meal-time-group" id="queryMealTimeGroup">
                     
-                        <button
-                            type="button"
-                            class="query-meal-btn active"
-                            data-meal-time="全部"
-                            onclick="selectQueryMealTime('全部')"
-                        >
+                        <button type="button" class="query-meal-btn active" data-meal-time="全部" onclick="selectQueryMealTime('全部')">
                             全部
                         </button>
                     
-                        <button
-                            type="button"
-                            class="query-meal-btn"
-                            data-meal-time="午餐"
-                            onclick="selectQueryMealTime('午餐')"
-                        >
+                        <button type="button" class="query-meal-btn" data-meal-time="午餐" onclick="selectQueryMealTime('午餐')">
                             午餐
                         </button>
                     
-                        <button
-                            type="button"
-                            class="query-meal-btn"
-                            data-meal-time="晚餐"
-                            onclick="selectQueryMealTime('晚餐')"
-                        >
+                        <button type="button" class="query-meal-btn" data-meal-time="晚餐" onclick="selectQueryMealTime('晚餐')">
                             晚餐
                         </button>
                     
                     </div>
                     
                     <!-- 實際查詢值 -->
-                    <input
-                        type="hidden"
-                        id="queryMealTime"
-                        value="全部"
-                    >
+                    <input type="hidden" id="queryMealTime" value="全部">
                     
-                </div>
-    
+                </div>   
     
                 <div class="input-group">
     
@@ -427,24 +365,11 @@
                         📅 日期區間
                     </label>
     
-                    <div
-                        style="
-                            display:flex;
-                            gap:10px;
-                        "
-                    >
+                    <div style=" display:flex;  gap:10px;">
     
-                        <input
-                            type="date"
-                            id="queryStartDate"
-                            class="input-field"
-                        >
+                        <input type="date" id="queryStartDate" class="input-field">
     
-                        <input
-                            type="date"
-                            id="queryEndDate"
-                            class="input-field"
-                        >
+                        <input type="date" id="queryEndDate" class="input-field">
     
                     </div>
     
@@ -452,30 +377,17 @@
                         ※ 僅能查詢今天至未來 30 天
                     </div>
     
-                </div>
+                </div>    
     
+                <!-- 查詢按鈕 -->
     
-                <!-- =========================================
-                     查詢按鈕
-                ========================================== -->
-    
-                <button
-                    type="button"
-                    class="btn btn-lunch"
-                    onclick="queryOrders()"
-                >
+                <button type="button" class="btn btn-lunch" onclick="queryOrders()">
                     🔎 查詢報餐
                 </button>
     
+                <!-- 查詢結果 -->
     
-                <!-- =========================================
-                     查詢結果
-                ========================================== -->
-    
-                <div
-                    id="queryResult"
-                    class="query-result"
-                >
+                <div id="queryResult" class="query-result">
     
                     <div class="hint">
                         請設定查詢條件後按「查詢報餐」
@@ -491,21 +403,15 @@
              第一層：餐點統計
         ================================================== -->
         
-        <section
-            id="page-meal-stat"
-            class="system-page"
-        >
+        <section id="page-meal-stat" class="system-page">
         
             <div class="card">
         
                 <h2>
                     🍱 餐點統計
-                </h2>
+                </h2>        
         
-        
-                <!-- =========================================
-                     統計查詢區
-                ========================================== -->
+                <!-- 統計查詢區 -->
         
                 <div class="statistics-date-box">
         
@@ -513,59 +419,31 @@
                         📅 統計日期
                     </label>
         
-                    <input
-                        type="date"
-                        id="statisticsDate"
-                    >
+                    <input type="date" id="statisticsDate">
         
-                    <button
-                        type="button"
-                        onclick="getMealStatistics()"
-                        class="statistics-btn"
-                    >
+                    <button type="button" onclick="getMealStatistics()" class="statistics-btn">
                         🔎 查詢
                     </button>
         
-                </div>
+                </div>        
         
+                <!-- 統計狀態 -->
         
-                <!-- =========================================
-                     統計狀態
-                ========================================== -->
+                <div id="mealStatisticsStatus" class="status"></div>        
         
-                <div
-                    id="mealStatisticsStatus"
-                    class="status"
-                ></div>
+                <!-- 統計結果 -->
         
-        
-                <!-- =========================================
-                     統計結果
-                     JavaScript 會把各公司卡片放這裡
-                ========================================== -->
-        
-                <div
-                    id="mealStatisticsResult"
-                    class="meal-statistics-result"
-                ></div>
+                <div id="mealStatisticsResult" class="meal-statistics-result"></div>
         
             </div>
         
-        </section>
-
+        </section>    
     
-    
-        <section
-            id="page-menu"
-            class="system-page"
-        >
+        <section id="page-menu" class="system-page">
         
             <div class="card menu-card">
         
-                <div
-                    id="menuCompany"
-                    class="menu-company"
-                >
+                <div id="menuCompany" class="menu-company">
                     載入中...
                 </div>
 
@@ -573,30 +451,21 @@
                     本週菜單
                 </h3>
         
-                <div
-                    id="menuList"
-                    class="menu-list"
-                >
+                <div id="menuList" class="menu-list">
                     <div class="hint">
                         ⏳ 正在載入...
                     </div>
                 </div>
         
-                <div
-                    id="menuStatus"
-                    class="hint"
-                ></div>
+                <div id="menuStatus" class="hint"></div>
         
             </div>
         
         </section>
 
-</main>
-
-
-
-<script src="script.js"></script>
-
+    </main>
+    
+    <script src="script.js"></script>
 
 </body>
 
