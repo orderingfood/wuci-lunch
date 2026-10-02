@@ -1656,6 +1656,16 @@
                 #f8fafc;
         
         }
+
+        .meal-stat-grand-total-label {
+        
+            font-size: 15px;
+        
+            font-weight: 700;
+        
+            color: #555;
+        
+        }
         
         .meal-stat-grand-total-value {
 
