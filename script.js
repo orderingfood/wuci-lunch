@@ -4359,13 +4359,10 @@ function initializeDates() {
         
                     <div class="meal-stat-grand-total">
         
-                        <div class="meal-stat-grand-total-label">
-        
-                            全部公司總報餐數
-        
-                        </div>
-        
                         <div class="meal-stat-grand-total-value">
+                            <span class="meal-stat-unit">
+                                總報參數
+                            </span>
         
                             ${item.total || 0}
         
