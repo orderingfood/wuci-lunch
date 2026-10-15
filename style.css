@@ -1,361 +1,201 @@
         body {
-
             font-family: Arial, sans-serif;
-
             background:
                 linear-gradient(
                     135deg,
                     #E0F2FE 0%,
                     #FFFBEB 100%
                 );
-
             text-align: center;
-
             padding: 20px;
-
             color: #333;
-
             transition:
                 background 0.3s ease;
-
         }
-
 
         /* -------------------------------------------------
            卡片
         ------------------------------------------------- */
 
         .card {
-
             background: white;
-
             max-width: 400px;
-
             margin: 30px auto;
-
             padding: 30px;
-
             border-radius: 12px;
-
             box-shadow:
                 0 4px 10px
                 rgba(0,0,0,0.1);
-
         }
-
 
         h2 {
-
             color: #007bff;
-
             margin-bottom: 20px;
-
         }
-
 
         /* -------------------------------------------------
            輸入區
         ------------------------------------------------- */
 
         .input-group {
-
             margin: 20px 0;
-
             text-align: left;
-
         }
         
         .input-group label {
-
             display: block;
-
             font-weight: bold;
-
             margin-bottom: 8px;
-
             font-size: 16px;
-
             color: #555;
-
         }
 
-
         .input-field {
-
             display: block;
-
             width: 100%;
-
             padding: 12px;
-
             font-size: 18px;
-
-            border:
-                2px solid #ccc;
-
+            border: 2px solid #ccc;
             border-radius: 8px;
-
             box-sizing: border-box;
-
             text-align: center;
-
         }
 
         .input-field:focus {
-
             border-color: #007bff;
-
             outline: none;
-
         }
-
 
         /* -------------------------------------------------
            按鈕
         ------------------------------------------------- */
 
         .btn {
-
             display: block;
-
             width: 100%;
-
             padding: 15px;
-
             margin: 15px 0;
-
             font-size: 18px;
-
             border: none;
-
             border-radius: 8px;
-
             cursor: pointer;
-
             transition: 0.2s;
-
             font-weight: bold;
-
         }
-
 
         .btn-lunch {
-
             background-color: #28a745;
-
             color: white;
-
         }
-
 
         .btn-lunch:hover {
-
             background-color: #218838;
-
         }
-
 
         .btn:disabled {
-
             background-color: #999;
-
             cursor: not-allowed;
-
         }
-
 
         /* -------------------------------------------------
            狀態訊息
         ------------------------------------------------- */
 
         .status {
-
             margin-top: 20px;
-
             font-weight: bold;
-
             font-size: 16px;
-
             line-height: 1.8;
-
             min-height: 24px;
-
             text-align: left;
-
             word-break: break-word;
-
         }
-
 
         .status-title {
-
             text-align: center;
-
             font-size: 18px;
-
             margin-bottom: 10px;
-
         }
-
 
         .result-success {
-
             color: #28a745;
-
         }
-
 
         .result-fail {
-
             color: #dc3545;
-
         }
-
 
         .hint {
-
             font-size: 12px;
-
             color: #888;
-
             text-align: center;
-
             margin-top: 5px;
-
         }
-
 
         /* -------------------------------------------------
            午餐 / 晚餐
         ------------------------------------------------- */
 
         .meal-options {
-
             display: flex;
-
             gap: 10px;
-
             margin-top: 10px;
-
         }
-
 
         .meal-option {
-
             flex: 1;
-
             cursor: pointer;
-
         }
-
 
         .meal-option input {
-
             display: none;
-
         }
-
 
         .meal-option span {
-
             display: block;
-
             padding: 14px 10px;
-
             text-align: center;
-
-            border:
-                2px solid #ccc;
-
+            border: 2px solid #ccc;
             border-radius: 8px;
-
             background-color: #fff;
-
             font-size: 17px;
-
             font-weight: bold;
-
             transition: 0.2s;
-
         }
-
 
         .meal-option input:checked + span {
-
             background-color: #007bff;
-
             color: white;
-
             border-color: #007bff;
-
         }
-
 
         /* -------------------------------------------------
            分頁
         ------------------------------------------------- */
 
         .tabs {
-
             display: flex;
-
             justify-content: space-around;
-
             margin-bottom: 20px;
-
-            border-bottom:
-                2px solid #ddd;
-
+            border-bottom: 2px solid #ddd;
         }
-
 
         .tab-btn {
-
             background: none;
-
             border: none;
-
             padding: 10px 20px;
-
             font-size: 16px;
-
             font-weight: bold;
-
             cursor: pointer;
-
             color: #666;
-
-            border-bottom:
-                3px solid transparent;
-
+            border-bottom: 3px solid transparent;
             transition: 0.2s;
-
         }
-
 
         .tab-btn.active {
-
             color: #007bff;
-
-            border-bottom-color:
-                #007bff;
-
+            border-bottom-color: block;
         }
-
-
-        .tab-content {
-
-            display: none;
-
-        }
-
-
-        .tab-content.active {
-
-            display: block;
-
-        }
-
 
         /* -------------------------------------------------
            多日日期
