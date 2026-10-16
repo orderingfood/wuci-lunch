@@ -194,7 +194,15 @@
 
         .tab-btn.active {
             color: #007bff;
-            border-bottom-color: block;
+            border-bottom-color: #007bff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         /* -------------------------------------------------
