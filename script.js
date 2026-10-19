@@ -2948,64 +2948,69 @@ function initializeDates() {
             employeeId,
             mealTime
         ) {
-
-            // =================================================
-            // 取消報餐時間限制
-            // 當天午餐：09:00 起禁止取消
-            // 當天晚餐：14:00 起禁止取消
-            // 日期格式：YYYY/MM/DD
-            // =================================================
         
+            // ==========================================
+            // 取得目前時間
+            // ==========================================
             const now = new Date();
         
-            // 取得今天日期：YYYY/MM/DD
             const today =
                 now.getFullYear() + "/" +
                 String(now.getMonth() + 1).padStart(2, "0") + "/" +
                 String(now.getDate()).padStart(2, "0");
         
-            // 報餐日期
-            const normalizedOrderDate =
-                String(orderDate || "").trim();
+            const currentMinutes =
+                now.getHours() * 60 + now.getMinutes();
         
-            // 只限制當天的報餐
-            if (normalizedOrderDate === today) {
+            // 統一日期格式，兼容 YYYY/MM/DD 與 YYYY-MM-DD
+            const normalizedOrderDate = String(orderDate || "")
+                .trim()
+                .replace(/-/g, "/");
         
-                const currentMinutes =
-                    now.getHours() * 60 +
-                    now.getMinutes();
+            const normalizedToday = today;
         
-                const meal =
-                    String(mealTime || "").trim();
+            // 統一餐別文字
+            const normalizedMealTime = String(mealTime || "")
+                .trim()
+                .replace(/\s/g, "");
         
-                // 當天午餐：09:00 起禁止取消
-                if (
-                    meal === "午餐" &&
-                    currentMinutes >= 9 * 60
-                ) {
-                    alert(
-                        "⚠️ 已超過午餐取消期限！\n\n" +
-                        "當天午餐必須在上午 09:00 前取消。\n" +
-                        "目前已無法取消這筆午餐報餐。"
-                    );
+            // 除錯資訊：按 F12 開啟 Console 查看
+            console.log("取消時間檢查：", {
+                now: now.toString(),
+                today: normalizedToday,
+                orderDate: normalizedOrderDate,
+                mealTime: normalizedMealTime,
+                currentMinutes
+            });
         
-                    return;
-                }
+            // ==========================================
+            // 當天午餐：09:00 起禁止取消
+            // ==========================================
+            if (
+                normalizedOrderDate === normalizedToday &&
+                normalizedMealTime.includes("午餐") &&
+                currentMinutes >= 540
+            ) {
+                alert(
+                    "⚠️ 已超過午餐取消期限！\n\n" +
+                    "當天午餐只能在上午 09:00 前取消。"
+                );
+                return;
+            }
         
-                // 當天晚餐：14:00 起禁止取消
-                if (
-                    meal === "晚餐" &&
-                    currentMinutes >= 14 * 60
-                ) {
-                    alert(
-                        "⚠️ 已超過晚餐取消期限！\n\n" +
-                        "當天晚餐必須在下午 14:00 前取消。\n" +
-                        "目前已無法取消這筆晚餐報餐。"
-                    );
-        
-                    return;
-                }
-        
+            // ==========================================
+            // 當天晚餐：14:00 起禁止取消
+            // ==========================================
+            if (
+                normalizedOrderDate === normalizedToday &&
+                normalizedMealTime.includes("晚餐") &&
+                currentMinutes >= 840
+            ) {
+                alert(
+                    "⚠️ 已超過晚餐取消期限！\n\n" +
+                    "當天晚餐只能在下午 14:00 前取消。"
+                );
+                return;
             }
         
             // =================================================
