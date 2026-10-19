@@ -2974,15 +2974,6 @@ function initializeDates() {
                 .trim()
                 .replace(/\s/g, "");
         
-            // 除錯資訊：按 F12 開啟 Console 查看
-            console.log("取消時間檢查：", {
-                now: now.toString(),
-                today: normalizedToday,
-                orderDate: normalizedOrderDate,
-                mealTime: normalizedMealTime,
-                currentMinutes
-            });
-        
             // ==========================================
             // 當天午餐：09:00 起禁止取消
             // ==========================================
