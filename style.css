@@ -2016,7 +2016,7 @@
         
         /* 滑鼠移過去 */
         
-        .meal-stat-table tbody tr:not(.total-row):hover td {
+        .meal-stat-table tbody tr:not(.meal-stat-total-row):hover td {
             background-color: #FFF9C4 !important;
             color: #333333 !important;
             transition: background-color 0.2s ease;
@@ -2036,7 +2036,8 @@
             background: #bfdbfe !important;
         }
 
-        .meal-stat-table tbody tr.total-row td.row-grand-total {
+        /* 全部合計：最右側總計欄 */
+        .meal-stat-table tbody tr.meal-stat-total-row td.row-grand-total {
             background-color: #dbeafe !important;
             color: #1d4ed8 !important;
         }
