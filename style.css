@@ -2003,8 +2003,8 @@
         }
         
         .meal-stat-table td.row-grand-total {
-            background: #eef2ff;
-            color: #3730a3;
+            background-color: #EDE7F6;
+            color: #5E35B1;
             font-weight: 800;
         }
         
@@ -2016,9 +2016,9 @@
         
         /* 滑鼠移過去 */
         
-        .meal-stat-table tbody tr:not(.total-row):hover td.row-grand-total {
-            background-color: #bfdbfe !important;
-            color: #1d4ed8 !important;
+        .meal-stat-table tbody tr:not(.total-row):hover td {
+            background-color: #FFF9C4 !important;
+            color: #333333 !important;
             transition: background-color 0.2s ease;
         }
                 
@@ -2034,6 +2034,11 @@
         
         .meal-stat-table tbody tr.meal-stat-total-row td:first-child {
             background: #bfdbfe !important;
+        }
+
+        .meal-stat-table tbody tr.total-row td.row-grand-total {
+            background-color: #dbeafe !important;
+            color: #1d4ed8 !important;
         }
         
         /* 最後一欄不顯示右側邊框 */
@@ -2062,4 +2067,5 @@
             }
         
         }
+
 
