@@ -1958,6 +1958,8 @@
         .meal-stat-table .company-col {
             min-width: 150px;
             background: #e8eef6;
+            text-align: center;
+            vertical-align: middle;    
         }
         
         .meal-stat-table td.company-name {
@@ -1987,8 +1989,16 @@
         /* 合計欄 */
         
         .meal-stat-table td.subtotal {
-            background: #f0f7ff;
+            background: #f0f7ff !important;
             color: #1565c0;
+            font-weight: 700;
+        }
+
+        /* 總計欄 */
+        
+        .meal-stat-table tbody tr:not(.total-row) td.row-grand-total {
+            background-color: #e8f3ff !important;
+            color: #1565c0 !important;
             font-weight: 700;
         }
         
@@ -2006,10 +2016,12 @@
         
         /* 滑鼠移過去 */
         
-        .meal-stat-table tbody tr:hover:not(.meal-stat-total-row) td {
-            background-color: #eff6ff;
+        .meal-stat-table tbody tr:not(.total-row):hover td.row-grand-total {
+            background-color: #bfdbfe !important;
+            color: #1d4ed8 !important;
+            transition: background-color 0.2s ease;
         }
-        
+                
         /* 全部合計 */
         
         .meal-stat-table tbody tr.meal-stat-total-row td {
