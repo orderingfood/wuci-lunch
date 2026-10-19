@@ -2948,6 +2948,71 @@ function initializeDates() {
             employeeId,
             mealTime
         ) {
+
+            // =================================================
+            // 取消報餐時間限制
+            // 當天午餐：超過 09:00 禁止取消
+            // 當天晚餐：超過 14:00 禁止取消
+            // =================================================
+        
+            // 取得目前時間
+            const now = new Date();
+        
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth() + 1;
+            const currentDay = now.getDate();
+        
+            // 組成今天的日期 YYYY-MM-DD
+            const today =
+                currentYear + "-" +
+                String(currentMonth).padStart(2, "0") + "-" +
+                String(currentDay).padStart(2, "0");
+        
+            // 標準化報餐日期
+            // 假設 orderDate 格式為 YYYY-MM-DD
+            const normalizedOrderDate = String(orderDate || "").trim();
+        
+            // 只限制當天的餐點
+            if (normalizedOrderDate === today) {
+        
+                const currentMinutes =
+                    now.getHours() * 60 +
+                    now.getMinutes();
+        
+                // 判斷餐別
+                const meal = String(mealTime || "").trim();
+        
+                // 當天午餐：09:00 起禁止取消
+                if (
+                    meal === "午餐" &&
+                    currentMinutes >= 9 * 60
+                ) {
+        
+                    alert(
+                        "⚠️ 已超過午餐取消期限！\n\n" +
+                        "當天午餐必須在上午 09:00 前取消。\n" +
+                        "目前已無法取消這筆午餐報餐。"
+                    );
+        
+                    return;
+                }
+        
+                // 當天晚餐：14:00 起禁止取消
+                if (
+                    meal === "晚餐" &&
+                    currentMinutes >= 14 * 60
+                ) {
+        
+                    alert(
+                        "⚠️ 已超過晚餐取消期限！\n\n" +
+                        "當天晚餐必須在下午 14:00 前取消。\n" +
+                        "目前已無法取消這筆晚餐報餐。"
+                    );
+        
+                    return;
+                }
+        
+            }
         
             // =================================================
             // 確認取消
