@@ -3988,43 +3988,14 @@ function initializeDates() {
         
         
                 // =================================================
-                // 建立公司 CARD
+                // 建立公司統計表格
                 // =================================================
-        
-                let html = "";
-        
-        
-                result.results.forEach(
-                    function(item) {
-        
-                        html +=
-                            createCompanyStatisticCard(
-                                item
-                            );
-        
-                    }
-                );
-        
-        
-                // =================================================
-                // 全部合計
-                // =================================================
-        
-                if (
-                    result.total
-                ) {
-        
-                    html +=
-                        createTotalStatisticCard(
-                            result.total
-                        );
-        
-                }
-        
-        
+
                 resultBox.innerHTML =
-                    html;
-        
+                    createMealStatisticsTable(
+                        result.results,
+                        result.total
+                    );                  
         
                 // =================================================
                 // 狀態
@@ -4070,7 +4041,95 @@ function initializeDates() {
         
         }
         
+        function createMealStatisticsTable(results, total) {
         
+            const companies = Array.isArray(results) ? results : [];
+        
+            // HTML 安全處理
+            const escape = value => escapeHtml(value ?? "");
+        
+            // 確保數量顯示為數字
+            const num = value => {
+                const n = Number(value);
+                return Number.isFinite(n) ? n : 0;
+            };
+        
+            let html = `
+                <div class="meal-stat-table-wrapper">
+                    <table class="meal-stat-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="company-col">公司名稱</th>
+                                <th colspan="3" class="lunch-header">🍱 午餐</th>
+                                <th colspan="3" class="dinner-header">🍽️ 晚餐</th>
+                                <th rowspan="2" class="grand-header">總計</th>
+                            </tr>
+                            <tr>
+                                <th>葷</th>
+                                <th>素</th>
+                                <th>合計</th>
+                                <th>葷</th>
+                                <th>素</th>
+                                <th>合計</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+        
+            // 每間公司一列
+            companies.forEach(item => {
+        
+                html += `
+                    <tr>
+                        <td class="company-name">
+                            ${escape(item.company || "未設定公司")}
+                        </td>
+        
+                        <td>${num(item.lunchMeat)}</td>
+                        <td>${num(item.lunchVegetarian)}</td>
+                        <td class="subtotal">${num(item.lunchTotal)}</td>
+        
+                        <td>${num(item.dinnerMeat)}</td>
+                        <td>${num(item.dinnerVegetarian)}</td>
+                        <td class="subtotal">${num(item.dinnerTotal)}</td>
+        
+                        <td class="row-grand-total">
+                            ${num(item.total)}
+                        </td>
+                    </tr>
+                `;
+            });
+        
+            // 全部公司合計列
+            if (total) {
+        
+                html += `
+                    <tr class="meal-stat-total-row">
+                        <td class="company-name">全部合計</td>
+        
+                        <td>${num(total.lunchMeat)}</td>
+                        <td>${num(total.lunchVegetarian)}</td>
+                        <td class="subtotal">${num(total.lunchTotal)}</td>
+        
+                        <td>${num(total.dinnerMeat)}</td>
+                        <td>${num(total.dinnerVegetarian)}</td>
+                        <td class="subtotal">${num(total.dinnerTotal)}</td>
+        
+                        <td class="row-grand-total">
+                            ${num(total.total)}
+                        </td>
+                    </tr>
+                `;
+            }
+        
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        
+            return html;
+        }
         
         // =================================================
         // 公司統計 CARD
