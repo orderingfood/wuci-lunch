@@ -2495,7 +2495,18 @@ function initializeDates() {
         
         renderQueryResults();
         
-
+        // 建立 Excel 下載按鈕
+        const resultBox = document.getElementById("queryResult");
+        
+        const downloadButton = document.createElement("button");
+        
+        downloadButton.type = "button";
+        downloadButton.className = "query-page-btn";
+        downloadButton.textContent = "📥 下載 Excel（.xlsx）";
+        downloadButton.onclick = downloadQueryOrdersExcel;
+        
+        // 放在查詢結果最上方
+        resultBox.prepend(downloadButton);
         
         
             }
@@ -4528,5 +4539,81 @@ function initializeDates() {
                 "&#039;"
             );
         
+        }
+
+        // =================================================
+        // 查詢結果Excel下載
+        // =================================================
+
+        function downloadQueryOrdersExcel() {
+        
+            if (!Array.isArray(queryResults) || queryResults.length === 0) {
+                alert("目前沒有可下載的報餐資料！");
+                return;
+            }
+        
+            const headers = [
+                "報餐日期",
+                "工號",
+                "姓名",
+                "公司",
+                "單位",
+                "餐別",
+                "葷素別",
+                "代報人",
+                "報餐時間",
+                "狀態"
+            ];
+        
+            const rows = queryResults.map(item => [
+                item.orderDate || "",
+                item.employeeId || "",
+                item.name || "",
+                item.company || "",
+                item.unit || "",
+                item.mealTime || "",
+                item.category || "",
+                item.proxyEmployeeId || "本人",
+                item.orderTime || "",
+                item.status === "O"
+                    ? "可取消"
+                    : item.status === "X"
+                        ? "不可取消"
+                        : item.status || ""
+            ]);
+        
+            const worksheet = XLSX.utils.aoa_to_sheet([
+                headers,
+                ...rows
+            ]);
+        
+            // 設定 Excel 欄寬
+            worksheet["!cols"] = [
+                { wch: 14 },
+                { wch: 14 },
+                { wch: 12 },
+                { wch: 20 },
+                { wch: 18 },
+                { wch: 12 },
+                { wch: 12 },
+                { wch: 14 },
+                { wch: 20 },
+                { wch: 12 }
+            ];
+        
+            const workbook = XLSX.utils.book_new();
+        
+            XLSX.utils.book_append_sheet(
+                workbook,
+                worksheet,
+                "報餐查詢"
+            );
+        
+            const date = new Date().toLocaleDateString("sv-SE");
+        
+            XLSX.writeFile(
+                workbook,
+                `報餐查詢_${date}.xlsx`
+            );
         }
 
