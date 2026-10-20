@@ -2634,10 +2634,8 @@ function initializeDates() {
             // 建立表格
             // =================================================
         
-            let html = `
-     
-        
-                <div class="query-table-wrapper">
+                let html = `
+                    <div class="query-table-wrapper">
         
                     <table class="query-table">
         
