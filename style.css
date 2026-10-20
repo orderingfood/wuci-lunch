@@ -2069,12 +2069,6 @@
         
         }
 
-        /* 外加餐數的兩列：字體顯示紅色 */
-        .meal-stat-table tr.extra-meal-row td {
-            color: red !important;
-        }
-
-
         /* excel下載圖示 */
 
         .query-export-toolbar {
