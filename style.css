@@ -84,16 +84,12 @@
         }
 
         .btn-lunch {
-            background-color: #F4A6A6;
+            background-color: #28a745;
             color: white;
-            border: 1px solid #E88D8D;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background-color 0.2s ease;
         }
-        
+
         .btn-lunch:hover {
-            background-color: #EE9292;
+            background-color: #218838;
         }
 
         .btn:disabled {
