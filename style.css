@@ -2075,3 +2075,40 @@
         }
 
 
+        /* excel下載圖示 */
+
+        .query-export-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin: 12px 0;
+        }
+        
+        .query-excel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #217346;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+            transition: background-color 0.2s ease;
+        }
+        
+        .query-excel-btn:hover {
+            background-color: #185c37;
+        }
+        
+        .query-excel-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .query-excel-btn:focus-visible {
+            outline: 3px solid #86c9a2;
+            outline-offset: 3px;
+        }
