@@ -2496,17 +2496,20 @@ function initializeDates() {
         renderQueryResults();
         
         // 建立 Excel 下載按鈕
-        const resultBox = document.getElementById("queryResult");
-        
-        const downloadButton = document.createElement("button");
-        
+                    
+        const resultBox = document.getElementById("queryResult");        
+        const downloadButton = document.createElement("button");        
         downloadButton.type = "button";
-        downloadButton.className = "query-page-btn";
-        downloadButton.textContent = "📥 下載 Excel（.xlsx）";
+        downloadButton.className = "query-excel-btn";
+        downloadButton.innerHTML = "<span>⬇</span> 匯出 Excel";
         downloadButton.onclick = downloadQueryOrdersExcel;
         
         // 放在查詢結果最上方
-        resultBox.prepend(downloadButton);
+        const toolbar = document.createElement("div");
+        toolbar.className = "query-export-toolbar";
+        toolbar.appendChild(downloadButton);
+        
+        resultBox.prepend(toolbar);
         
         
             }
