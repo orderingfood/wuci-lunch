@@ -4058,89 +4058,50 @@ function initializeDates() {
         }
         
 
-        function createMealStatisticsTable(
-            results,
-            total,
-            mealType
-        ) {
+
+        function createMealStatisticsTable(results, total, mealType) {
         
-            const companies = Array.isArray(results)
-                ? results
-                : [];
-        
+            const companies = Array.isArray(results) ? results : [];
             const isLunch = mealType === "lunch";
         
-            // HTML 安全處理
             const escape = value => escapeHtml(value ?? "");
         
-            // 確保數量為有效數字
             const num = value => {
                 const n = Number(value);
                 return Number.isFinite(n) ? n : 0;
             };
         
-            // 依照餐別取得對應欄位
-            const meatKey = isLunch
-                ? "lunchMeat"
-                : "dinnerMeat";
+            // 只取目前餐別的欄位
+            const meatKey = isLunch ? "lunchMeat" : "dinnerMeat";
+            const vegetarianKey = isLunch ? "lunchVegetarian" : "dinnerVegetarian";
+            const totalKey = isLunch ? "lunchTotal" : "dinnerTotal";
         
-            const vegetarianKey = isLunch
-                ? "lunchVegetarian"
-                : "dinnerVegetarian";
-        
-            const totalKey = isLunch
-                ? "lunchTotal"
-                : "dinnerTotal";
-        
-            const titleClass = isLunch
-                ? "lunch-header"
-                : "dinner-header";
+            const mealName = isLunch ? "午餐" : "晚餐";
+            const titleClass = isLunch ? "lunch-header" : "dinner-header";
         
             let html = `
                 <div class="meal-stat-table-wrapper">
-        
                     <table class="meal-stat-table">
-        
                         <thead>
                             <tr>
-                                <th class="company-col">
-                                    公司名稱
-                                </th>
-        
-                                <th class="${titleClass}">
-                                    ${isLunch ? "🍱 午餐葷食" : "🍽️ 晚餐葷食"}
-                                </th>
-        
-                                <th class="${titleClass}">
-                                    ${isLunch ? "午餐素食" : "晚餐素食"}
-                                </th>
-        
-                                <th class="grand-header">
-                                    ${isLunch ? "午餐合計" : "晚餐合計"}
-                                </th>
+                                <th class="company-col">公司名稱</th>
+                                <th class="${titleClass}">${mealName}葷食</th>
+                                <th class="${titleClass}">${mealName}素食</th>
+                                <th class="grand-header">${mealName}合計</th>
                             </tr>
                         </thead>
-        
                         <tbody>
             `;
         
-            // 每間公司一列
+            // 各公司：只顯示目前餐別
             companies.forEach(item => {
-        
                 html += `
                     <tr>
                         <td class="company-name">
                             ${escape(item.company || "未設定公司")}
                         </td>
-        
-                        <td>
-                            ${num(item[meatKey])}
-                        </td>
-        
-                        <td>
-                            ${num(item[vegetarianKey])}
-                        </td>
-        
+                        <td>${num(item[meatKey])}</td>
+                        <td>${num(item[vegetarianKey])}</td>
                         <td class="row-grand-total">
                             ${num(item[totalKey])}
                         </td>
@@ -4148,37 +4109,23 @@ function initializeDates() {
                 `;
             });
         
-            // 全部公司合計：只加總目前選取的餐別
+            // 全部公司合計：只統計目前餐別
             if (total) {
-        
                 html += `
                     <tr class="meal-stat-total-row">
-        
-                        <td class="company-name">
-                            全部合計
-                        </td>
-        
-                        <td>
-                            ${num(total[meatKey])}
-                        </td>
-        
-                        <td>
-                            ${num(total[vegetarianKey])}
-                        </td>
-        
+                        <td class="company-name">全部公司合計</td>
+                        <td>${num(total[meatKey])}</td>
+                        <td>${num(total[vegetarianKey])}</td>
                         <td class="row-grand-total">
                             ${num(total[totalKey])}
                         </td>
-        
                     </tr>
                 `;
             }
         
             html += `
                         </tbody>
-        
                     </table>
-        
                 </div>
             `;
         
@@ -4662,83 +4609,98 @@ function initializeDates() {
         }
 
 
-/* =================================================
-   餐點統計：午餐／晚餐切換
-================================================= */
-
-let mealStatisticsResults = [];
-let mealStatisticsTotal = null;
-
-// 預設顯示午餐
-let currentMealStatisticsTab = "lunch";
-
-
-/* =================================================
-   顯示統計介面
-================================================= */
-
-function renderMealStatistics() {
-
-    const resultBox = document.getElementById(
-        "mealStatisticsResult"
-    );
-
-    if (!resultBox) return;
-
-    const isLunch =
-        currentMealStatisticsTab === "lunch";
-
-    resultBox.innerHTML = `
-        <div class="meal-stat-tabs">
-
-            <button
-                type="button"
-                class="meal-stat-tab ${isLunch ? "active lunch-tab" : ""}"
-                onclick="switchMealStatisticsTab('lunch')"
-                aria-pressed="${isLunch}"
-            >
-                🍱 午餐統計
-            </button>
-
-            <button
-                type="button"
-                class="meal-stat-tab ${!isLunch ? "active dinner-tab" : ""}"
-                onclick="switchMealStatisticsTab('dinner')"
-                aria-pressed="${!isLunch}"
-            >
-                🍽️ 晚餐統計
-            </button>
-
-        </div>
-
-        <div class="meal-stat-current-title">
-            ${isLunch ? "🍱 午餐統計" : "🍽️ 晚餐統計"}
-        </div>
-
-        ${createMealStatisticsTable(
-            mealStatisticsResults,
-            mealStatisticsTotal,
-            currentMealStatisticsTab
-        )}
-    `;
-}
-
-
-/* =================================================
-   切換午餐／晚餐
-================================================= */
-
-function switchMealStatisticsTab(mealType) {
-
-    if (
-        mealType !== "lunch" &&
-        mealType !== "dinner"
-    ) {
-        return;
-    }
-
-    currentMealStatisticsTab = mealType;
-
-    renderMealStatistics();
-}
+        /* =================================================
+           餐點統計：午餐／晚餐切換
+        ================================================= */
+        
+        let mealStatisticsResults = [];
+        let mealStatisticsTotal = null;
+        
+        // 預設顯示午餐
+        let currentMealStatisticsTab = "lunch";
+        
+        
+        /* =================================================
+           顯示統計介面
+        ================================================= */
+        
+        function renderMealStatistics() {
+        
+            const resultBox = document.getElementById(
+                "mealStatisticsResult"
+            );
+        
+            if (!resultBox) return;
+        
+            const isLunch = currentMealStatisticsTab === "lunch";
+        
+            resultBox.innerHTML = `
+                <div class="meal-stat-tabs">
+        
+                    <button
+                        type="button"
+                        class="meal-stat-tab ${isLunch ? "active lunch-tab" : ""}"
+                        onclick="switchMealStatisticsTab('lunch')"
+                        aria-pressed="${isLunch}"
+                    >
+                        🍱 午餐統計
+                    </button>
+        
+                    <button
+                        type="button"
+                        class="meal-stat-tab ${!isLunch ? "active dinner-tab" : ""}"
+                        onclick="switchMealStatisticsTab('dinner')"
+                        aria-pressed="${!isLunch}"
+                    >
+                        🍽️ 晚餐統計
+                    </button>
+        
+                </div>
+        
+                <div class="meal-stat-current-title">
+                    ${isLunch ? "🍱 午餐統計" : "🍽️ 晚餐統計"}
+                </div>
+        
+                <div class="meal-stat-content">
+                    ${createMealStatisticsTable(
+                        mealStatisticsResults,
+                        mealStatisticsTotal,
+                        currentMealStatisticsTab
+                    )}
+                </div>
+            `;
+        }
+        
+        
+        /* 切換午餐／晚餐介面 */
+        
+        function switchMealStatisticsTab(mealType) {
+        
+            if (mealType !== "lunch" && mealType !== "dinner") {
+                return;
+            }
+        
+            currentMealStatisticsTab = mealType;
+        
+            renderMealStatistics();
+        }
+        
+        
+        /* =================================================
+           切換午餐／晚餐
+        ================================================= */
+        
+        function switchMealStatisticsTab(mealType) {
+        
+            if (
+                mealType !== "lunch" &&
+                mealType !== "dinner"
+            ) {
+                return;
+            }
+        
+            currentMealStatisticsTab = mealType;
+        
+            renderMealStatistics();
+        }
 
