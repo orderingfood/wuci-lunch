@@ -2261,3 +2261,35 @@
             }
         
         }
+
+
+        /* =================================================
+           餐點統計：載入中區塊填滿 CARD
+        ================================================= */
+        
+        #mealStatisticsResult > .meal-stat-empty {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            padding: 20px 16px;
+            text-align: center;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+        
+        /* 避免載入中的外層容器被壓縮 */
+        #mealStatisticsResult {
+            width: 100%;
+            min-width: 0;
+            align-items: stretch;
+        }
+        
+        /* 手機版 */
+        @media (max-width: 600px) {
+            #mealStatisticsResult > .meal-stat-empty {
+                width: 100%;
+                padding: 18px 10px;
+            }
+        }
