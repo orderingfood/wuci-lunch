@@ -2175,3 +2175,57 @@
                 font-size: 18px;
             }
         }
+
+
+        /* =================================================
+           餐點統計：改為上下排列
+        ================================================= */
+        
+        #mealStatisticsResult {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 16px;
+        }
+        
+        /* 午餐／晚餐切換按鈕：位於上方 */
+        #mealStatisticsResult .meal-stat-tabs {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            gap: 12px;
+            margin-bottom: 0;
+        }
+        
+        /* 統計表格：位於下方 */
+        #mealStatisticsResult .meal-stat-content {
+            display: block;
+            width: 100%;
+            min-width: 0;
+        }
+        
+        /* 表格容器佔滿可用寬度 */
+        #mealStatisticsResult .meal-stat-table-wrapper {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        
+        /* 不再顯示中間標題 */
+        #mealStatisticsResult .meal-stat-current-title {
+            display: none;
+        }
+        
+        /* 手機版 */
+        @media (max-width: 600px) {
+        
+            #mealStatisticsResult .meal-stat-tabs {
+                gap: 8px;
+            }
+        
+            #mealStatisticsResult .meal-stat-tab {
+                min-width: 0;
+                padding: 10px 6px;
+                font-size: 14px;
+            }
+        }
