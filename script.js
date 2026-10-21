@@ -4085,8 +4085,8 @@ function initializeDates() {
                         <thead>
                             <tr>
                                 <th class="company-col">公司名稱</th>
-                                <th class="${titleClass}">${mealName}葷食</th>
-                                <th class="${titleClass}">${mealName}素食</th>
+                                <th class="${titleClass}">葷食</th>
+                                <th class="${titleClass}">素食</th>
                                 <th class="grand-header">合計</th>
                             </tr>
                         </thead>
