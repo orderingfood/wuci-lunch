@@ -4632,7 +4632,8 @@ function initializeDates() {
         
             if (!resultBox) return;
         
-            const isLunch = currentMealStatisticsTab === "lunch";
+            const isLunch =
+                currentMealStatisticsTab === "lunch";
         
             resultBox.innerHTML = `
                 <div class="meal-stat-tabs">
@@ -4657,10 +4658,6 @@ function initializeDates() {
         
                 </div>
         
-                <div class="meal-stat-current-title">
-                    ${isLunch ? "🍱 午餐統計" : "🍽️ 晚餐統計"}
-                </div>
-        
                 <div class="meal-stat-content">
                     ${createMealStatisticsTable(
                         mealStatisticsResults,
@@ -4669,6 +4666,25 @@ function initializeDates() {
                     )}
                 </div>
             `;
+        }
+        
+        
+        /* =================================================
+           切換午餐／晚餐
+        ================================================= */
+        
+        function switchMealStatisticsTab(mealType) {
+        
+            if (
+                mealType !== "lunch" &&
+                mealType !== "dinner"
+            ) {
+                return;
+            }
+        
+            currentMealStatisticsTab = mealType;
+        
+            renderMealStatistics();
         }
         
         
