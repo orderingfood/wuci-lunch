@@ -4640,11 +4640,9 @@ function initializeDates() {
                             type="button"
                             id="mealLunchTab"
                             class="tab-btn ${
-                                currentMealStatisticsTab === "lunch"
-                                    ? "active"
-                                    : ""
+                                currentMealStatisticsTab === "lunch" ? "active" : ""
                             }"
-                            onclick="switchTab('mealLunchTab', 'mealLunchContent')"
+                            onclick="switchMealStatisticsTab('lunch')"
                         >
                             🍱 午餐統計
                         </button>
@@ -4653,11 +4651,9 @@ function initializeDates() {
                             type="button"
                             id="mealDinnerTab"
                             class="tab-btn ${
-                                currentMealStatisticsTab === "dinner"
-                                    ? "active"
-                                    : ""
+                                currentMealStatisticsTab === "dinner" ? "active" : ""
                             }"
-                            onclick="switchTab('mealDinnerTab', 'mealDinnerContent')"
+                            onclick="switchMealStatisticsTab('dinner')"
                         >
                             🍽️ 晚餐統計
                         </button>
@@ -4698,4 +4694,19 @@ function initializeDates() {
                 </div>
             `;
         }
+
+
+        /* =================================================
+           餐點統計專用切換
+        ================================================= */
         
+        function switchMealStatisticsTab(mealType) {
+        
+            if (mealType !== "lunch" && mealType !== "dinner") {
+                return;
+            }
+        
+            currentMealStatisticsTab = mealType;
+        
+            renderMealStatistics();
+        }
