@@ -864,14 +864,7 @@
         
         .query-company-locked:hover {
             cursor: not-allowed !important;
-        }     
-
-        
-        .menu-card {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        }             
         
         .menu-company {
             text-align: center;
@@ -902,7 +895,7 @@
         .menu-card {
             width: 100%;
             max-width: 1400px;
-            margin: 0 auto;
+            margin: 30px auto;
             box-sizing: border-box;
         }
         
