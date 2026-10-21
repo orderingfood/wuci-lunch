@@ -2279,86 +2279,40 @@
            餐點統計：午餐／晚餐視覺區隔
         ================================================= */
         
-        /* 分頁按鈕排列 */
-        #mealStatisticsResult .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        
-        /* 共用分頁按鈕 */
-        #mealStatisticsResult .tab-btn {
-            flex: 1;
-            padding: 13px 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            background: #f9fafb;
-            color: #4b5563;
-            font-size: 16px;
-            font-weight: 700;
-            border-bottom-width: 1px;
-            transition: all 0.2s ease;
-        }
-        
-        /* 午餐：藍色 */
+        /* 午餐：藍色選取線 */
         #mealStatisticsResult #mealLunchTab.active {
-            background: #dbeafe;
-            color: #1d4ed8;
-            border-color: #60a5fa;
-            box-shadow: inset 0 -3px 0 #2563eb;
+            color: #2563eb;
+            border-bottom-color: #2563eb;
         }
         
-        /* 晚餐：紫色 */
+        /* 晚餐：紫色選取線 */
         #mealStatisticsResult #mealDinnerTab.active {
-            background: #ede9fe;
-            color: #6d28d9;
-            border-color: #a78bfa;
-            box-shadow: inset 0 -3px 0 #7c3aed;
+            color: #7c3aed;
+            border-bottom-color: #7c3aed;
         }
         
-        /* 滑鼠移過去 */
-        #mealStatisticsResult #mealLunchTab:hover {
-            background: #eff6ff;
-        }
-        
-        #mealStatisticsResult #mealDinnerTab:hover {
-            background: #f5f3ff;
-        }
-        
-        /* 午餐表格 */
-        #mealStatisticsResult #mealLunchContent
-        .meal-stat-table-wrapper {
-            border-top: 4px solid #3b82f6;
-        }
-        
+        /* 午餐表格標題 */
         #mealStatisticsResult #mealLunchContent
         .meal-stat-table thead th {
             background: #eff6ff;
             color: #1e40af;
         }
         
-        /* 晚餐表格 */
-        #mealStatisticsResult #mealDinnerContent
+        /* 午餐表格上方識別線 */
+        #mealStatisticsResult #mealLunchContent
         .meal-stat-table-wrapper {
-            border-top: 4px solid #8b5cf6;
+            border-top: 3px solid #3b82f6;
         }
         
+        /* 晚餐表格標題 */
         #mealStatisticsResult #mealDinnerContent
         .meal-stat-table thead th {
             background: #f5f3ff;
             color: #5b21b6;
         }
         
-        /* 手機版 */
-        @media (max-width: 600px) {
-            #mealStatisticsResult .tab-buttons {
-                gap: 8px;
-            }
-        
-            #mealStatisticsResult .tab-btn {
-                padding: 12px 6px;
-                font-size: 14px;
-            }
+        /* 晚餐表格上方識別線 */
+        #mealStatisticsResult #mealDinnerContent
+        .meal-stat-table-wrapper {
+            border-top: 3px solid #8b5cf6;
         }
