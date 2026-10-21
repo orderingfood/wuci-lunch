@@ -2229,3 +2229,35 @@
                 font-size: 14px;
             }
         }
+
+
+        /* =================================================
+           餐點統計：手機版縮小公司名稱欄
+        ================================================= */
+        
+        @media (max-width: 600px) {
+        
+            #mealStatisticsResult .meal-stat-table {
+                width: 100%;
+                table-layout: fixed;
+            }
+        
+            /* 公司名稱欄 */
+            #mealStatisticsResult .meal-stat-table th.company-col,
+            #mealStatisticsResult .meal-stat-table td.company-name {
+                width: 38%;
+                max-width: 38%;
+                padding: 8px 5px;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+        
+            /* 數量欄位 */
+            #mealStatisticsResult .meal-stat-table th:not(.company-col),
+            #mealStatisticsResult .meal-stat-table td:not(.company-name) {
+                padding: 8px 4px;
+                text-align: center;
+                white-space: normal;
+            }
+        
+        }
