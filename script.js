@@ -4632,91 +4632,70 @@ function initializeDates() {
         
             if (!resultBox) return;
         
-            const isLunch =
-                currentMealStatisticsTab === "lunch";
-        
             resultBox.innerHTML = `
-                <div class="meal-stat-tabs">
+                <div class="meal-stat-tab-container">
         
-                    <button
-                        type="button"
-                        class="meal-stat-tab ${isLunch ? "active lunch-tab" : ""}"
-                        onclick="switchMealStatisticsTab('lunch')"
-                        aria-pressed="${isLunch}"
+                    <div class="tab-buttons">
+                        <button
+                            type="button"
+                            id="mealLunchTab"
+                            class="tab-btn ${
+                                currentMealStatisticsTab === "lunch"
+                                    ? "active"
+                                    : ""
+                            }"
+                            onclick="switchTab('mealLunchTab', 'mealLunchContent')"
+                        >
+                            🍱 午餐統計
+                        </button>
+        
+                        <button
+                            type="button"
+                            id="mealDinnerTab"
+                            class="tab-btn ${
+                                currentMealStatisticsTab === "dinner"
+                                    ? "active"
+                                    : ""
+                            }"
+                            onclick="switchTab('mealDinnerTab', 'mealDinnerContent')"
+                        >
+                            🍽️ 晚餐統計
+                        </button>
+                    </div>
+        
+                    <div
+                        id="mealLunchContent"
+                        class="tab-content"
+                        style="display: ${
+                            currentMealStatisticsTab === "lunch"
+                                ? "block"
+                                : "none"
+                        };"
                     >
-                        🍱 午餐統計
-                    </button>
+                        ${createMealStatisticsTable(
+                            mealStatisticsResults,
+                            mealStatisticsTotal,
+                            "lunch"
+                        )}
+                    </div>
         
-                    <button
-                        type="button"
-                        class="meal-stat-tab ${!isLunch ? "active dinner-tab" : ""}"
-                        onclick="switchMealStatisticsTab('dinner')"
-                        aria-pressed="${!isLunch}"
+                    <div
+                        id="mealDinnerContent"
+                        class="tab-content"
+                        style="display: ${
+                            currentMealStatisticsTab === "dinner"
+                                ? "block"
+                                : "none"
+                        };"
                     >
-                        🍽️ 晚餐統計
-                    </button>
+                        ${createMealStatisticsTable(
+                            mealStatisticsResults,
+                            mealStatisticsTotal,
+                            "dinner"
+                        )}
+                    </div>
         
-                </div>
-        
-                <div class="meal-stat-content">
-                    ${createMealStatisticsTable(
-                        mealStatisticsResults,
-                        mealStatisticsTotal,
-                        currentMealStatisticsTab
-                    )}
                 </div>
             `;
         }
         
-        
-        /* =================================================
-           切換午餐／晚餐
-        ================================================= */
-        
-        function switchMealStatisticsTab(mealType) {
-        
-            if (
-                mealType !== "lunch" &&
-                mealType !== "dinner"
-            ) {
-                return;
-            }
-        
-            currentMealStatisticsTab = mealType;
-        
-            renderMealStatistics();
-        }
-        
-        
-        /* 切換午餐／晚餐介面 */
-        
-        function switchMealStatisticsTab(mealType) {
-        
-            if (mealType !== "lunch" && mealType !== "dinner") {
-                return;
-            }
-        
-            currentMealStatisticsTab = mealType;
-        
-            renderMealStatistics();
-        }
-        
-        
-        /* =================================================
-           切換午餐／晚餐
-        ================================================= */
-        
-        function switchMealStatisticsTab(mealType) {
-        
-            if (
-                mealType !== "lunch" &&
-                mealType !== "dinner"
-            ) {
-                return;
-            }
-        
-            currentMealStatisticsTab = mealType;
-        
-            renderMealStatistics();
-        }
-
