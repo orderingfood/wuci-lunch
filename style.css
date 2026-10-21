@@ -2152,12 +2152,6 @@
             border-color: #9333ea;
         }
         
-        .meal-stat-current-title {
-            margin-bottom: 14px;
-            font-size: 20px;
-            font-weight: 700;
-            color: #374151;
-        }
         
         /* 手機版 */
         @media (max-width: 600px) {
@@ -2171,9 +2165,6 @@
                 font-size: 14px;
             }
         
-            .meal-stat-current-title {
-                font-size: 18px;
-            }
         }
 
 
@@ -2211,10 +2202,6 @@
             overflow-x: auto;
         }
         
-        /* 不再顯示中間標題 */
-        #mealStatisticsResult .meal-stat-current-title {
-            display: none;
-        }
         
         /* 手機版 */
         @media (max-width: 600px) {
