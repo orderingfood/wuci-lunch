@@ -3814,13 +3814,23 @@ function initializeDates() {
         }
 
 
+        // =================================================
+        // 餐點統計權限驗證
+        // =================================================
+        
         async function hasMealStatisticsPermission() {
         
-            const code = window.location.search
-                .replace(/^\?/, "")
+            // 讀取網址末端的數字
+            const code = window.location.pathname
+                .replace(/\/+$/, "")
+                .split("/")
+                .pop()
                 .trim();
         
+            console.log("目前網址權限碼：", code);
+        
             if (!/^\d+$/.test(code)) {
+                console.warn("網址權限碼格式錯誤");
                 return false;
             }
         
@@ -3834,13 +3844,14 @@ function initializeDates() {
         
                 const response = await fetch(url);
                 const result = await response.json();
-                
-                console.log("權限驗證網址：", url);
-                console.log("HTTP 狀態：", response.status);
-                console.log("API 回傳結果：", result);
-                
-                return result.success === true &&
-                       result.authorized === true;
+        
+                console.log("權限 API 回傳：", result);
+        
+                return (
+                    response.ok &&
+                    result.success === true &&
+                    result.authorized === true
+                );
         
             } catch (error) {
         
