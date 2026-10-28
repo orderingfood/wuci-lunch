@@ -3918,7 +3918,7 @@ function initializeDates() {
         
             if (!authorized) {
         
-                alert("❌ 你無此權限查詢餐點統計！");
+                alert("❌ 你無權限查詢餐點統計！");
         
                 return;
             }
