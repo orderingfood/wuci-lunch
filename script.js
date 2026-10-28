@@ -2518,8 +2518,6 @@ function initializeDates() {
         renderQueryResults();
         
         // 建立 Excel 下載按鈕
-                    
-        const resultBox = document.getElementById("queryResult");        
         const downloadButton = document.createElement("button");        
         downloadButton.type = "button";
         downloadButton.className = "query-excel-btn";
@@ -3917,32 +3915,22 @@ function initializeDates() {
         
             try {
         
-                // =================================================
-                // 建立 API
-                // =================================================
-        
-                const account = window.location.pathname
-                    .replace(/\/+$/, "")
-                    .split("/")
-                    .pop()
-                    .trim()
-                    .toUpperCase();
-                
+                // 建立 API：取得網址帳號
                 const pathname = window.location.pathname;
                 const search = window.location.search;
-                
+
                 let account = "";
-                
+
                 if (pathname.startsWith("/wuci-lunch/")) {
                     account = pathname
                         .substring("/wuci-lunch/".length)
                         .split("/")[0]
                         .trim();
                 }
-                
+
                 if (!account && search && search !== "?") {
                     const q = search.substring(1).trim();
-                
+
                     account = q.startsWith("account=")
                         ? decodeURIComponent(q.substring(8))
                         : (
@@ -3951,9 +3939,9 @@ function initializeDates() {
                                 : ""
                         );
                 }
-                
+
                 account = account.trim().toUpperCase();
-                
+
                 const url =
                     GOOGLE_SCRIPT_URL +
                     "?action=getMealStatistics" +
