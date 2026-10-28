@@ -3813,12 +3813,57 @@ function initializeDates() {
         
         }
 
+
+        async function hasMealStatisticsPermission() {
+        
+            const code = window.location.search
+                .replace(/^\?/, "")
+                .trim();
+        
+            if (!/^\d+$/.test(code)) {
+                return false;
+            }
+        
+            try {
+        
+                const url =
+                    GOOGLE_SCRIPT_URL +
+                    "?action=checkParameterStatisticsPermission" +
+                    "&code=" +
+                    encodeURIComponent(code);
+        
+                const response = await fetch(url);
+                const result = await response.json();
+        
+                return result.success === true &&
+                       result.authorized === true;
+        
+            } catch (error) {
+        
+                console.error("權限驗證失敗：", error);
+                return false;
+        
+            }
+        }
+
         // =================================================
         // 餐點統計
         // 單日統計
         // =================================================
         
         async function getMealStatistics() {
+        
+            // 權限檢查：無權限就禁止查詢
+        
+            const authorized =
+                await hasMealStatisticsPermission();
+        
+            if (!authorized) {
+        
+                alert("❌ 你無此權限查詢餐點統計！");
+        
+                return;
+            }
         
             const dateInput =
                 document.getElementById(
