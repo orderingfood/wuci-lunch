@@ -3861,6 +3861,49 @@ function initializeDates() {
             }
         }
 
+                // =================================================
+                // 餐點統計權限驗證
+                // =================================================
+                
+                async function hasMealStatisticsPermission() {
+                
+                  const code = window.location.pathname
+                    .replace(/\/+$/, "")
+                    .split("/")
+                    .pop();
+                
+                  if (!/^\d+$/.test(code)) {
+                    return false;
+                  }
+                
+                  try {
+                
+                    const url =
+                      GOOGLE_SCRIPT_URL +
+                      "?action=checkParameterStatisticsPermission" +
+                      "&code=" +
+                      encodeURIComponent(code);
+                
+                    const response = await fetch(url);
+                
+                    const result = await response.json();
+                
+                    return (
+                      response.ok &&
+                      result.success === true &&
+                      result.authorized === true
+                    );
+                
+                  } catch (error) {
+                
+                    console.error("權限驗證失敗：", error);
+                
+                    return false;
+                
+                  }
+                
+                }
+
         // =================================================
         // 餐點統計
         // 單日統計
