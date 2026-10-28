@@ -83,109 +83,131 @@
             const queryCompany =
                 document.getElementById("queryCompany");
         
-            if (!queryCompany) return;
-        
-        
             // 取得網址帳號
-            const pathname =
-                window.location.pathname;
-        
-            const search =
-                window.location.search;
+            const pathname = window.location.pathname;
+            const search = window.location.search;
         
             let account = "";
         
-            if (
-                pathname.startsWith("/wuci-lunch/")
-            ) {
-        
-                account =
-                    pathname
-                        .substring("/wuci-lunch/".length)
-                        .split("/")[0]
-                        .trim();
-        
+            if (pathname.startsWith("/wuci-lunch/")) {
+                account = pathname
+                    .substring("/wuci-lunch/".length)
+                    .split("/")[0]
+                    .trim();
             }
         
-            if (
-                !account &&
-                search &&
-                search !== "?"
-            ) {
+            if (!account && search && search !== "?") {
+                const q = search.substring(1).trim();
         
-                const q =
-                    search.substring(1).trim();
-        
-                account =
-                    q.startsWith("account=")
-                        ? decodeURIComponent(q.substring(8))
-                        : (
-                            !q.includes("=") &&
-                            !q.includes("&")
-                                ? decodeURIComponent(q)
-                                : ""
-                        );
-        
+                account = q.startsWith("account=")
+                    ? decodeURIComponent(q.substring(8))
+                    : (
+                        !q.includes("=") && !q.includes("&")
+                            ? decodeURIComponent(q)
+                            : ""
+                    );
             }
         
+            account = account.trim().toUpperCase();
+        
+            // 沒有帳號，不允許進入統計頁面
+            const statisticsAllowed =
+                await checkStatisticsPagePermission(account);
+        
+            if (!statisticsAllowed) {
+                return;
+            }
+        
+            // 沒有查詢公司元件時，不執行公司查詢授權
+            if (!queryCompany) return;
         
             if (!account) return;
         
-        
             // 先讀取快取
-            const cacheKey =
-                "query_company_" + account;
-        
-            const cached =
-                localStorage.getItem(cacheKey);
+            const cacheKey = "query_company_" + account;
+            const cached = localStorage.getItem(cacheKey);
         
             if (cached) {
                 queryCompany.value = cached;
             }
         
-        
-            // 背景向 GAS 認證
+            // 背景向 GAS 認證查詢公司
             try {
+                const response = await fetch(
+                    GOOGLE_SCRIPT_URL +
+                    "?action=checkQueryAuth" +
+                    "&account=" +
+                    encodeURIComponent(account)
+                );
         
-                const response =
-                    await fetch(
-                        GOOGLE_SCRIPT_URL +
-                        "?action=checkQueryAuth" +
-                        "&account=" +
-                        encodeURIComponent(account)
-                    );
+                const result = await response.json();
         
-                const result =
-                    await response.json();
-        
-        
-                if (
-                    result.success &&
-                    result.company
-                ) {
-        
-                    queryCompany.value =
-                        result.company;
+                if (result.success && result.company) {
+                    queryCompany.value = result.company;
         
                     localStorage.setItem(
                         cacheKey,
                         result.company
                     );
-        
                 }
         
+            } catch (error) {
+                console.error("授權查詢失敗：", error);
             }
-            catch (error) {
+        }
+
+        async function checkStatisticsPagePermission(account) {
         
-                console.error(
-                    "授權查詢失敗：",
-                    error
+            // 沒有網址帳號，直接拒絕
+            if (!account) {
+                showStatisticsPermissionDenied();
+                return false;
+            }
+        
+            try {
+                const response = await fetch(
+                    GOOGLE_SCRIPT_URL +
+                    "?action=checkStatisticsAuth" +
+                    "&account=" +
+                    encodeURIComponent(account)
                 );
         
-            }
+                if (!response.ok) {
+                    throw new Error("HTTP " + response.status);
+                }
         
+                const result = await response.json();
+        
+                if (!result.success) {
+                    showStatisticsPermissionDenied();
+                    return false;
+                }
+        
+                return true;
+        
+            } catch (error) {
+                console.error("統計頁面權限檢查失敗：", error);
+        
+                showStatisticsPermissionDenied();
+                return false;
+            }
         }
-      
+        
+        function showStatisticsPermissionDenied() {
+        
+            document.body.innerHTML = `
+                <div style="
+                    text-align: center;
+                    margin: 100px auto;
+                    padding: 24px;
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #d32f2f;
+                ">
+                    ❌ 你沒有權限閱覽此頁面
+                </div>
+            `;
+        }
 
         // =================================================
         // 目前分頁
@@ -3899,13 +3921,46 @@ function initializeDates() {
                 // 建立 API
                 // =================================================
         
+                const account = window.location.pathname
+                    .replace(/\/+$/, "")
+                    .split("/")
+                    .pop()
+                    .trim()
+                    .toUpperCase();
+                
+                const pathname = window.location.pathname;
+                const search = window.location.search;
+                
+                let account = "";
+                
+                if (pathname.startsWith("/wuci-lunch/")) {
+                    account = pathname
+                        .substring("/wuci-lunch/".length)
+                        .split("/")[0]
+                        .trim();
+                }
+                
+                if (!account && search && search !== "?") {
+                    const q = search.substring(1).trim();
+                
+                    account = q.startsWith("account=")
+                        ? decodeURIComponent(q.substring(8))
+                        : (
+                            !q.includes("=") && !q.includes("&")
+                                ? decodeURIComponent(q)
+                                : ""
+                        );
+                }
+                
+                account = account.trim().toUpperCase();
+                
                 const url =
                     GOOGLE_SCRIPT_URL +
                     "?action=getMealStatistics" +
+                    "&account=" +
+                    encodeURIComponent(account) +
                     "&date=" +
-                    encodeURIComponent(
-                        statisticsDate
-                    );
+                    encodeURIComponent(statisticsDate);
         
         
                 console.log(
