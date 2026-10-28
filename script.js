@@ -3834,7 +3834,11 @@ function initializeDates() {
         
                 const response = await fetch(url);
                 const result = await response.json();
-        
+                
+                console.log("權限驗證網址：", url);
+                console.log("HTTP 狀態：", response.status);
+                console.log("API 回傳結果：", result);
+                
                 return result.success === true &&
                        result.authorized === true;
         
