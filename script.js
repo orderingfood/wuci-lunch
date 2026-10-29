@@ -3183,7 +3183,9 @@ function initializeDates() {
         let menuData = [];        
         let thisWeekMenuData = [];
         let nextWeekMenuData = [];        
-        let currentMenuWeek = "thisWeek";        
+        let currentMenuWeek = "thisWeek";
+        let thisWeekCompany = "";
+        let nextWeekCompany = "";
         
         // =================================================
         // 載入菜單
@@ -3238,7 +3240,9 @@ function initializeDates() {
                     return;
                 }
         
-                menuCompany.innerText = result.company || "";
+                thisWeekCompany = result.thisWeekCompany || "";
+                nextWeekCompany = result.nextWeekCompany || "";
+                menuCompany.innerText = thisWeekCompany;
         
                 // 接收兩週菜單
                 if (
@@ -3291,6 +3295,15 @@ function initializeDates() {
             }
         
             currentMenuWeek = week;
+
+                const menuCompany = document.getElementById("menuCompany");
+
+                if (menuCompany) {
+                    menuCompany.innerText =
+                        week === "thisWeek"
+                            ? window.thisWeekCompany
+                            : window.nextWeekCompany;
+                }
         
             menuData = week === "thisWeek"
                 ? thisWeekMenuData
