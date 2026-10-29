@@ -3298,15 +3298,7 @@ function initializeDates() {
         
             updateMenuWeekTabs();
             renderSevenDayMenu();
-        
-            const menuStatus = document.getElementById("menuStatus");
-        
-            if (menuStatus) {
-                menuStatus.innerText =
-                    week === "thisWeek"
-                        ? "目前顯示本週菜單"
-                        : "目前顯示下週菜單";
-            }
+
         }
         
         
