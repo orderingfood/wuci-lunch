@@ -448,11 +448,36 @@
                 <div id="menuCompany" class="menu-company">
                     載入中...
                 </div>
-
-                <h3>
+        
+                <!-- 本週／下週菜單切換 -->
+                <div class="tab-buttons menu-tab-buttons">
+        
+                    <button
+                        type="button"
+                        id="menuThisWeekTab"
+                        class="tab-btn active"
+                        onclick="switchMenuWeek('thisWeek')"
+                    >
+                        本週菜單
+                    </button>
+        
+                    <button
+                        type="button"
+                        id="menuNextWeekTab"
+                        class="tab-btn"
+                        onclick="switchMenuWeek('nextWeek')"
+                    >
+                        下週菜單
+                    </button>
+        
+                </div>
+        
+                <!-- 菜單標題 -->
+                <h3 id="menuWeekTitle">
                     本週菜單
                 </h3>
         
+                <!-- 菜單內容 -->
                 <div id="menuList" class="menu-list">
                     <div class="hint">
                         ⏳ 正在載入...
