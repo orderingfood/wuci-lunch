@@ -3820,12 +3820,27 @@ function initializeDates() {
         
         async function hasMealStatisticsPermission() {
         
-            // 讀取網址末端的數字
-            const code = window.location.pathname
-                .replace(/\/+$/, "")
-                .split("/")
-                .pop()
-                .trim();
+            // 從網址查詢字串取得權限碼
+            // 支援 https://你的網域/?9999
+            const params = new URLSearchParams(
+                window.location.search
+            );
+        
+            // 優先讀取 ?code=9999 或 ?account=9999
+            // 若網址是單獨的 ?9999，則從原始查詢字串取得
+            let code =
+                params.get("code") ||
+                params.get("account") ||
+                "";
+        
+            if (!code) {
+                code = window.location.search
+                    .replace(/^\?/, "")
+                    .split("&")[0]
+                    .trim();
+            }
+        
+            code = code.trim();
         
             console.log("目前網址權限碼：", code);
         
@@ -3860,49 +3875,6 @@ function initializeDates() {
         
             }
         }
-
-                // =================================================
-                // 餐點統計權限驗證
-                // =================================================
-                
-                async function hasMealStatisticsPermission() {
-                
-                  const code = window.location.pathname
-                    .replace(/\/+$/, "")
-                    .split("/")
-                    .pop();
-                
-                  if (!/^\d+$/.test(code)) {
-                    return false;
-                  }
-                
-                  try {
-                
-                    const url =
-                      GOOGLE_SCRIPT_URL +
-                      "?action=checkParameterStatisticsPermission" +
-                      "&code=" +
-                      encodeURIComponent(code);
-                
-                    const response = await fetch(url);
-                
-                    const result = await response.json();
-                
-                    return (
-                      response.ok &&
-                      result.success === true &&
-                      result.authorized === true
-                    );
-                
-                  } catch (error) {
-                
-                    console.error("權限驗證失敗：", error);
-                
-                    return false;
-                
-                  }
-                
-                }
 
         // =================================================
         // 餐點統計
