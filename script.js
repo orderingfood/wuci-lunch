@@ -3180,8 +3180,10 @@ function initializeDates() {
         // 菜單
         // =================================================
         
-        let menuData = [];
-        
+        let menuData = [];        
+        let thisWeekMenuData = [];
+        let nextWeekMenuData = [];        
+        let currentMenuWeek = "thisWeek";        
         
         // =================================================
         // 載入菜單
@@ -3190,231 +3192,150 @@ function initializeDates() {
         
         async function loadMenu() {
         
-            const menuCompany =
-                document.getElementById(
-                    "menuCompany"
-                );
+            const menuCompany = document.getElementById("menuCompany");
+            const menuList = document.getElementById("menuList");
+            const menuStatus = document.getElementById("menuStatus");
         
-            const menuList =
-                document.getElementById(
-                    "menuList"
-                );
-        
-            const menuStatus =
-                document.getElementById(
-                    "menuStatus"
-                );
-        
-        
-            if (
-                !menuCompany ||
-                !menuList
-            ) {
-        
-                console.error(
-                    "找不到菜單 DOM 元件"
-                );
-        
+            if (!menuCompany || !menuList) {
+                console.error("找不到菜單 DOM 元件");
                 return;
-        
             }
         
-        
-            // =================================================
-            // 顯示載入中
-            // =================================================
-        
-            menuCompany.innerText =
-                "正在載入菜單...";
-        
+            menuCompany.innerText = "正在載入菜單...";
         
             menuList.innerHTML = `
-                <div class="hint">
-                    ⏳ 正在讀取...
-                </div>
+                <div class="hint">⏳ 正在讀取...</div>
             `;
         
-        
             if (menuStatus) {
-        
-                menuStatus.innerText =
-                    "";
-        
+                menuStatus.innerText = "";
             }
-        
         
             try {
         
-                // =================================================
-                // 取得菜單
-                // =================================================
-        
-                const response =
-                    await fetch(
-                        GOOGLE_SCRIPT_URL +
-                        "?action=getMenu"
-                    );
-        
-        
-                // =================================================
-                // HTTP 錯誤
-                // =================================================
-        
-                if (!response.ok) {
-        
-                    throw new Error(
-                        "HTTP " +
-                        response.status
-                    );
-        
-                }
-        
-        
-                const result =
-                    await response.json();
-        
-        
-                console.log(
-                    "菜單資料：",
-                    result
+                const response = await fetch(
+                    GOOGLE_SCRIPT_URL + "?action=getMenu"
                 );
         
+                if (!response.ok) {
+                    throw new Error("HTTP " + response.status);
+                }
         
-                // =================================================
-                // GAS 回傳失敗
-                // =================================================
+                const result = await response.json();
         
-                if (
-                    !result.success
-                ) {
+                console.log("菜單資料：", result);
         
-                    menuCompany.innerText =
-                        "";
+                if (!result.success) {
+        
+                    menuCompany.innerText = "";
         
                     menuList.innerHTML = `
                         <div class="result-fail">
-                            ❌ ${
-                                result.message ||
-                                "菜單讀取失敗"
-                            }
+                            ❌ ${escapeHtml(result.message || "菜單讀取失敗")}
                         </div>
                     `;
         
                     return;
-        
                 }
         
+                menuCompany.innerText = result.company || "";
         
-                // =================================================
-                // 公司名稱
-                // =================================================
-        
-                menuCompany.innerText =
-                    result.company ||
-                    "";
-        
-        
-                // =================================================
-                // 取得
-                // =================================================
-        
+                // 接收兩週菜單
                 if (
-                    !Array.isArray(
-                        result.menus
-                    )
+                    !Array.isArray(result.thisWeek) ||
+                    !Array.isArray(result.nextWeek)
                 ) {
-        
                     throw new Error(
-                        "menus 不是陣列"
+                        "GAS 尚未回傳 thisWeek / nextWeek，請先更新後端 getMenu()"
                     );
-        
                 }
         
+                thisWeekMenuData = result.thisWeek;
+                nextWeekMenuData = result.nextWeek;
         
-                menuData =
-                    result.menus;
+                // 預設顯示本週
+                currentMenuWeek = "thisWeek";
+                menuData = thisWeekMenuData;
         
-        
-                console.log(
-                    "menus：",
-                    menuData
-                );
-        
-                console.log(
-                    "menus 是否為陣列：",
-                    Array.isArray(menuData)
-                );
-        
-                console.log(
-                    "menus 筆數：",
-                    menuData.length
-                );
-        
-        
-                // =================================================
-                // 沒有菜單
-                // =================================================
-        
-                if (
-                    menuData.length === 0
-                ) {
-        
-                    menuList.innerHTML = `
-                        <div class="menu-empty">
-                            目前沒有菜單資料
-                        </div>
-                    `;
-        
-                    return;
-        
-                }
-        
-        
-                // =================================================
-                // 顯示
-                // =================================================
-        
+                updateMenuWeekTabs();
                 renderSevenDayMenu();
         
-        
-                // =================================================
-                // 更新狀態
-                // =================================================
-        
                 if (menuStatus) {
-        
-                    menuStatus.innerText =
-                        "菜單資料已更新";
-        
+                    menuStatus.innerText = "菜單資料已更新";
                 }
         
-            }
+            } catch (error) {
         
+                console.error("載入菜單失敗：", error);
         
-            catch (error) {
-        
-                console.error(
-                    "載入菜單失敗：",
-                    error
-                );
-        
-        
-                menuCompany.innerText =
-                    "";
-        
+                menuCompany.innerText = "";
         
                 menuList.innerHTML = `
                     <div class="result-fail">
                         ❌ 無法取得菜單資料
                         <br>
-                        <small>
-                            ${error.message || ""}
-                        </small>
+                        <small>${escapeHtml(error.message || "")}</small>
                     </div>
                 `;
         
+                if (menuStatus) {
+                    menuStatus.innerText = "";
+                }
+            }
+        }
+
+        function switchMenuWeek(week) {
+        
+            if (week !== "thisWeek" && week !== "nextWeek") {
+                return;
             }
         
+            currentMenuWeek = week;
+        
+            menuData = week === "thisWeek"
+                ? thisWeekMenuData
+                : nextWeekMenuData;
+        
+            updateMenuWeekTabs();
+            renderSevenDayMenu();
+        
+            const menuStatus = document.getElementById("menuStatus");
+        
+            if (menuStatus) {
+                menuStatus.innerText =
+                    week === "thisWeek"
+                        ? "目前顯示本週菜單"
+                        : "目前顯示下週菜單";
+            }
+        }
+        
+        
+        function updateMenuWeekTabs() {
+        
+            const thisWeekTab = document.getElementById("menuThisWeekTab");
+            const nextWeekTab = document.getElementById("menuNextWeekTab");
+            const title = document.getElementById("menuWeekTitle");
+        
+            if (thisWeekTab) {
+                thisWeekTab.classList.toggle(
+                    "active",
+                    currentMenuWeek === "thisWeek"
+                );
+            }
+        
+            if (nextWeekTab) {
+                nextWeekTab.classList.toggle(
+                    "active",
+                    currentMenuWeek === "nextWeek"
+                );
+            }
+        
+            if (title) {
+                title.innerText =
+                    currentMenuWeek === "thisWeek"
+                        ? "本週菜單"
+                        : "下週菜單";
+            }
         }
         
         
