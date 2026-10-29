@@ -3351,6 +3351,18 @@ function initializeDates() {
         
             const menuList =
                 document.getElementById("menuList");
+
+            const menuCompany =
+                document.getElementById("menuCompany");
+        
+            if (menuCompany) {
+        
+                menuCompany.innerText =
+                    currentMenuWeek === "nextWeek"
+                        ? nextWeekCompany
+                        : thisWeekCompany;
+        
+            }    
         
         
             if (!menuList) {
