@@ -3314,7 +3314,7 @@ function initializeDates() {
         
             const thisWeekTab = document.getElementById("menuThisWeekTab");
             const nextWeekTab = document.getElementById("menuNextWeekTab");
-            const title = document.getElementById("menuWeekTitle");
+
         
             if (thisWeekTab) {
                 thisWeekTab.classList.toggle(
@@ -3328,13 +3328,6 @@ function initializeDates() {
                     "active",
                     currentMenuWeek === "nextWeek"
                 );
-            }
-        
-            if (title) {
-                title.innerText =
-                    currentMenuWeek === "thisWeek"
-                        ? "本週菜單"
-                        : "下週菜單";
             }
         }
         
