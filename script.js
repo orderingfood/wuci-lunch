@@ -3224,6 +3224,10 @@ function initializeDates() {
                 }
         
                 const result = await response.json();
+                console.log("GAS 菜單完整回傳：", result);
+                console.log("本週公司：", result.thisWeekCompany);
+                console.log("下週公司：", result.nextWeekCompany);
+                    
         
                 console.log("菜單資料：", result);
         
